@@ -51,3 +51,29 @@ body { background-color: #f8f9fa; }
 /* Footer */
 .footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 50px 20px; margin-top: 50px; }
 .footer h2 { color: #60a5fa; margin-bottom: 15px; }
+
+/* New Filter & Sort Group Styling */
+.filter-sort-group {
+    display: flex;
+    gap: 15px;
+}
+.filter-sort-group select {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #d1d5db;
+    background-color: white;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Filter & Sort Dropdowns */
+.filter-sort-group { display: flex; gap: 15px; }
+.filter-sort-group select { padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; background-color: white; font-size: 14px; font-weight: 600; color: #334155; cursor: pointer; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+
+/* Social Icons */
+.social-icons { margin: 20px 0; display: flex; justify-content: center; gap: 20px; }
+.social-icons a { color: #94a3b8; font-size: 24px; transition: 0.3s; }
+.social-icons a:hover { color: #60a5fa; transform: translateY(-3px); }
