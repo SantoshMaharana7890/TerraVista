@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="home-bg">
-    <nav class="navbar dark-nav">
-        <div class="logo" style="display: flex; align-items: center; gap: 10px;">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height: 35px; width: auto;">
-            <span style="font-weight: bold; font-size: 1.5rem; letter-spacing: -0.5px; color: #d1d5db;">Terra<span style="color: #3b82f6;">Vista</span></span>
+    <nav class="navbar light-nav">
+        <div class="logo" style="display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-globe-americas" style="color: #3b82f6; font-size: 28px;"></i>
+            <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: #1e293b;">Terra<span style="color: #3b82f6;">Vista</span></span>
         </div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
@@ -33,23 +33,29 @@
                 <option value="Punjab">Punjab</option>
                 <option value="Kolkata">Kolkata</option>
             </select>
-            <button type="submit" class="search-btn">Search</button>
+            <button type="submit" class="hero-search-btn">
+                Search
+            </button>
         </form>
     </div>
 
     <footer class="footer">
-        <h2 style="margin: 0 0 5px 0 !important; font-size: 1.5rem; letter-spacing: -0.5px;">
-            <span style="font-weight: bold; color: #6b7280;">Terra</span><span style="color: #2563eb;">Vista</span>
+        <h2 style="margin: 0 0 15px 0 !important; font-size: 1.8rem; letter-spacing: -0.5px;">
+            <span style="font-weight: 800; color: #ffffff;">Terra</span><span style="color: #3b82f6;">Vista</span>
         </h2>
-        <p>Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history.</p>
+        <p style="max-width: 800px; margin: 0 auto !important; color: #94a3b8; font-size: 0.95rem;">
+            Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history. Made with passion by final year B.Tech students.
+        </p>
         <div class="social-icons">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-youtube"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
         </div>
-        <p>&copy; 2026 TerraVista. All rights reserved.</p>
+        <div class="footer-bottom">
+            <p>&copy; 2026 TerraVista. All rights reserved.</p>
+        </div>
     </footer>
 </body>
 </html>
