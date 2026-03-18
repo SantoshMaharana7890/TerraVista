@@ -22,7 +22,7 @@
         </ul>
     </nav>
 
-    <header class="city-header" style="background-image: url('{{ url_for("static", filename="images/hero_bg.jpg") }}'); min-height: 100vh; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;">
+    <header class="city-header" style="background-image: url({{ url_for('static', filename='images/hero_bg.jpg') }}); min-height: 100vh; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;">
         
         <div style="margin-top: 60px;">
             <h1 style="font-size: 3.5rem; font-weight: bold; margin-bottom: 15px; color: #ffffff; text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">
@@ -51,13 +51,13 @@
     </header>
 
     <footer class="footer">
-        <h2 style="margin: 0 0 15px 0 !important; font-size: 1.8rem; letter-spacing: -0.5px;">
+        <h2 style="margin: 0 0 15px 0; font-size: 1.8rem; letter-spacing: -0.5px;">
             <span style="font-weight: 800; color: #ffffff;">Terra</span><span style="color: #3b82f6;">Vista</span>
         </h2>
-        <p style="max-width: 800px; margin: 0 auto !important; color: #94a3b8; font-size: 0.95rem;">
-            Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history.
+        <p style="max-width: 800px; margin: 0 auto; color: #94a3b8; font-size: 0.95rem;">
+            Join us in curating unforgettable journeys that blend culture, comfort, and adventure.
         </p>
-        <div class="social-icons" style="margin: 20px 0 !important;">
+        <div class="social-icons" style="margin: 20px 0;">
             <a href="#"><i class="fab fa-facebook"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
             <a href="#"><i class="fab fa-twitter"></i></a>
