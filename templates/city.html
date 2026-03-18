@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ city.name }} - TerraVista</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <nav class="navbar light-nav">
+
+    <nav class="navbar">
         <div class="logo" style="display: flex; align-items: center; gap: 8px;">
             <i class="fas fa-globe-americas" style="color: #3b82f6; font-size: 28px;"></i>
-            <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: #1e293b;">Terra<span style="color: #3b82f6;">Vista</span></span>
+            <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: #f8fafc;">Terra<span style="color: #3b82f6;">Vista</span></span>
         </div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
@@ -21,74 +22,88 @@
         </ul>
     </nav>
 
-    <div class="city-header">
-        <h1>{{ city.name | upper }}</h1>
-        <div class="tags">
-            <span class="tag sport-tag">{{ city.tag1 }}</span>
-            <span class="tag food-tag">{{ city.tag2 }}</span>
-            <span class="tag art-tag">{{ city.tag3 }}</span>
+    <header class="city-header" style="background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.4)), url({{ city.image_url | default(url_for('static', filename='images/hero_bg.jpg')) }}); min-height: 60vh; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;">
+        
+        <div style="margin-top: 80px;">
+            <h1 style="font-size: 3.5rem; font-weight: bold; margin-bottom: 15px; color: #ffffff; text-shadow: 2px 2px 8px rgba(0,0,0,0.8);">
+                Welcome to {{ city.name }}
+            </h1>
+            <p style="font-size: 1.2rem; color: #f8fafc; max-width: 800px; margin: 0 auto; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">
+                {{ city.description | default("Explore the hidden gems, rich culture, and breathtaking beauty of this incredible destination.") }}
+            </p>
         </div>
-        <p class="city-desc">{{ city.description }}</p>
-    </div>
+    </header>
 
-    <h2 class="section-title" id="places">Top Places to Visit</h2>
-    <div class="grid-container">
-        {% for place in places %}
-        <div class="card">
-            <img src="{{ url_for('static', filename='images/' + place.image_file) }}" alt="{{ place.name }}">
-            <div class="card-content">
-                <span class="category-text">{{ place.category }}</span>
-                <h3>{{ place.name }}</h3>
-                <p>{{ place.description }}</p>
+    <div id="places">
+        <div class="section-header">
+            <h2 class="section-title">Top Destinations in {{ city.name }}</h2>
+        </div>
+        
+        <div class="grid-container">
+            {% for place in places %}
+            <div class="card">
+                <img src="{{ place.image_url | default('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=800') }}" alt="{{ place.name }}">
+                <div class="card-content">
+                    <h3>
+                        {{ place.name }}
+                        {% if place.rating %}
+                        <span class="rating"><i class="fas fa-star"></i> {{ place.rating }}</span>
+                        {% endif %}
+                    </h3>
+                    <p style="margin-top: 10px; color: #475569; font-size: 0.95rem;">
+                        {{ place.description | default("A beautiful must-visit location full of rich history and culture.") }}
+                    </p>
+                    <button class="book-btn" style="margin-top: 15px;">Explore Map</button>
+                </div>
             </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <div class="section-header">
-        <h2 id="accommodations">Hotels & Dining</h2>
-        <div class="filter-sort-group">
-            <select id="typeFilter" onchange="filterAndSortItems()">
-                <option value="all">Show All Categories</option>
-                <option value="lodging">Show Hotels & Lodges</option>
-                <option value="dining">Show Restaurants & Cafes</option>
-            </select>
-            
-            <select id="sortOptions" onchange="filterAndSortItems()">
-                <option value="default">Sort By</option>
-                <option value="highToLow">Price: High to Low</option>
-                <option value="lowToHigh">Price: Low to High</option>
-                <option value="rating">Top Rated</option>
-            </select>
-        </div>
-    </div>
-    
-    <div class="grid-container" id="itemGrid">
-        {% for item in items %}
-        <div class="card item-card" data-price="{{ item.price }}" data-rating="{{ item.rating }}" data-type="{{ item.type }}">
-            <img src="{{ url_for('static', filename='images/' + item.image_file) }}" alt="{{ item.name }}">
-            <div class="card-content">
-                <h3>{{ item.name }} <span class="rating">⭐ {{ item.rating }}</span></h3>
-                <span class="budget-badge {{ item.budget_category | lower | replace(' ', '-') | replace('/', '') }}">{{ item.budget_category }}</span>
-                <p class="price">₹{{ item.price }} <small>/ night or meal</small></p>
-                <button class="book-btn">Direct Book Now</button>
+            {% else %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #64748b;">
+                <h3>We are still discovering places in {{ city.name }}!</h3>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 
-    <h2 class="section-title">Transport & Live Routes</h2>
-    <div class="map-container">
-        <div class="transport-info">
-            <h3>Local Transport</h3>
-            <ul>
-                <li>🚌 Local Bus Routes covering all major tourist zones. Safe and highly connected.</li>
-                <li>🚕 City Taxis available directly from all stations.</li>
-                <li>🚆 Local Train/Metro Network - The fastest way to cross the city.</li>
-            </ul>
-            <button class="book-cab-btn">Book Local Cab Now</button>
+    <div id="accommodations">
+        <div class="section-header">
+            <h2 class="section-title">Hotels & Dining</h2>
         </div>
-        <div id="liveMap" style="height: 400px; width: 60%;"></div>
+        
+        <div class="grid-container">
+            {% for item in items %}
+            <div class="card">
+                <img src="{{ item.image_url | default('https://images.unsplash.com/photo-1551882547-ff40c0d5bf8f?auto=format&fit=crop&w=800') }}" alt="{{ item.name }}">
+                <div class="card-content">
+                    <h3>
+                        {{ item.name }}
+                        {% if item.rating %}
+                        <span class="rating"><i class="fas fa-star"></i> {{ item.rating }}</span>
+                        {% endif %}
+                    </h3>
+                    
+                    {% if item.category %}
+                    <span class="budget-badge budget">{{ item.category }}</span>
+                    {% endif %}
+                    
+                    <p style="margin-top: 10px; color: #475569; font-size: 0.95rem;">
+                        {{ item.description | default("A highly-rated, comfortable stay with excellent amenities.") }}
+                    </p>
+                    
+                    {% if item.price %}
+                    <div class="price" style="margin-top: 10px;">
+                        ₹{{ item.price }} <span style="font-size: 0.9rem; font-weight: normal; color: #64748b;">/ night</span>
+                    </div>
+                    {% endif %}
+                    
+                    <button class="book-btn" style="margin-top: 15px;">Book Now</button>
+                </div>
+            </div>
+            {% else %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #64748b;">
+                <h3>No accommodations listed yet.</h3>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 
     <footer class="footer">
@@ -96,70 +111,20 @@
             <span style="font-weight: 800; color: #ffffff;">Terra</span><span style="color: #3b82f6;">Vista</span>
         </h2>
         <p style="max-width: 800px; margin: 0 auto !important; color: #94a3b8; font-size: 0.95rem;">
-            Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history. Made with passion by final year B.Tech students.
+            Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history. 
+            Made with passion by a final year B.Tech student.
         </p>
-        <div class="social-icons">
+        <div class="social-icons" style="margin: 20px 0 !important;">
             <a href="#"><i class="fab fa-facebook"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-youtube"></i></a>
             <a href="#"><i class="fab fa-linkedin"></i></a>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 TerraVista. All rights reserved.</p>
+        <div class="footer-bottom" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+            <p style="color: #64748b; font-size: 0.9rem;">&copy; 2026 TerraVista Major Project. All rights reserved.</p>
         </div>
     </footer>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // Upgraded Filter and Sort Logic
-        function filterAndSortItems() {
-            let container = document.getElementById("itemGrid");
-            let cards = Array.from(container.getElementsByClassName("item-card"));
-            let sortValue = document.getElementById("sortOptions").value;
-            let filterValue = document.getElementById("typeFilter").value;
-
-            // Step 1: Filter
-            cards.forEach(card => {
-                let itemType = card.getAttribute("data-type");
-                let isLodging = (itemType === "Hotel" || itemType === "Lodge");
-                let isDining = (itemType === "Restaurant" || itemType === "Cafe");
-
-                if (filterValue === "all" || 
-                   (filterValue === "lodging" && isLodging) || 
-                   (filterValue === "dining" && isDining)) {
-                    card.style.display = "block"; 
-                } else {
-                    card.style.display = "none";  
-                }
-            });
-
-            // Step 2: Sort
-            cards.sort(function(a, b) {
-                let priceA = parseInt(a.getAttribute("data-price"));
-                let priceB = parseInt(b.getAttribute("data-price"));
-                let ratingA = parseFloat(a.getAttribute("data-rating"));
-                let ratingB = parseFloat(b.getAttribute("data-rating"));
-
-                if (sortValue === "lowToHigh") return priceA - priceB;
-                if (sortValue === "highToLow") return priceB - priceA;
-                if (sortValue === "rating") return ratingB - ratingA;
-                return 0; // Default
-            });
-
-            container.innerHTML = "";
-            cards.forEach(card => container.appendChild(card));
-        }
-
-        // Live Map Logic 
-        // Note: You can dynamically update these coordinates based on the city if you expand the DB later!
-        var map = L.map('liveMap').setView([18.9220, 72.8347], 14); 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors | TerraVista Routing'
-        }).addTo(map);
-        L.marker([18.9220, 72.8347]).addTo(map)
-            .bindPopup('{{ city.name }}<br>City Center (Safe Zone)')
-            .openPopup();
-    </script>
 </body>
 </html>
