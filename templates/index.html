@@ -2,15 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TerraVista - Explore.Experience.Enjoy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraVista -  Explore.Experience.Enjoy </title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="home-bg">
-    <nav class="navbar light-nav">
+<body>
+
+    <nav class="navbar">
         <div class="logo" style="display: flex; align-items: center; gap: 8px;">
             <i class="fas fa-globe-americas" style="color: #3b82f6; font-size: 28px;"></i>
-            <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: #1e293b;">Terra<span style="color: #3b82f6;">Vista</span></span>
+            <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: #f8fafc;">Terra<span style="color: #3b82f6;">Vista</span></span>
         </div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
@@ -20,42 +22,58 @@
         </ul>
     </nav>
 
-    <div class="hero-section">
-        <h1><bold>Experience the True Essence of India</h1>
-        <p><bold>Discover heritage, savor authentic cuisines, and stay in comfort. Curate your perfect journey today.</bold></p>
+    <header class="city-header" style="background-image: url({{ url_for('static', filename='images/hero_bg.jpg') }}); min-height: 100vh; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;">
         
-        <form action="/search" method="GET" class="search-bar">
-            <select name="city" required>
-                <option value="" disabled selected>Search for Mumbai, Hyderabad, Bhubaneswar, Punjab, Kolkata...</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="Hyderabad">Hyderabad</option>
-                <option value="Bhubaneswar">Bhubaneswar</option>
-                <option value="Punjab">Punjab</option>
-                <option value="Kolkata">Kolkata</option>
-            </select>
-            <button type="submit" class="hero-search-btn">
-                Search
-            </button>
-        </form>
-    </div>
+        <div style="margin-top: 60px;"> <h1 style="font-size: 3.5rem; font-weight: bold; margin-bottom: 15px; color: #ffffff; text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">
+                Experience the True Essence of India
+            </h1>
+            <p style="font-size: 1.2rem; color: #f8fafc; max-width: 800px; margin: 0 auto 40px auto; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">
+                Discover heritage, savor authentic cuisines, and stay in comfort. Curate your perfect journey today.
+            </p>
+            
+            <form action="/search" method="GET" class="hero-search-form">
+                
+                <div class="search-input-wrapper">
+                    <i class="fas fa-map-marker-alt location-icon"></i>
+                    
+                    <select name="city" required class="hero-search-select">
+                        <option value="" disabled selected>Search for Mumbai, Hyderabad, Bhubaneswar, Punjab, Kolkata...</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Bhubaneswar">Bhubaneswar</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Kolkata">Kolkata</option>
+                    </select>
+                    
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </div>
+
+                <button type="submit" class="hero-search-btn">
+                    Search
+                </button>
+                
+            </form>
+        </div>
+    </header>
 
     <footer class="footer">
         <h2 style="margin: 0 0 15px 0 !important; font-size: 1.8rem; letter-spacing: -0.5px;">
             <span style="font-weight: 800; color: #ffffff;">Terra</span><span style="color: #3b82f6;">Vista</span>
         </h2>
         <p style="max-width: 800px; margin: 0 auto !important; color: #94a3b8; font-size: 0.95rem;">
-            Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history. Made with passion by final year B.Tech students.
+            Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history.
         </p>
-        <div class="social-icons">
+        <div class="social-icons" style="margin: 20px 0 !important;">
             <a href="#"><i class="fab fa-facebook"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-youtube"></i></a>
             <a href="#"><i class="fab fa-linkedin"></i></a>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 TerraVista. All rights reserved.</p>
+        <div class="footer-bottom" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+            <p style="color: #64748b; font-size: 0.9rem;">&copy; 2026 TerraVista Major Project. All rights reserved.</p>
         </div>
     </footer>
+
 </body>
 </html>
