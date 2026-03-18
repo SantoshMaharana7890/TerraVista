@@ -17,15 +17,13 @@ body {
     line-height: 1.6;
 }
 
-/* --- 2. PREMIUM HEADER & FOOTER (Texture + Vignette) --- */
+/* --- 2. PREMIUM HEADER & FOOTER (Sleek Matte Finish) --- */
 .navbar, .footer {
-    background-color: #0f172a; 
+    /* A smooth, dark gradient for a premium matte/fabric feel */
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     
-    /* Generates a subtle, professional dot texture */
-    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231e293b' fill-opacity='0.6' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
-    
-    /* Creates the dark vignette shadow around the inner edges */
-    box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.95);
+    /* Soft vignette shadow around the edges */
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.6);
     color: #f8fafc;
 }
 
@@ -78,7 +76,22 @@ body {
     transform: translateY(-3px);
 }
 
-/* --- 3. HERO SEARCH BAR & ALIGNMENT --- */
+/* --- 3. HOMEPAGE HERO SECTION (Fixed Background) --- */
+.home-hero {
+    /* Moving this to CSS stops all VS Code and Jinja quote errors! */
+    background-image: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.6)), url('../images/hero_bg.jpg');
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* --- 4. HERO SEARCH BAR & ALIGNMENT --- */
 .hero-search-form {
     display: flex;
     justify-content: center;
@@ -96,7 +109,6 @@ body {
     min-width: 300px;
 }
 
-/* Force exact 60px height on the Dropdown */
 .hero-search-select {
     width: 100%;
     height: 60px; 
@@ -117,7 +129,6 @@ body {
     border: 2px solid #3b82f6; 
 }
 
-/* Positioning the Icons inside the input */
 .location-icon {
     position: absolute;
     left: 22px;
@@ -138,7 +149,6 @@ body {
     z-index: 2;
 }
 
-/* Force exact 60px height on the Button so it sits flush */
 .hero-search-btn {
     height: 60px; 
     padding: 0 40px;
@@ -162,14 +172,14 @@ body {
     box-shadow: 0 15px 35px rgba(59, 130, 246, 0.6);
 }
 
-/* --- 4. FILTER & SORT DROPDOWNS --- */
+/* --- 5. FILTER & SORT DROPDOWNS --- */
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     max-width: 1200px;
-    margin: 100px auto 20px auto; 
+    margin: 80px auto 20px auto; 
 }
 
 .section-title {
@@ -177,25 +187,7 @@ body {
     color: #0f172a;
 }
 
-.filter-sort-group {
-    display: flex;
-    gap: 15px;
-}
-
-.filter-sort-group select {
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-    background-color: white;
-    font-size: 14px;
-    font-weight: 600;
-    color: #334155;
-    cursor: pointer;
-    outline: none;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-/* --- 5. THE MASTER GRID (DESKTOP) --- */
+/* --- 6. THE MASTER GRID (DESKTOP) --- */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -205,7 +197,7 @@ body {
     padding: 0 20px;
 }
 
-/* --- 6. SMART CARD STYLING (Zoom-Proof) --- */
+/* --- 7. SMART CARD STYLING (Zoom-Proof) --- */
 .card {
     display: flex;
     flex-direction: column;
@@ -222,13 +214,13 @@ body {
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-/* Magic Aspect Ratio Resizing */
 .card img {
     width: 100%;
     height: auto;
     aspect-ratio: 16 / 9; 
     object-fit: cover;
     display: block;
+    background-color: #e2e8f0; /* Soft grey fallback if image fails */
 }
 
 .card-content {
@@ -276,7 +268,6 @@ body {
     background-color: #2563eb;
 }
 
-/* --- 7. BADGES & TAGS --- */
 .budget-badge {
     display: inline-block;
     padding: 4px 8px;
@@ -289,15 +280,14 @@ body {
 
 .premium { background: #fef08a; color: #854d0e; }
 .budget { background: #dcfce7; color: #166534; }
-.expensive { background: #fee2e2; color: #991b1b; }
 
 /* --- 8. LIVE MAP SECTION --- */
 .map-container {
     display: flex;
     gap: 30px;
     max-width: 1200px;
-    margin: 0 auto 50px auto;
-    padding: 20px;
+    margin: 60px auto 50px auto;
+    padding: 30px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
@@ -366,42 +356,13 @@ body {
     .map-container {
         flex-direction: column;
     }
-    #liveMap {
-        width: 100% !important;
-        height: 300px;
-    }
 }
 
 @media (max-width: 768px) {
-    .navbar {
-        padding: 15px 20px;
-    }
-    .nav-links {
-        display: none;
-    }
-    .grid-container {
-        grid-template-columns: 1fr;
-        padding: 10px;
-    }
-    .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-top: 80px;
-    }
-    .filter-sort-group {
-        flex-direction: column;
-        width: 100%;
-        margin-top: 15px;
-    }
-    .filter-sort-group select {
-        width: 100%;
-    }
-    .city-header h1 {
-        font-size: 2.2rem !important;
-    }
-    .about-container {
-        padding: 30px 20px;
-        margin-top: 100px;
-        border-width: 8px;
-    }
+    .navbar { padding: 15px 20px; }
+    .nav-links { display: none; }
+    .grid-container { grid-template-columns: 1fr; padding: 10px; }
+    .section-header { flex-direction: column; align-items: flex-start; margin-top: 80px; }
+    .filter-sort-group { flex-direction: column; width: 100%; margin-top: 15px; }
+    .filter-sort-group select { width: 100%; }
 }
