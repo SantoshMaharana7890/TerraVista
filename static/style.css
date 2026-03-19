@@ -117,11 +117,12 @@ body {
 
 /* Glowing Search Button Effect */
 .search-btn:hover { 
-    background-color: #4096ff; /* Lightens the blue slightly */
+    background-color: #0073ff; /* Lightens the blue slightly */
     transform: translateY(-2px); 
     /* The double shadow creates a strong, layered neon glow effect */
-    box-shadow: 0 0 15px rgba(0, 97, 254, 0.8), 0 0 30px rgba(0, 97, 254, 0.5); 
+    box-shadow: 0 0 15px rgba(65, 138, 255, 0.612), 0 0 30px rgba(100, 160, 255, 0.606); 
 }
+
 
 /* ==========================================================================
    CITY PAGE SPECIFIC STYLES (Light Theme)
