@@ -62,7 +62,9 @@ body {
 }
 
 .nav-links a:hover {
-    color: #3b82f6 !important; 
+    color: #3b82f6 !important;
+    box-shadow: 0 0 15px rgba(65, 138, 255, 0.612), 0 0 30px rgba(100, 160, 255, 0.606); 
+
 }
 
 /* --- HOME PAGE HERO --- */
