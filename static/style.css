@@ -1,6 +1,6 @@
 /* ==========================================================================
    TERRAVISTA MASTER STYLESHEET
-   Core UI, Responsive Grid, and Component Styling
+   Includes Global Styles, Dark Homepage, and Light City Page
    ========================================================================== */
 
 * {
@@ -16,8 +16,19 @@ body {
     line-height: 1.6;
 }
 
-/* --- NAVIGATION BAR --- */
-.navbar, .navbar.dark-nav {
+.home-bg {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.city-page-bg {
+    background-color: #f8fafc; /* Crisp light grey background */
+}
+
+/* --- NAVIGATION BARS --- */
+/* Dark Nav for Home Page */
+.navbar {
     background-color: #0f172a; 
     padding: 15px 50px;
     display: flex;
@@ -30,8 +41,22 @@ body {
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
-.logo {
+.navbar .logo, .navbar .nav-links a {
     color: #f8fafc;
+}
+
+/* Light Nav for City Page (Matches your screenshots) */
+.navbar-light {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.navbar-light .logo, .navbar-light .nav-links a {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.logo {
     font-size: 1.6rem;
     font-weight: 800;
 }
@@ -43,27 +68,17 @@ body {
 }
 
 .nav-links a {
-    color: #f8fafc;
     text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
     transition: color 0.3s;
 }
 
 .nav-links a:hover {
-    color: #3b82f6; 
+    color: #3b82f6 !important; 
 }
 
-/* --- FLEXBOX PAGE LAYOUT --- */
-.home-bg {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Forces the page to be exactly the height of your screen */
-}
-
-/* --- HERO SECTION --- */
+/* --- HOME PAGE HERO --- */
 .hero-section {
-    flex: 1; /* Automatically fills the space between the navbar and footer */
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -71,11 +86,9 @@ body {
     text-align: center;
     padding: 120px 20px 40px 20px; 
     width: 100%;
-    
-    /* The background image is now safely locked inside this section */
     background-image: url('/static/images/hero_bg.jpg');
     background-size: cover;
-    background-position: center; /* Forces the bottom of the image (the boats) to ALWAYS be visible just above the footer */
+    background-position: center;
 }
 
 .hero-title {
@@ -86,158 +99,326 @@ body {
 }
 
 .hero-subtitle {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     color: #f8fafc;
     max-width: 800px;
     text-shadow: 1px 2px 6px rgba(0,0,0,0.8);
 }
 
-/* --- FLEXBOX SEARCH BAR --- */
 .search-bar-container {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 700px;
-    margin-top: 35px;
-    flex-wrap: wrap; /* Crucial for mobile stacking */
+    display: flex; gap: 15px; align-items: center; justify-content: center;
+    width: 100%; max-width: 700px; margin-top: 35px; flex-wrap: wrap;
 }
 
-.search-input-wrapper {
-    position: relative;
-    flex: 1; 
-    min-width: 250px;
-}
+.search-input-wrapper { position: relative; flex: 1; min-width: 250px; }
 
 .city-select {
-    width: 100%;
-    height: 55px; 
-    border-radius: 30px;
-    border: none;
-    padding: 0 45px; 
-    font-size: 1.05rem;
-    color: #475569;
-    appearance: none;
-    outline: none;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    cursor: pointer;
-    /* Prevents long text from breaking mobile layouts */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 100%; height: 55px; border-radius: 30px; border: none; padding: 0 45px; 
+    font-size: 1.05rem; color: #475569; appearance: none; outline: none; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer;
 }
 
-.location-icon {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-    font-size: 1.1rem;
-    z-index: 2;
-}
-
-.dropdown-icon {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-    pointer-events: none; 
-}
+.location-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.1rem; z-index: 2; }
+.dropdown-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
 
 .search-btn {
-    height: 55px; 
-    padding: 0 35px;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-    transition: all 0.3s ease;
+    height: 55px; padding: 0 35px; background-color: #3b82f6; color: white; border: none;
+    border-radius: 30px; font-weight: bold; font-size: 1.1rem; cursor: pointer;
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); transition: all 0.3s ease;
 }
 
-.search-btn:hover {
-    background-color: #2563eb;
-    transform: translateY(-2px);
-    box-shadow: 0 0 10px #007bff, 0 0 30px #007bff, 0 0 50px #007bff;
+.search-btn:hover { background-color: #2563eb; transform: translateY(-2px); box-shadow: 0 0 10px #007bff, 0 0 20px #007bff, 0 0 30px #007bff;}
+
+
+/* ==========================================================================
+   CITY PAGE SPECIFIC STYLES (Light Theme)
+   ========================================================================== */
+
+/* City Header Content */
+.city-title-container {
+    padding: 120px 20px 20px 20px;
+    text-align: center;
+}
+
+.city-title {
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #0f172a;
+}
+
+.city-tags {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.tag {
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tag-blue { background: #e0e7ff; color: #3730a3; }
+.tag-orange { background: #ffedd5; color: #9a3412; }
+.tag-purple { background: #f3e8ff; color: #6b21a8; }
+
+.city-description {
+    max-width: 900px;
+    margin: 20px auto;
+    color: #475569;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* Sections & Grids */
+.section-wrapper {
+    max-width: 1200px;
+    margin: 40px auto 60px auto;
+    padding: 0 20px;
+}
+
+.section-heading {
+    font-size: 2rem;
+    color: #0f172a;
+    border-bottom: 3px solid #1e3a8a; /* Blue underline from screenshot */
+    display: inline-block;
+    padding-bottom: 8px;
+    margin-bottom: 30px;
+}
+
+.section-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+.filter-sort-group { display: flex; gap: 15px; }
+.filter-sort-group select {
+    padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1;
+    background-color: white; font-size: 14px; font-weight: 600; color: #334155;
+    cursor: pointer; outline: none;
+}
+
+/* The 3-Column UI Grid */
+.grid-container-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Exactly 3 columns */
+    gap: 30px;
+}
+
+/* Clean White UI Cards */
+.ui-card {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ui-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.category-text {
+    color: #2563eb;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.title-rating-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.card-desc {
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Badges & Buttons */
+.rating-badge {
+    background: #3b82f6;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.budget-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    width: fit-content;
+}
+
+.premium { background: #fef08a; color: #854d0e; } 
+.budget { background: #dcfce7; color: #166534; }  
+.expensive { background: #fef08a; color: #854d0e; }
+
+.price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: auto;
+    margin-bottom: 15px;
+}
+
+.book-btn-light {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.book-btn-light:hover { background-color: #dbeafe; }
+
+/* Transport Layout */
+.transport-layout {
+    display: flex;
+    gap: 30px;
+    align-items: stretch; /* Makes map and card equal height */
+}
+
+.transport-card {
+    flex: 0 0 350px; /* Fixed width for text */
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+.transport-list {
+    list-style: none;
+    margin-bottom: 20px;
+    color: #475569;
+}
+
+.transport-list li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.btn-green {
+    margin-top: auto;
+    background-color: #22c55e;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-green:hover { background-color: #16a34a; }
+
+.map-wrapper {
+    flex: 1; /* Map takes remaining space */
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+.map-header {
+    background: white;
+    padding: 12px 20px;
+    font-weight: 600;
+    color: #475569;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 /* --- FOOTER --- */
 .footer {
-    margin-top: auto; /* Pushes footer to the absolute bottom of the page */
-    padding: 30px 20px 15px 20px;
+    padding: 40px 20px 20px 20px;
     text-align: center;
     background-color: #0f172a; 
     color: #94a3b8;
-    width: 100%;
+    margin-top: auto;
 }
 
-.footer h2 {
-    margin-bottom: 10px;
-    color: #ffffff;
-}
+.footer h2 { margin-bottom: 10px; color: #ffffff; }
+.social-icons { margin: 20px 0; display: flex; justify-content: center; gap: 20px; }
+.social-icons a { color: #94a3b8; font-size: 20px; transition: 0.3s; }
+.social-icons a:hover { color: #3b82f6; transform: translateY(-3px); }
+.footer-bottom { margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
 
-.social-icons {
-    margin: 15px 0;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.social-icons a {
-    color: #94a3b8;
-    font-size: 20px;
-    transition: 0.3s;
-}
-
-.social-icons a:hover {
-    color: #3b82f6;
-    transform: translateY(-3px); 
-}
-
-.footer-bottom {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
 
 /* ==========================================================================
-   RESPONSIVE MEDIA QUERIES (Mobile Fixes)
+   RESPONSIVE (Mobile & Tablet)
    ========================================================================== */
 
+@media (max-width: 992px) {
+    .grid-container-3 { grid-template-columns: repeat(2, 1fr); }
+    .transport-layout { flex-direction: column; }
+    .transport-card { flex: auto; }
+}
+
 @media (max-width: 768px) {
-    /* Navbar Mobile Fix */
-    .navbar.dark-nav, .navbar {
-        padding: 15px;
-        flex-direction: column; /* Stacks the logo and the links */
-        gap: 15px;
-    }
+    .navbar.dark-nav, .navbar, .navbar-light { padding: 15px; flex-direction: column; gap: 15px; }
+    .nav-links { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; gap: 15px; }
     
-    .nav-links {
-        display: flex; /* Makes links visible on mobile! */
-        flex-wrap: wrap; /* Allows links to drop to a new line if needed */
-        justify-content: center;
-        width: 100%;
-        gap: 15px;
-    }
+    .grid-container-3 { grid-template-columns: 1fr; }
     
-    .hero-title {
-        font-size: 2.2rem; 
-        margin-top: 40px; /* Extra space to clear the taller mobile navbar */
-    }
+    .section-header-flex { flex-direction: column; align-items: flex-start; }
+    .filter-sort-group { flex-direction: column; width: 100%; margin-top: 15px; }
+    .filter-sort-group select { width: 100%; }
     
-    /* Search Bar Mobile Fix */
-    .search-input-wrapper {
-        width: 100%; 
-        min-width: 100%; 
-    }
-    
-    .search-btn {
-        width: 100%; /* Stretches button to match input width */
-    }
+    .city-title { font-size: 2.2rem; }
 }
