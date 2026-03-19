@@ -45,17 +45,6 @@ body {
     color: #f8fafc;
 }
 
-/* Light Nav for City Page (Matches your screenshots) */
-.navbar-light {
-    background-color: #0f172a;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.navbar-light .logo, .navbar-light .nav-links a {
-    color: #0f172a;
-    font-weight: 600;
-}
-
 .logo {
     font-size: 1.6rem;
     font-weight: 800;
@@ -99,7 +88,7 @@ body {
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: #f8fafc;
     max-width: 800px;
     text-shadow: 1px 2px 6px rgba(0,0,0,0.8);
@@ -126,8 +115,13 @@ body {
     box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); transition: all 0.3s ease;
 }
 
-.search-btn:hover { background-color: #2563eb; transform: translateY(-2px); box-shadow: 0 0 10px #007bff, 0 0 20px #007bff, 0 0 30px #007bff;}
-
+/* Glowing Search Button Effect */
+.search-btn:hover { 
+    background-color: #60a5fa; /* Lightens the blue slightly */
+    transform: translateY(-2px); 
+    /* The double shadow creates a strong, layered neon glow effect */
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.5); 
+}
 
 /* ==========================================================================
    CITY PAGE SPECIFIC STYLES (Light Theme)
