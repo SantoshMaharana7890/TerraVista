@@ -16,14 +16,6 @@ body {
     line-height: 1.6;
 }
 
-/* --- FLEXBOX PAGE LAYOUT --- */
-.home-bg {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; 
-    /* The background image has been removed from here so the footer doesn't overlap it! */
-}
-
 /* --- NAVIGATION BAR --- */
 .navbar, .navbar.dark-nav {
     background-color: #0f172a; 
@@ -62,9 +54,16 @@ body {
     color: #3b82f6; 
 }
 
+/* --- FLEXBOX PAGE LAYOUT --- */
+.home-bg {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Forces the page to be exactly the height of your screen */
+}
+
 /* --- HERO SECTION --- */
 .hero-section {
-    flex: 1; 
+    flex: 1; /* Automatically fills the space between the navbar and footer */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -76,7 +75,7 @@ body {
     /* The background image is now safely locked inside this section */
     background-image: url('/static/images/hero_bg.jpg');
     background-size: cover;
-    background-position: center bottom; /* Forces the bottom of the photo to stay visible */
+    background-position: bottom center; /* Forces the bottom of the image (the boats) to ALWAYS be visible just above the footer */
 }
 
 .hero-title {
