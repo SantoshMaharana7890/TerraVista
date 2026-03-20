@@ -17,7 +17,7 @@ def get_db_connection():
         database="defaultdb"
     )
 
-app.route('/')
+@app.route('/')
 def home():
     # Renders the main frontpage
     return render_template('index.html')
