@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ city.name }} - TerraVista</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=11.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=6.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -14,9 +14,8 @@
 <body class="city-page-bg">
 
     <nav class="navbar">
-        <div class="logo" style="display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-globe-americas" style="color: #3b82f6; font-size: 28px;"></i>
-            <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: #f8fafc;">Terra<span style="color: #3b82f6;">Vista</span></span>
+        <div class="logo">
+            <i class="fas fa-globe-americas" style="color: #3b82f6;"></i> TerraVista
         </div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
@@ -39,47 +38,37 @@
         </p>
     </div>
 
-    <header class="city-title-container">
-        <h1 class="city-title">{{ city.name }}</h1>
-        <div class="city-tags">
-             <span class="tag tag-blue">{{ city.tag1 | default('Historical Sites') }}</span>
-             <span class="tag tag-orange">{{ city.tag2 | default('Local Cuisine') }}</span>
-             <span class="tag tag-purple">{{ city.tag3 | default('Arts & Culture') }}</span>
-        </div>
-        <p class="city-description">
-            {{ city.description | default("Experience the spectacular paradox of chaos and hope, glamour and squalor. From aromatic street food stalls to dynamic city life, this metropolis caters to all, leaving an indelible mark.") }}
-        </p>
-    </header>
-
-    <main class="section-wrapper">
+    <div id="places" class="section-wrapper">
+        <h2 class="section-heading">Top Places to Visit</h2>
+        
         <div class="grid-container-3">
             {% for place in places %}
             <div class="ui-card">
-                <img src="{{ place.image_url }}" class="card-img" alt="{{ place.name }}">
+                <img src="{{ url_for('static', filename='images/' + place.image_file) }}" alt="{{ place.name }}" class="card-img">
                 <div class="card-content">
-                    <span class="category-text">{{ place.category | default('SIGHTSEEING') }}</span>
+                    <span class="category-text">{{ place.category | default('Historical & Cultural') }}</span>
                     <h3 class="card-title">{{ place.name }}</h3>
                     <p class="card-desc">{{ place.description }}</p>
                 </div>
             </div>
             {% endfor %}
         </div>
-    </main>
+    </div>
 
-    <section id="hotels" class="section-wrapper">
+    <div id="accommodations" class="section-wrapper">
         <div class="section-header-flex">
-            <h2 class="section-heading">Hotels & Dining</h2>
+            <h2 class="section-heading" style="margin-bottom: 0;">Hotels & Dining</h2>
             <div class="filter-sort-group">
-                <select name="filter">
-                    <option>Show All</option>
-                    <option>Hotels & Lodges</option>
-                    <option>Restaurants & Cafes</option>
+                <select id="typeFilter" onchange="filterAndSortItems()">
+                    <option value="all">Show All</option>
+                    <option value="lodging">Show Hotels & Lodges</option>
+                    <option value="dining">Show Restaurants & Cafes</option>
                 </select>
-                <select name="sort">
-                    <option>Sort By</option>
-                    <option>Price: High to Low</option>
-                    <option>Price: Low to High</option>
-                    <option>Top Rated</option>
+                <select id="sortOptions" onchange="filterAndSortItems()">
+                    <option value="default">Sort By</option>
+                    <option value="highToLow">Price: High to Low</option>
+                    <option value="lowToHigh">Price: Low to High</option>
+                    <option value="rating">Top Rated</option>
                 </select>
             </div>
         </div>
@@ -129,10 +118,8 @@
     </div>
 
     <footer class="footer">
-        <h2 style="margin: 0 0 15px 0; font-size: 1.8rem; letter-spacing: -0.5px;">
-            <span style="font-weight: 800; color: #ffffff;">Terra</span><span style="color: #3b82f6;">Vista</span>
-        </h2>
-        <p>Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history.</p>
+        <h2>TerraVista</h2>
+        <p>Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history. Made with passion by a final year B.Tech student.</p>
         <div class="social-icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
@@ -141,7 +128,7 @@
             <a href="#"><i class="fab fa-linkedin-in"></i></a>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 TerraVista. All rights reserved.</p>
+            <p>&copy; 2026 TerraVista Major Project. All rights reserved.</p>
         </div>
     </footer>
 
