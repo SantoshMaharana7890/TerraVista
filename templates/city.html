@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ city.name }} - TerraVista</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=11.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -39,34 +39,47 @@
         </p>
     </div>
 
-    <div class="grid-container-3">
+    <header class="city-title-container">
+        <h1 class="city-title">{{ city.name }}</h1>
+        <div class="city-tags">
+             <span class="tag tag-blue">{{ city.tag1 | default('Historical Sites') }}</span>
+             <span class="tag tag-orange">{{ city.tag2 | default('Local Cuisine') }}</span>
+             <span class="tag tag-purple">{{ city.tag3 | default('Arts & Culture') }}</span>
+        </div>
+        <p class="city-description">
+            {{ city.description | default("Experience the spectacular paradox of chaos and hope, glamour and squalor. From aromatic street food stalls to dynamic city life, this metropolis caters to all, leaving an indelible mark.") }}
+        </p>
+    </header>
+
+    <main class="section-wrapper">
+        <div class="grid-container-3">
             {% for place in places %}
             <div class="ui-card">
-                <img src="{{ url_for('static', filename='images/' + place.image_file) }}" alt="{{ place.name }}" class="card-img">
+                <img src="{{ place.image_url }}" class="card-img" alt="{{ place.name }}">
                 <div class="card-content">
-                    <span class="category-text">{{ place.category | default('Historical & Cultural') }}</span>
+                    <span class="category-text">{{ place.category | default('SIGHTSEEING') }}</span>
                     <h3 class="card-title">{{ place.name }}</h3>
                     <p class="card-desc">{{ place.description }}</p>
                 </div>
             </div>
             {% endfor %}
         </div>
-    </div>
+    </main>
 
-    <div id="accommodations" class="section-wrapper">
+    <section id="hotels" class="section-wrapper">
         <div class="section-header-flex">
-            <h2 class="section-heading" style="margin-bottom: 0;">Hotels & Dining</h2>
+            <h2 class="section-heading">Hotels & Dining</h2>
             <div class="filter-sort-group">
-                <select id="typeFilter" onchange="filterAndSortItems()">
-                    <option value="all">Show All</option>
-                    <option value="lodging">Show Hotels & Lodges</option>
-                    <option value="dining">Show Restaurants & Cafes</option>
+                <select name="filter">
+                    <option>Show All</option>
+                    <option>Hotels & Lodges</option>
+                    <option>Restaurants & Cafes</option>
                 </select>
-                <select id="sortOptions" onchange="filterAndSortItems()">
-                    <option value="default">Sort By</option>
-                    <option value="highToLow">Price: High to Low</option>
-                    <option value="lowToHigh">Price: Low to High</option>
-                    <option value="rating">Top Rated</option>
+                <select name="sort">
+                    <option>Sort By</option>
+                    <option>Price: High to Low</option>
+                    <option>Price: Low to High</option>
+                    <option>Top Rated</option>
                 </select>
             </div>
         </div>
