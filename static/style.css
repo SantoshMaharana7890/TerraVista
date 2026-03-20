@@ -173,9 +173,9 @@ body {
 
 /* Sections & Grids */
 .section-wrapper {
-    max-width: 1200px;
-    margin: 40px auto 60px auto;
-    padding: 0 20px;
+    max-width: 1300px; /* Increased slightly for a wider frame */
+    margin: 60px auto; 
+    padding: 0 40px; /* More side padding to prevent cards from touching screen corners */
 }
 
 .section-heading {
@@ -219,25 +219,29 @@ body {
     border: 1px solid #e2e8f0;
     box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     overflow: hidden;
+    height: 100%; /* Ensures all cards in a row are the same height */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .ui-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.15); /* Soft blue glow frame */
+    border-color: #3b82f6;
 }
 
 .card-img {
     width: 100%;
-    height: 240px;
+    aspect-ratio: 16 / 9; /* Professional cinematic framing */
     object-fit: cover;
+    object-position: center; /* Ensures the heart of the photo is always visible */
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .card-content {
-    padding: 20px;
+    padding: 25px; /* More padding inside for a cleaner frame */
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex-grow: 1; /* This is the secret for vertical alignment */
 }
 
 .category-text {
@@ -266,7 +270,9 @@ body {
     color: #475569;
     font-size: 0.95rem;
     line-height: 1.6;
-}
+    margin-bottom: 20px;
+    flex-grow: 1; /* Pushes everything below it to the absolute bottom */
+} 
 
 /* Badges & Buttons */
 .rating-badge {
