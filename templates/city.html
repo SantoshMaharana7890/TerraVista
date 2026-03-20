@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ city.name }} - TerraVista</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=6.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 </head>
 <body class="city-page-bg">
 
@@ -36,10 +39,7 @@
         </p>
     </div>
 
-    <div id="places" class="section-wrapper">
-        <h2 class="section-heading">Top Places to Visit</h2>
-        
-        <div class="grid-container-3">
+    <div class="grid-container-3">
             {% for place in places %}
             <div class="ui-card">
                 <img src="{{ url_for('static', filename='images/' + place.image_file) }}" alt="{{ place.name }}" class="card-img">
@@ -59,8 +59,8 @@
             <div class="filter-sort-group">
                 <select id="typeFilter" onchange="filterAndSortItems()">
                     <option value="all">Show All</option>
-                    <option value="lodging">Show Hotels</option>
-                    <option value="dining">Show Restaurants</option>
+                    <option value="lodging">Show Hotels & Lodges</option>
+                    <option value="dining">Show Restaurants & Cafes</option>
                 </select>
                 <select id="sortOptions" onchange="filterAndSortItems()">
                     <option value="default">Sort By</option>
@@ -96,18 +96,21 @@
             <div class="transport-card">
                 <h3 style="color: #1e3a8a; margin-bottom: 20px;"><i class="fas fa-bus"></i> Local Transport</h3>
                 <ul class="transport-list">
-                    <li>🚌 BEST Bus Routes covering all major tourist zones (Operating 5 AM - 12 AM). Safe and highly connected.</li>
+                    <li>🚌 BEST Bus Routes covering all major tourist zones. Safe and highly connected.</li>
                     <li>🚕 Yellow-Black Taxis (Kaali-Peeli) available via meters directly from all stations.</li>
-                    <li>🚆 Local Train Network (Central, Western, Harbour lines) - The fastest way to cross the city.</li>
+                    <li>🚆 Local Train Network - The fastest way to cross the city.</li>
                 </ul>
                 <button class="btn-green"><i class="fas fa-taxi"></i> Book Local Cab Now</button>
             </div>
             
             <div class="map-wrapper">
-                <div class="map-header">
-                    <i class="fas fa-shield-alt" style="color: #22c55e;"></i> Showing shortest & safest routes.
+                <div class="map-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span><i class="fas fa-route" style="color: #3b82f6;"></i> Interactive Route Planner</span>
+                    <span id="weatherBadge" style="background: #e0e7ff; color: #3730a3; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
+                        <i class="fas fa-cloud-sun"></i> Fetching weather...
+                    </span>
                 </div>
-                <div id="liveMap" style="height: 400px; width: 100%;"></div>
+                <div id="liveMap" style="height: 500px; width: 100%;"></div>
             </div>
         </div>
     </div>
@@ -130,8 +133,11 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    
     <script>
-        // Your exact original filtering logic
+        // --- 1. DYNAMIC FILTER & SORT LOGIC ---
         function filterAndSortItems() {
             let container = document.getElementById("itemGrid");
             let cards = Array.from(container.getElementsByClassName("item-card"));
@@ -166,14 +172,47 @@
             cards.forEach(card => container.appendChild(card));
         }
 
-        // Your exact original Map Logic
-        var map = L.map('liveMap').setView([18.9220, 72.8347], 14); 
+        // --- 2. DYNAMIC CITY COORDINATES ---
+        const currentCity = "{{ city.name }}";
+        let cityLat = 18.9220; // Default: Mumbai
+        let cityLng = 72.8347;
+
+        if (currentCity === "Hyderabad") { cityLat = 17.3850; cityLng = 78.4867; }
+        else if (currentCity === "Bhubaneswar") { cityLat = 20.2961; cityLng = 85.8245; }
+        else if (currentCity === "Punjab") { cityLat = 31.6340; cityLng = 74.8723; } // Amritsar coordinates
+        else if (currentCity === "Kolkata") { cityLat = 22.5726; cityLng = 88.3639; }
+
+        // --- 3. ADVANCED ROUTING MAP ---
+        var map = L.map('liveMap').setView([cityLat, cityLng], 13); 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors | TerraVista Routing'
         }).addTo(map);
-        L.marker([18.9220, 72.8347]).addTo(map)
-            .bindPopup('<b>{{ city.name }}</b><br>City Center (Safe Zone)')
-            .openPopup();
+
+        // Add the routing machine with Search Boxes
+        L.Routing.control({
+            waypoints: [
+                L.latLng(cityLat, cityLng), // Start at city center
+                null // Leaves destination empty for user input
+            ],
+            routeWhileDragging: true,
+            geocoder: L.Control.Geocoder.nominatim(),
+            lineOptions: {
+                styles: [{color: '#3b82f6', opacity: 0.8, weight: 6}]
+            },
+            showAlternatives: true
+        }).addTo(map);
+
+        // --- 4. REAL-TIME WEATHER FETCH ---
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${cityLat}&longitude=${cityLng}&current_weather=true`)
+            .then(response => response.json())
+            .then(data => {
+                const temp = data.current_weather.temperature;
+                const wind = data.current_weather.windspeed;
+                document.getElementById('weatherBadge').innerHTML = `<i class="fas fa-temperature-high"></i> ${temp}°C | Wind: ${wind} km/h`;
+            })
+            .catch(error => {
+                document.getElementById('weatherBadge').innerHTML = `<i class="fas fa-cloud"></i> Weather Unavailable`;
+            });
     </script>
 </body>
 </html>
