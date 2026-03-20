@@ -1,218 +1,419 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ city.name }} - TerraVista</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+/* ==========================================================================
+   TERRAVISTA MASTER STYLESHEET
+   Includes Global Styles, Dark Homepage, and Light City Page
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f8fafc; 
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+.home-bg {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.city-page-bg {
+    background-color: #f8fafc;
+}
+
+/* --- NAVIGATION BAR --- */
+.navbar {
+    background-color: #0f172a; 
+    padding: 15px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; 
+    top: 0;
+    width: 100%;
+    z-index: 1000; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+.navbar .logo, .navbar .nav-links a {
+    color: #f8fafc;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #3b82f6 !important;
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.8), 0 0 20px rgba(96, 165, 250, 0.5); 
+}
+
+/* --- HOME PAGE HERO --- */
+.hero-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 120px 20px 40px 20px; 
+    width: 100%;
+    background-image: url('/static/images/hero_bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    color: #ffffff;
+    margin-bottom: 15px;
+    text-shadow: 2px 4px 10px rgba(0,0,0,0.7); 
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #f8fafc;
+    max-width: 800px;
+    text-shadow: 1px 2px 6px rgba(0,0,0,0.8);
+}
+
+.search-bar-container {
+    display: flex; gap: 15px; align-items: center; justify-content: center;
+    width: 100%; max-width: 700px; margin-top: 35px; flex-wrap: wrap;
+}
+
+.search-input-wrapper { position: relative; flex: 1; min-width: 250px; }
+
+.city-select {
+    width: 100%; height: 55px; border-radius: 30px; border: none; padding: 0 45px; 
+    font-size: 1.05rem; color: #475569; appearance: none; outline: none; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer;
+}
+
+.location-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.1rem; z-index: 2; }
+.dropdown-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+
+.search-btn {
+    height: 55px; padding: 0 35px; background-color: #3b82f6; color: white; border: none;
+    border-radius: 30px; font-weight: bold; font-size: 1.1rem; cursor: pointer;
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); transition: all 0.3s ease;
+}
+
+/* Glowing Search Button Effect */
+.search-btn:hover { 
+    background-color: #60a5fa; /* Lightens the blue slightly */
+    transform: translateY(-2px); 
+    /* The double shadow creates a strong, layered neon glow effect */
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.5); 
+}
+
+
+/* ==========================================================================
+   CITY PAGE SPECIFIC STYLES
+   ========================================================================== */
+
+/* City Header Content */
+.city-title-container {
+    padding: 120px 20px 20px 20px;
+    text-align: center;
+}
+
+.city-title {
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #0f172a;
+}
+
+.city-tags {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.tag {
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tag-blue { background: #e0e7ff; color: #3730a3; }
+.tag-orange { background: #ffedd5; color: #9a3412; }
+.tag-purple { background: #f3e8ff; color: #6b21a8; }
+
+.city-description {
+    max-width: 900px;
+    margin: 20px auto;
+    color: #475569;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* Sections & Grids */
+.section-wrapper {
+    max-width: 1200px;
+    margin: 40px auto 60px auto;
+    padding: 0 20px;
+}
+
+.section-heading {
+    font-size: 2rem;
+    color: #0f172a;
+    border-bottom: 3px solid #1e3a8a; 
+    display: inline-block;
+    padding-bottom: 8px;
+    margin-bottom: 30px;
+}
+
+.section-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+.filter-sort-group { display: flex; gap: 15px; }
+.filter-sort-group select {
+    padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1;
+    background-color: white; font-size: 14px; font-weight: 600; color: #334155;
+    cursor: pointer; outline: none;
+}
+
+/* The 3-Column UI Grid */
+.grid-container-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px;
+}
+
+/* Clean White UI Cards */
+.ui-card {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ui-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.category-text {
+    color: #2563eb;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.title-rating-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.card-desc {
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Badges & Buttons */
+.rating-badge {
+    background: #3b82f6;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.budget-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    width: fit-content;
+}
+
+.premium { background: #fef08a; color: #854d0e; } 
+.budget { background: #dcfce7; color: #166534; }  
+.expensive { background: #fef08a; color: #854d0e; }
+
+.price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: auto;
+    margin-bottom: 15px;
+}
+
+.book-btn-light {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.book-btn-light:hover { background-color: #dbeafe; }
+
+/* Transport Layout */
+.transport-layout {
+    display: flex;
+    gap: 30px;
+    align-items: stretch; 
+}
+
+.transport-card {
+    flex: 0 0 350px; 
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+.transport-list {
+    list-style: none;
+    margin-bottom: 20px;
+    color: #475569;
+}
+
+.transport-list li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.btn-green {
+    margin-top: auto;
+    background-color: #22c55e;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-green:hover { background-color: #16a34a; }
+
+.map-wrapper {
+    flex: 1; 
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+.map-header {
+    background: white;
+    padding: 12px 20px;
+    font-weight: 600;
+    color: #475569;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* --- FOOTER --- */
+.footer {
+    padding: 40px 20px 20px 20px;
+    text-align: center;
+    background-color: #0f172a; 
+    color: #94a3b8;
+    margin-top: auto;
+}
+
+.footer h2 { margin-bottom: 10px; color: #ffffff; }
+.social-icons { margin: 20px 0; display: flex; justify-content: center; gap: 20px; }
+.social-icons a { color: #94a3b8; font-size: 20px; transition: 0.3s; }
+.social-icons a:hover { color: #3b82f6; transform: translateY(-3px); }
+.footer-bottom { margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+
+
+/* ==========================================================================
+   RESPONSIVE (Mobile & Tablet)
+   ========================================================================== */
+
+@media (max-width: 992px) {
+    .grid-container-3 { grid-template-columns: repeat(2, 1fr); }
+    .transport-layout { flex-direction: column; }
+    .transport-card { flex: auto; }
+}
+
+@media (max-width: 768px) {
+    .navbar { padding: 15px; flex-direction: column; gap: 15px; }
+    .nav-links { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; gap: 15px; }
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-</head>
-<body class="city-page-bg">
-
-    <nav class="navbar">
-        <div class="logo" style="display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-globe-americas" style="color: #3b82f6; font-size: 28px;"></i>
-            <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: #f8fafc;">Terra<span style="color: #3b82f6;">Vista</span></span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="#places">Destinations</a></li>
-            <li><a href="#accommodations">Hotels & Dining</a></li>
-            <li><a href="#transport">Transport</a></li>
-            <li><a href="/about">About Us</a></li>
-        </ul>
-    </nav>
-
-    <div class="city-title-container">
-        <h1 class="city-title">{{ city.name }}</h1>
-        <div class="city-tags">
-            <span class="tag tag-blue"><i class="fas fa-landmark"></i> {{ city.tag1 | default('Historical Sites') }}</span>
-            <span class="tag tag-orange"><i class="fas fa-utensils"></i> {{ city.tag2 | default('Local Cuisine') }}</span>
-            <span class="tag tag-purple"><i class="fas fa-palette"></i> {{ city.tag3 | default('Arts & Culture') }}</span>
-        </div>
-        <p class="city-description">
-            {{ city.description | default("Experience the spectacular paradox of chaos and hope, glamour and squalor. From aromatic street food stalls to dynamic city life, this metropolis caters to all, leaving an indelible mark.") }}
-        </p>
-    </div>
-
-    <div class="grid-container-3">
-            {% for place in places %}
-            <div class="ui-card">
-                <img src="{{ url_for('static', filename='images/' + place.image_file) }}" alt="{{ place.name }}" class="card-img">
-                <div class="card-content">
-                    <span class="category-text">{{ place.category | default('Historical & Cultural') }}</span>
-                    <h3 class="card-title">{{ place.name }}</h3>
-                    <p class="card-desc">{{ place.description }}</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-    <div id="accommodations" class="section-wrapper">
-        <div class="section-header-flex">
-            <h2 class="section-heading" style="margin-bottom: 0;">Hotels & Dining</h2>
-            <div class="filter-sort-group">
-                <select id="typeFilter" onchange="filterAndSortItems()">
-                    <option value="all">Show All</option>
-                    <option value="lodging">Show Hotels & Lodges</option>
-                    <option value="dining">Show Restaurants & Cafes</option>
-                </select>
-                <select id="sortOptions" onchange="filterAndSortItems()">
-                    <option value="default">Sort By</option>
-                    <option value="highToLow">Price: High to Low</option>
-                    <option value="lowToHigh">Price: Low to High</option>
-                    <option value="rating">Top Rated</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="grid-container-3" id="itemGrid">
-            {% for item in items %}
-            <div class="ui-card item-card" data-price="{{ item.price }}" data-rating="{{ item.rating }}" data-type="{{ item.type }}">
-                <img src="{{ url_for('static', filename='images/' + item.image_file) }}" alt="{{ item.name }}" class="card-img">
-                <div class="card-content">
-                    <div class="title-rating-row">
-                        <h3 class="card-title">{{ item.name }}</h3>
-                        <span class="rating-badge"><i class="fas fa-star" style="font-size: 0.8rem;"></i> {{ item.rating }}</span>
-                    </div>
-                    <span class="budget-badge {{ item.budget_category | lower | replace(' ', '-') | replace('/', '') }}">{{ item.budget_category }}</span>
-                    <p class="price">₹{{ item.price }} <small>/ night or meal</small></p>
-                    <button class="book-btn-light">Direct Book Now</button>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-    <div id="transport" class="section-wrapper">
-        <h2 class="section-heading">Transport & Live Routes</h2>
-        
-        <div class="transport-layout">
-            <div class="transport-card">
-                <h3 style="color: #1e3a8a; margin-bottom: 20px;"><i class="fas fa-bus"></i> Local Transport</h3>
-                <ul class="transport-list">
-                    <li>🚌 BEST Bus Routes covering all major tourist zones. Safe and highly connected.</li>
-                    <li>🚕 Yellow-Black Taxis (Kaali-Peeli) available via meters directly from all stations.</li>
-                    <li>🚆 Local Train Network - The fastest way to cross the city.</li>
-                </ul>
-                <button class="btn-green"><i class="fas fa-taxi"></i> Book Local Cab Now</button>
-            </div>
-            
-            <div class="map-wrapper">
-                <div class="map-header" style="display: flex; justify-content: space-between; align-items: center;">
-                    <span><i class="fas fa-route" style="color: #3b82f6;"></i> Interactive Route Planner</span>
-                    <span id="weatherBadge" style="background: #e0e7ff; color: #3730a3; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
-                        <i class="fas fa-cloud-sun"></i> Fetching weather...
-                    </span>
-                </div>
-                <div id="liveMap" style="height: 500px; width: 100%;"></div>
-            </div>
-        </div>
-    </div>
-
-    <footer class="footer">
-        <h2 style="margin: 0 0 15px 0; font-size: 1.8rem; letter-spacing: -0.5px;">
-            <span style="font-weight: 800; color: #ffffff;">Terra</span><span style="color: #3b82f6;">Vista</span>
-        </h2>
-        <p>Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history.</p>
-        <div class="social-icons">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 TerraVista. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    .grid-container-3 { grid-template-columns: 1fr; }
     
-    <script>
-        // --- 1. DYNAMIC FILTER & SORT LOGIC ---
-        function filterAndSortItems() {
-            let container = document.getElementById("itemGrid");
-            let cards = Array.from(container.getElementsByClassName("item-card"));
-            let sortValue = document.getElementById("sortOptions").value;
-            let filterValue = document.getElementById("typeFilter").value;
-
-            cards.forEach(card => {
-                let itemType = card.getAttribute("data-type");
-                let isLodging = (itemType === "Hotel" || itemType === "Lodge");
-                let isDining = (itemType === "Restaurant" || itemType === "Cafe");
-
-                if (filterValue === "all" || (filterValue === "lodging" && isLodging) || (filterValue === "dining" && isDining)) {
-                    card.style.display = "flex"; 
-                } else {
-                    card.style.display = "none";  
-                }
-            });
-
-            cards.sort(function(a, b) {
-                let priceA = parseInt(a.getAttribute("data-price"));
-                let priceB = parseInt(b.getAttribute("data-price"));
-                let ratingA = parseFloat(a.getAttribute("data-rating"));
-                let ratingB = parseFloat(b.getAttribute("data-rating"));
-
-                if (sortValue === "lowToHigh") return priceA - priceB;
-                if (sortValue === "highToLow") return priceB - priceA;
-                if (sortValue === "rating") return ratingB - ratingA;
-                return 0; 
-            });
-
-            container.innerHTML = "";
-            cards.forEach(card => container.appendChild(card));
-        }
-
-        // --- 2. DYNAMIC CITY COORDINATES ---
-        const currentCity = "{{ city.name }}";
-        let cityLat = 18.9220; // Default: Mumbai
-        let cityLng = 72.8347;
-
-        if (currentCity === "Hyderabad") { cityLat = 17.3850; cityLng = 78.4867; }
-        else if (currentCity === "Bhubaneswar") { cityLat = 20.2961; cityLng = 85.8245; }
-        else if (currentCity === "Punjab") { cityLat = 31.6340; cityLng = 74.8723; } // Amritsar coordinates
-        else if (currentCity === "Kolkata") { cityLat = 22.5726; cityLng = 88.3639; }
-
-        // --- 3. ADVANCED ROUTING MAP ---
-        var map = L.map('liveMap').setView([cityLat, cityLng], 13); 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors | TerraVista Routing'
-        }).addTo(map);
-
-        // Add the routing machine with Search Boxes
-        L.Routing.control({
-            waypoints: [
-                L.latLng(cityLat, cityLng), // Start at city center
-                null // Leaves destination empty for user input
-            ],
-            routeWhileDragging: true,
-            geocoder: L.Control.Geocoder.nominatim(),
-            lineOptions: {
-                styles: [{color: '#3b82f6', opacity: 0.8, weight: 6}]
-            },
-            showAlternatives: true
-        }).addTo(map);
-
-        // --- 4. REAL-TIME WEATHER FETCH ---
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${cityLat}&longitude=${cityLng}&current_weather=true`)
-            .then(response => response.json())
-            .then(data => {
-                const temp = data.current_weather.temperature;
-                const wind = data.current_weather.windspeed;
-                document.getElementById('weatherBadge').innerHTML = `<i class="fas fa-temperature-high"></i> ${temp}°C | Wind: ${wind} km/h`;
-            })
-            .catch(error => {
-                document.getElementById('weatherBadge').innerHTML = `<i class="fas fa-cloud"></i> Weather Unavailable`;
-            });
-    </script>
-</body>
-</html>
+    .section-header-flex { flex-direction: column; align-items: flex-start; }
+    .filter-sort-group { flex-direction: column; width: 100%; margin-top: 15px; }
+    .filter-sort-group select { width: 100%; }
+    
+    .city-title { font-size: 2.2rem; }
+}
