@@ -22,41 +22,28 @@
     </nav>
 
     <header class="hero-section">
-        <h1 class="hero-title">Experience the True Essence of India</h1>
-        <p class="hero-subtitle">Discover heritage, savor authentic cuisines, and stay in comfort. Curate your perfect journey today.</p>
-        
-        <form action="/search" method="get" class="search-bar-container">
-            <div class="search-input-wrapper" style="display: flex; align-items: center; width: 100%;">
-                <i class="fas fa-map-marker-alt" style="margin-left: 15px; color: #94a3b8;"></i>
-                <select name="city" class="city-select" required style="-webkit-appearance: none; -moz-appearance: none; appearance: none; text-align: center; cursor: pointer;">
-                    <option value="" disabled selected>Select a destination (Mumbai, Hyderabad, Bhubaneswar, Punjab, Kolkata...)</option>
-                    <option value="Mumbai">Mumbai - The City of Dreams</option>
-                    <option value="Hyderabad">Hyderabad - The City of Pearls</option>
-                    <option value="Bhubaneswar">Bhubaneswar - The Temple City</option>
-                    <option value="Punjab">Punjab - The Land of Five Rivers</option>
-                    <option value="Kolkata">Kolkata - The City of Joy</option>
-                </select>
-                <i class="fas fa-chevron-down dropdown-icon"></i>
-            </div>
+        <h1 class="hero-title" style="margin-bottom: 20px;">Experience the True Essence of India</h1>
+        <p class="hero-subtitle">
+            Discover heritage, savor authentic cuisines, and stay in comfort. Curate your perfect journey today.
+        </p>
 
-            <button type="submit" class="search-btn">Search</button>
-
+        <form action="/search" method="get" style="display: flex; background: #ffffff; padding: 8px 8px 8px 25px; border-radius: 50px; width: 100%; max-width: 750px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); align-items: center; gap: 15px; margin-top: 10px;">
+            
+            <i class="fas fa-map-marker-alt" style="color: #94a3b8; font-size: 1.2rem;"></i>
+            
+            <select name="city" required style="flex: 1; border: none; outline: none; font-size: 1.1rem; background: transparent; cursor: pointer; color: #334155;">
+                <option value="" disabled selected>Select a destination (Mumbai, Hyderabad, Bhubaneswar, Punjab)...</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Bhubaneswar">Bhubaneswar</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Kolkata">Kolkata</option>
+            </select>
+            
+            <button type="submit" style="background: #3b82f6; color: white; border: none; padding: 14px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1.05rem; transition: background 0.3s;">
+                Search
+            </button>
         </form>
-
-        <div style="margin-top: 40px; display: flex; gap: 30px; color: #cbd5e1;">
-            <div style="text-align: center;">
-                <h4 style="color: #ffffff;">5+</h4>
-                <p style="font-size: 0.8rem;">Cities</p>
-            </div>
-            <div style="text-align: center; border-left: 1px solid #475569; padding-left: 30px;">
-                <h4 style="color: #ffffff;">50+</h4>
-                <p style="font-size: 0.8rem;">Destinations</p>
-            </div>
-            <div style="text-align: center; border-left: 1px solid #475569; padding-left: 30px;">
-                <h4 style="color: #ffffff;">Live</h4>
-                <p style="font-size: 0.8rem;">Mappls API</p>
-            </div>
-        </div>
     </header>
     
     <footer class="footer">
