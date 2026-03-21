@@ -1,6 +1,6 @@
 /* ==========================================================================
-   TERRAVISTA MASTER STYLESHEET
-   Includes Global Styles, Dark Homepage, and Light City Page
+   TERRAVISTA MASTER STYLESHEET - V12.0 (FINAL POLISH)
+   Fixes: Sticky Footer, Thinner Footer, Subtitle Break, and Custom Select
    ========================================================================== */
 
 * {
@@ -10,25 +10,16 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* 1. KILLS THE WHITE GAP - Forces body to full screen height */
 body {
-    background-color: #f8fafc; 
+    background-color: #f8fafc;
     color: #1e293b;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.home-bg {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.city-page-bg {
-    background-color: #f8fafc;
-}
-
-/* --- NAVIGATION BAR --- */
+/* --- THE NAVBAR --- */
 .navbar {
     background-color: #0f172a;
     padding: 15px 60px;
@@ -42,237 +33,111 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
 
-.navbar .logo, .navbar .nav-links a {
-    color: #f8fafc;
-}
-
-.logo {
-    font-size: 1.6rem;
-    font-weight: 800;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: #3b82f6 !important;
-    text-shadow: 0 0 10px rgba(96, 165, 250, 0.8), 0 0 20px rgba(96, 165, 250, 0.5); 
-}
+.navbar .logo { color: #ffffff; font-size: 1.6rem; font-weight: 800; text-decoration: none; }
+.nav-links { list-style: none; display: flex; gap: 30px; }
+.nav-links a { color: #cbd5e1; text-decoration: none; transition: all 0.3s ease; }
+.nav-links a:hover { color: #60a5fa !important; text-shadow: 0 0 10px rgba(96, 165, 250, 0.8); }
 
 /* --- HOME PAGE HERO --- */
 .hero-section {
-    flex: 1;
+    flex-grow: 1; /* THIS FIXES THE GAP: Pushes the footer down */
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 120px 20px 40px 20px; 
-    width: 100%;
-    background-image: url('/static/images/hero_bg.jpg');
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), 
+                url('/static/images/hero_bg.jpg') no-repeat center center/cover;
+    padding: 100px 20px 20px 20px; /* Accounts for navbar */
 }
 
 .hero-title {
     font-size: 3.5rem;
     color: #ffffff;
     margin-bottom: 15px;
-    text-shadow: 2px 4px 10px rgba(0,0,0,0.7); 
+    font-weight: 800;
 }
 
+/* SUBTITLE WRAP FIX - Max-width forces the second line perfectly */
 .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     color: #ffffff;
-    margin-bottom: 40px;
-    max-width: 800px;
-    text-shadow: 1px 2px 6px rgba(0,0,0,0.8);
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.9);
+    font-weight: 500;
+    line-height: 1.6;
+    margin: 0 auto 35px auto;
+    max-width: 620px; /* Magic number to break the line correctly */
 }
 
+/* --- THE SEARCH BAR (CSS ONLY) --- */
 .search-bar-container {
-    display: flex; gap: 15px; align-items: center; justify-content: center;
-    width: 100%; max-width: 700px; margin-top: 35px; flex-wrap: wrap;
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
 }
 
-.search-input-wrapper { position: relative; flex: 1; min-width: 250px; }
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px 25px;
+    border-radius: 50px;
+    flex: 1;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
 
+/* THE DROPDOWN ARROW FIX via CSS Background SVG */
 .city-select {
-    width: 100%; height: 55px; border-radius: 30px; border: none; padding: 0 45px; 
-    font-size: 1.05rem; color: #475569; appearance: none; outline: none; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer;
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1.1rem;
+    background: transparent;
+    cursor: pointer;
+    color: #334155;
+    padding-right: 30px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Custom SVG Arrow injected via CSS */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 5px center;
+    background-size: 16px;
 }
-
-.location-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.1rem; z-index: 2; }
-.dropdown-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
 
 .search-btn {
-    height: 55px; padding: 0 35px; background-color: #3b82f6; color: white; border: none;
-    border-radius: 30px; font-weight: bold; font-size: 1.1rem; cursor: pointer;
-    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); transition: all 0.3s ease;
-}
-
-/* Glowing Search Button Effect */
-.search-btn:hover { 
-    background-color: #60a5fa; /* Lightens the blue slightly */
-    transform: translateY(-2px); 
-    /* The double shadow creates a strong, layered neon glow effect */
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.5); 
-}
-
-
-/* ==========================================================================
-   CITY PAGE SPECIFIC STYLES
-   ========================================================================== */
-
-/* City Header Content */
-.city-title-container {
-    padding: 120px 20px 20px 20px;
-    text-align: center;
-}
-
-.city-title {
-    font-size: 3rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #0f172a;
-}
-
-.city-tags {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin: 20px 0;
-    flex-wrap: wrap;
-}
-
-.tag {
-    padding: 8px 18px;
-    border-radius: 30px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.tag-blue { background: #e0e7ff; color: #3730a3; }
-.tag-orange { background: #ffedd5; color: #9a3412; }
-.tag-purple { background: #f3e8ff; color: #6b21a8; }
-
-.city-description {
-    max-width: 900px;
-    margin: 20px auto;
-    color: #475569;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0 40px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
     font-size: 1.1rem;
-    line-height: 1.8;
+    box-shadow: 0 10px 30px rgba(59,130,246,0.4);
+    transition:  all 0.3s ease;
 }
 
-/* Sections & Grids */
-.section-wrapper {
-    max-width: 1300px; /* Increased slightly for a wider frame */
-    margin: 60px auto; 
-    padding: 0 40px; /* More side padding to prevent cards from touching screen corners */
-}
+.search-btn:hover { background: #2563eb; transform: translateY(-2px); }
 
-.section-heading {
-    font-size: 2rem;
-    color: #0f172a;
-    border-bottom: 3px solid #1e3a8a; 
-    display: inline-block;
-    padding-bottom: 8px;
-    margin-bottom: 30px;
-}
+/* --- CITY PAGE & CARDS --- */
+.city-title-container { padding: 140px 20px 40px 20px; text-align: center; }
+.section-wrapper { max-width: 1400px; margin: 0 auto 80px auto; padding: 0 60px; }
+.section-heading { font-size: 2.2rem; color: #0f172a; border-bottom: 4px solid #3b82f6; display: inline-block; padding-bottom: 10px; margin-bottom: 40px; }
+.grid-container-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; align-items: stretch; }
 
-.section-header-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #e2e8f0;
-    padding-bottom: 10px;
-}
-
-.filter-sort-group { display: flex; gap: 15px; }
-.filter-sort-group select {
-    padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1;
-    background-color: white; font-size: 14px; font-weight: 600; color: #334155;
-    cursor: pointer; outline: none;
-}
-
-/* The 3-Column UI Grid */
-.grid-container-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 40px;
-    align-items: stretch; /* Keeps all cards in a row equal height */
-}
-
-/* Clean White UI Cards */
 .ui-card {
-    display: flex;
-    flex-direction: column;
-    background: #ffffff;
-    border-radius: 16px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    overflow: hidden;
-    height: 100%; /* Ensures all cards in a row are the same height */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; height: 100%; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); transition: transform 0.3s ease;
 }
-
-.ui-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.15); /* Soft blue glow frame */
-    border-color: #3b82f6;
-}
-
-.card-img {
-    width: 100%;
-    aspect-ratio: 1 / 1; /* Professional cinematic framing */
-    object-fit: cover;
-    object-position: center; /* Ensures the heart of the photo is always visible */
-    border-bottom: 1px solid #e2e8f0;
-    background-color: #f1f5f9;
-    min-height: 250px; /* Ensures the card stays the same size even if image fails */
-    display: block; /* Prevents tiny gaps at the bottom */
-}
-
-.card-content {
-    padding: 25px; /* More padding inside for a cleaner frame */
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* This is the secret for vertical alignment */
-}
-
-.category-text {
-    color: #3b82f6;
-    font-size: 0.8rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-}
-
-.title-rating-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.card-title {
-    font-size: 1.3rem;
-    color: #0f172a;
-    margin-bottom: 10px;
-}
-
+.ui-card:hover { transform: translateY(-8px); }
+.card-img { width: 100%; height: 220px; object-fit: cover; object-position: center; background-color: #f1f5f9; }
+.card-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+.category-text { font-size: 0.75rem; color: #3b82f6; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+.card-title { font-size: 1.3rem; color: #0f172a; margin-bottom: 10px; }
 .card-desc {
     color: #475569;
     font-size: 0.95rem;
@@ -280,123 +145,14 @@ body {
     margin-bottom: 20px;
     flex-grow: 1; /* Pushes everything below it to the absolute bottom */
 } 
+.price { font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 15px; margin-top: auto; }
+.book-btn-light { background: #eff6ff; color: #1d4ed8; border: none; padding: 12px; border-radius: 10px; font-weight: 700; width: 100%; cursor: pointer; }
+.book-btn-light:hover { background: #3b82f6; color: white; }
 
-/* Badges & Buttons */
-.rating-badge {
-    background: #3b82f6;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 0.9rem;
-}
-
-.budget-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    margin-bottom: 10px;
-    width: fit-content;
-}
-
-.premium { background: #fef08a; color: #854d0e; } 
-.budget { background: #dcfce7; color: #166534; }  
-.expensive { background: #fef08a; color: #854d0e; }
-
-.price {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin-top: auto;
-    margin-bottom: 15px;
-}
-
-.card-desc, .price {
-    margin-bottom: 20px;
-}
-
-.book-btn-light {
-    background-color: #eff6ff;
-    color: #1d4ed8;
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.book-btn-light:hover { background-color: #dbeafe; }
-
-/* Transport Layout */
-.transport-layout {
-    display: flex;
-    gap: 30px;
-    align-items: stretch; 
-}
-
-.transport-card {
-    flex: 0 0 350px; 
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    display: flex;
-    flex-direction: column;
-}
-
-.transport-list {
-    list-style: none;
-    margin-bottom: 20px;
-    color: #475569;
-}
-
-.transport-list li {
-    margin-bottom: 15px;
-    font-size: 1rem;
-    line-height: 1.5;
-}
-
-.btn-green {
-    margin-top: auto;
-    background-color: #22c55e;
-    color: white;
-    width: 100%;
-    padding: 15px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-green:hover { background-color: #16a34a; }
-
-.map-wrapper {
-    flex: 1; 
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    display: flex;
-    flex-direction: column;
-}
-
-.map-header {
-    background: white;
-    padding: 12px 20px;
-    font-weight: 600;
-    color: #475569;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-/* --- FOOTER --- */
+/* --- TRANSPORT & MAP --- */
+.transport-layout { display: flex; gap: 40px; align-items: stretch; }
+.transport-card { flex: 1; background: white; padding: 35px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+.map-wrapper { flex: 2; border-radius: 16px; overflow: hidden; height: 480px; border: 1px solid #e2e8f0; }
 
 /* --- THE THINNER FOOTER FIX --- */
 .footer {
@@ -418,83 +174,15 @@ body {
 /* Thinner bottom bar */
 .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; font-size: 0.85rem; }
 
-.about-main {
-    flex: 1;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 120px 20px 60px 20px;
-}
-
-.about-features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin: 60px 0;
-}
-
-.feature-card {
-    background: #ffffff;
-    padding: 40px 30px;
-    border-radius: 16px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    border-top: 5px solid #3b82f6; /* Adds the blue accent at the top */
-    transition: transform 0.3s ease;
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-}
-
-.feature-icon {
-    font-size: 3rem;
-    color: #3b82f6;
-    margin-bottom: 20px;
-}
-
-.feature-card h3 {
-    font-size: 1.4rem;
-    color: #0f172a;
-    margin-bottom: 15px;
-}
-
-.developer-section {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    padding: 60px 40px;
-    border-radius: 16px;
-    text-align: center;
-    color: white;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
-
-.developer-section p {
-    font-size: 1.1rem;
-    color: #cbd5e1;
-    max-width: 850px;
-    margin: 0 auto;
-    line-height: 1.8;
-}
-
-/* ==========================================================================
-   RESPONSIVE (Mobile & Tablet)
-   ========================================================================== */
-
-@media (max-width: 992px) {
+/* --- RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 1024px) {
     .grid-container-3 { grid-template-columns: repeat(2, 1fr); }
-    .transport-layout { flex-direction: column; }
-    .transport-card { flex: auto; }
+    .section-wrapper { padding: 0 30px; }
 }
 
 @media (max-width: 768px) {
-    .navbar { padding: 15px; flex-direction: column; gap: 15px; }
-    .nav-links { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; gap: 15px; }
-    
-    .grid-container-3 { grid-template-columns: 1fr; }
-    
-    .section-header-flex { flex-direction: column; align-items: flex-start; }
-    .filter-sort-group { flex-direction: column; width: 100%; margin-top: 15px; }
-    .filter-sort-group select { width: 100%; }
-    
-    .city-title { font-size: 2.2rem; }
+    .grid-container-3, .transport-layout { grid-template-columns: 1fr; flex-direction: column; }
+    .search-bar-container { flex-direction: column; align-items: stretch; }
+    .search-btn { padding: 15px; }
+    .hero-title { font-size: 2.5rem; }
 }
