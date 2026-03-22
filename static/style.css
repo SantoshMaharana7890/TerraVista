@@ -10,6 +10,11 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html, body {
+    height: 100%; 
+    overflow-x: hidden; /* This absolutely prevents horizontal scrolling */
+}
+
 body {
     background-color: #f8fafc; 
     color: #1e293b;
@@ -492,27 +497,33 @@ body {
 }
 
 @media (max-width: 768px) {
-    /* Navbar */
-    .navbar { padding: 15px; flex-direction: column; gap: 15px; }
-    .nav-links { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; gap: 15px; }
+    /* 1. Un-squish the Navbar */
+    .navbar { padding: 15px 20px !important; flex-direction: column; gap: 15px; }
+    .nav-links { flex-wrap: wrap; justify-content: center; gap: 15px !important; width: 100%; }
     
-    /* Hero Section & Search Bar */
-    .hero-title { font-size: 2.3rem; margin-top: 20px; } /* Shrinks the giant text */
-    .hero-subtitle { font-size: 1rem; margin-bottom: 25px; }
+    /* 2. Scale down the Hero Text */
+    .hero-title { font-size: 2.2rem !important; margin-top: 10px; }
+    .hero-subtitle { font-size: 1rem !important; padding: 0 10px; }
     
-    /* Forces the search bar to stack neatly instead of bleeding off screen */
-    .search-bar-container { flex-direction: column; gap: 10px; width: 100%; padding: 0 10px; }
-    .search-input-wrapper { width: 100%; }
-    .search-btn { width: 100%; height: 50px; }
+    /* 3. FORCE the inline-styled search bar to stack */
+    .hero-section form {
+        flex-direction: column !important;
+        width: 100% !important;
+        padding: 0 15px !important;
+    }
+    .hero-section form > div {
+        width: 100% !important;
+        flex: none !important; /* Overrides the flex: 1 inline style */
+    }
+    .search-btn {
+        width: 100% !important;
+    }
     
-    /* Grids: Forces all cards (places, hotels, about page) into 1 single column */
-    .grid-container-3, .about-features { grid-template-columns: 1fr; }
-    .section-wrapper { padding: 0 15px; }
-    
-    /* City Page Filters */
+    /* 4. City Page Elements */
+    .grid-container-3 { grid-template-columns: 1fr; }
+    .section-wrapper { padding: 0 20px; }
+    .city-title { font-size: 2.2rem; }
     .section-header-flex { flex-direction: column; align-items: flex-start; }
     .filter-sort-group { flex-direction: column; width: 100%; margin-top: 15px; }
     .filter-sort-group select { width: 100%; }
-    
-    .city-title { font-size: 2.2rem; }
 }
