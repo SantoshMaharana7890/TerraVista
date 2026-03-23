@@ -523,24 +523,64 @@ body {
 /* --- THE UNIFIED ROOT RESPONSIVENESS FIX --- */
 
 @media (max-width: 768px) {
-    /* 1. Stack the navbar */
-    .navbar { padding: 15px; flex-direction: column; gap: 15px; }
-    .nav-links { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; gap: 15px; }
-    
-    /* 2. THE ROOT FIX: Add extra padding to clear the tall mobile navbar */
-    .city-title-container { padding-top: 190px; }
-    .hero-section { padding-top: 190px; }
-    .about-main { padding-top: 190px; }
+    /* 1. FIX THE OVERLAPPING NAVBAR (Image 3) */
+    .navbar {
+        position: relative !important; /* Un-pins it from the top so it pushes content down */
+        padding: 15px 10px !important;
+    }
+    .nav-links {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
 
-    /* 3. Keep your existing mobile grids and text scaling */
-    .grid-container-3 { grid-template-columns: 1fr; }
-    .section-header-flex { flex-direction: column; align-items: flex-start; }
-    .filter-sort-group { flex-direction: column; width: 100%; margin-top: 15px; }
-    .filter-sort-group select { width: 100%; }
-    .city-title { font-size: 2.2rem; }
+    /* 2. FIX THE GIANT HERO TEXT & PADDING (Image 2) */
+    .hero-section, .about-main, .city-title-container {
+        padding-top: 40px !important; /* Normal padding since navbar is no longer overlapping */
+        height: auto !important;
+    }
+    .hero-title {
+        font-size: 2.2rem !important; /* Shrinks the giant "Experience the True Essence" text */
+        line-height: 1.2 !important;
+    }
+    .hero-subtitle {
+        font-size: 1rem !important;
+        padding: 0 15px !important;
+    }
 
-    /* 4. Ensure search bar stacks if you applied the HTML fix */
-    .hero-search-form { flex-direction: column; padding: 0 15px; width: 100%; box-sizing: border-box; }
-    .search-input-group { padding: 12px 20px; width: 100%; box-sizing: border-box; }
-    .search-btn { width: 100%; }
+    /* 3. FIX THE CUT-OFF SEARCH BARS (Image 2) */
+    .search-bar-container, .hero-search-form {
+        flex-direction: column !important;
+        width: 100% !important;
+        padding: 0 15px !important;
+        box-sizing: border-box !important;
+        margin-top: 20px !important;
+    }
+    .search-input-wrapper, .city-select, .search-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 4. FIX THE TRANSPORT MAP UI (Image 1) */
+    .map-header, .map-header-responsive {
+        flex-direction: column !important;
+        padding: 15px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .map-header input, .map-header button, #weatherBadge {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin-bottom: 10px !important;
+        justify-content: center !important;
+    }
+
+    /* 5. FIX THE SQUISHED CARDS (Image 3) */
+    .grid-container-3, .about-features {
+        grid-template-columns: 1fr !important; /* Forces all grids into a single, neat column */
+        width: 100% !important;
+        padding: 0 15px !important;
+        box-sizing: border-box !important;
+    }
 }
