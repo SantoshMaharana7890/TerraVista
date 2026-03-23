@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ city.name }} - TerraVista</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=6.0">
+    <title>Explore {{ city.name }} - TerraVista</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=22.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 </head>
-    
 <body class="city-page-bg">
 
     <nav class="navbar">
         <a href="/" class="logo">
             <i class="fas fa-globe-americas" style="color: #3b82f6; font-size: 28px;"></i>
-            <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: #f8fafc;">Terra<span style="color: #3b82f6;">Vista</span></span>
+            <span>Terra<span style="color: #3b82f6;">Vista</span></span>
         </a>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
@@ -25,33 +23,34 @@
         </ul>
     </nav>
 
-    <div class="city-title-container">
+    <header class="city-title-container">
         <h1 class="city-title">{{ city.name }}</h1>
         <div class="city-tags">
-            <span class="tag tag-blue"><i class="fas fa-landmark"></i> {{ city.tag1 | default('Historical Sites') }}</span>
-            <span class="tag tag-orange"><i class="fas fa-utensils"></i> {{ city.tag2 | default('Local Cuisine') }}</span>
-            <span class="tag tag-purple"><i class="fas fa-palette"></i> {{ city.tag3 | default('Arts & Culture') }}</span>
+            <span id="weatherBadge" class="tag tag-blue" style="background: #1e293b; color: #60a5fa; border: 1px solid #334155;">
+                <i class="fas fa-sync fa-spin"></i> Loading Weather...
+            </span>
+            <span class="tag tag-orange"><i class="fas fa-utensils"></i> Cuisine</span>
+            <span class="tag tag-purple"><i class="fas fa-camera"></i> Photography</span>
         </div>
-        <p class="city-description">
-            {{ city.description | default("Experience the spectacular paradox of chaos and hope, glamour and squalor. From aromatic street food stalls to dynamic city life, this metropolis caters to all, leaving an indelible mark.") }}
-        </p>
-    </div>
+        <p class="city-description">{{ city.description }}</p>
+    </header>
 
-    <div id="places" class="section-wrapper">
+    <section id="places" class="section-wrapper">
         <h2 class="section-heading">Top Places to Visit</h2>
         <div class="grid-container-3">
             {% for place in places %}
             <div class="ui-card">
-                <img src="{{ url_for('static', filename='images/' + place.image_file) }}" alt="{{ place.name }}" class="card-img">
+                <img src="{{ place.image_url }}" alt="{{ place.name }}" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=Place+Image'">
                 <div class="card-content">
-                    <span class="category-text">{{ place.category | default('Historical & Cultural') }}</span>
+                    <span class="category-text">{{ place.category }}</span>
                     <h3 class="card-title">{{ place.name }}</h3>
                     <p class="card-desc">{{ place.description }}</p>
+                    <button class="book-btn-light">Explore More</button>
                 </div>
             </div>
             {% endfor %}
         </div>
-    </div>
+    </section>
 
     <div id="accommodations" class="section-wrapper">
         <div class="section-header-flex">
@@ -74,7 +73,7 @@
         <div class="grid-container-3" id="itemGrid">
             {% for item in items %}
             <div class="ui-card item-card" data-price="{{ item.price }}" data-rating="{{ item.rating }}" data-type="{{ item.type }}">
-                <img src="{{ url_for('static', filename='images/' + item.image_file) }}" alt="{{ item.name }}" class="card-img">
+                <img src="{{ url_for('static', filename='images/' + item.image_file) }}" alt="{{ item.name }}" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=Hotel+Image'">
                 <div class="card-content">
                     <div class="title-rating-row">
                         <h3 class="card-title">{{ item.name }}</h3>
@@ -90,77 +89,69 @@
         </div>
     </div>
 
-    <div id="transport" class="section-wrapper">
+    <section id="transport" class="section-wrapper">
         <h2 class="section-heading">Transport & Live Routes</h2>
-        
         <div class="transport-layout">
             <div class="transport-card">
-                <h3 style="color: #1e3a8a; margin-bottom: 20px;"><i class="fas fa-bus"></i> Local Transit</h3>
-                <ul class="transport-list">
-                    <li><i class="fas fa-check-circle" style="color: #22c55e;"></i> Comprehensive Bus & Metro coverage.</li>
-                    <li><i class="fas fa-check-circle" style="color: #22c55e;"></i> Verified local taxi & auto services.</li>
-                    <li><i class="fas fa-check-circle" style="color: #22c55e;"></i> Major railway hubs connectivity.</li>
+                <h3><i class="fas fa-bus"></i> Local Transit</h3>
+                <ul class="transport-list" style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #22c55e;"></i> Metro & Bus Connectivity</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #22c55e;"></i> Verified Cab Services</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check-circle" style="color: #22c55e;"></i> Real-time Route Tracking</li>
                 </ul>
-                <button class="btn-green"><i class="fas fa-taxi"></i> View Fare Estimates</button>
+                <button class="btn-green" style="width: 100%; margin-top: 20px;">View Fare Estimates</button>
             </div>
-            
+
             <div class="map-wrapper">
-                <div class="map-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: white; padding: 15px;">
-                    <div style="display: flex; gap: 10px; flex: 1; min-width: 300px;">
-                        <input type="text" id="start-location" placeholder="Start (e.g., Station)..." style="flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.95rem;">
-                        <input type="text" id="end-location" placeholder="End (e.g., Hotel)..." style="flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.95rem;">
-                        <button onclick="calculateMapplsRoute()" style="background: #3b82f6; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">Go</button>
-                    </div>
+                <div class="map-header" style="display: flex; gap: 10px; background: white; padding: 15px;">
+                    <input type="text" id="start-location" placeholder="Start Location..." style="flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <input type="text" id="end-location" placeholder="Destination..." style="flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <button id="go-btn" onclick="calculateMapplsRoute()" style="background: #3b82f6; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">Go</button>
                 </div>
 
                 <div id="live-route-info" style="display: none; background: #eff6ff; border-bottom: 1px solid #bfdbfe; padding: 15px 20px; align-items: center; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-car-side" style="color: #2563eb; font-size: 1.5rem;"></i>
-                        <div>
-                            <p style="margin: 0; font-size: 0.8rem; color: #64748b; font-weight: bold; text-transform: uppercase;">Est. Travel Time</p>
-                            <h4 id="route-time" style="margin: 0; color: #1e3a8a; font-size: 1.2rem;">--</h4>
-                        </div>
+                        <div><p style="margin: 0; font-size: 0.7rem; font-weight: 800; color: #64748b;">TRAVEL TIME</p><h4 id="route-time" style="margin: 0; color: #1e3a8a;">--</h4></div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-road" style="color: #2563eb; font-size: 1.5rem;"></i>
-                        <div>
-                            <p style="margin: 0; font-size: 0.8rem; color: #64748b; font-weight: bold; text-transform: uppercase;">Total Distance</p>
-                            <h4 id="route-distance" style="margin: 0; color: #1e3a8a; font-size: 1.2rem;">--</h4>
-                        </div>
+                        <div><p style="margin: 0; font-size: 0.7rem; font-weight: 800; color: #64748b;">DISTANCE</p><h4 id="route-distance" style="margin: 0; color: #1e3a8a;">--</h4></div>
                     </div>
                 </div>
-
                 <div id="liveMap" style="height: 500px; width: 100%;"></div>
             </div>
         </div>
-    </div>
+    </section>
 
     <footer class="footer">
         <h2>TerraVista</h2>
-        <p>Your ultimate guide to exploring the unseen beauties and rich history of India.</p>
         <div class="social-icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-linkedin-in"></i></a>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 TerraVista. All rights reserved.</p>
-        </div>
+        <div class="footer-bottom"><p>&copy; 2026 TerraVista. All rights reserved.</p></div>
     </footer>
 
     <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
-    <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk_plugins?v=3.0&libraries=direction"></script>
+    <script id="mappls-plugin" src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk_plugins?v=3.0&libraries=direction"></script>
 
     <script>
         var map, directionPlugin;
+        var pluginLoaded = false;
         const currentCity = "{{ city.name }}";
         let cityLat = 18.9220, cityLng = 72.8347;
 
+        // 1. DYNAMIC COORDINATES
         if (currentCity === "Hyderabad") { cityLat = 17.3850; cityLng = 78.4867; }
         else if (currentCity === "Bhubaneswar") { cityLat = 20.2961; cityLng = 85.8245; }
         else if (currentCity === "Punjab") { cityLat = 31.6340; cityLng = 74.8723; }
         else if (currentCity === "Kolkata") { cityLat = 22.5726; cityLng = 88.3639; }
+
+        document.getElementById('mappls-plugin').addEventListener('load', function() {
+            pluginLoaded = true;
+        });
 
         function initMap1() {
             map = new mappls.Map('liveMap', { center: [cityLat, cityLng], zoom: 12 });
@@ -175,17 +166,47 @@
                 }).catch(() => { document.getElementById('weatherBadge').innerHTML = "Weather N/A"; });
         }
 
+        // 2. FILTER & SORT LOGIC (For Accommodations)
+        function filterAndSortItems() {
+            const type = document.getElementById('typeFilter').value;
+            const sort = document.getElementById('sortOptions').value;
+            const grid = document.getElementById('itemGrid');
+            const items = Array.from(grid.getElementsByClassName('item-card'));
+
+            items.forEach(item => {
+                const itemType = item.getAttribute('data-type');
+                if (type === 'all' || itemType === type) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const visibleItems = items.filter(i => i.style.display !== 'none');
+
+            visibleItems.sort((a, b) => {
+                if (sort === 'highToLow') return b.getAttribute('data-price') - a.getAttribute('data-price');
+                if (sort === 'lowToHigh') return a.getAttribute('data-price') - b.getAttribute('data-price');
+                if (sort === 'rating') return b.getAttribute('data-rating') - a.getAttribute('data-rating');
+                return 0;
+            });
+
+            visibleItems.forEach(i => grid.appendChild(i));
+        }
+
+        // 3. MAP DIRECTION LOGIC
         function calculateMapplsRoute() {
             const start = document.getElementById("start-location").value;
             const end = document.getElementById("end-location").value;
             if (!start || !end) return alert("Enter both locations!");
 
-            // ROOT FIX: Check if plugin is ready. If not, retry every 500ms instead of showing alert.
-            if (typeof mappls.direction !== 'function') {
-                console.log("Plugin not ready, retrying...");
-                setTimeout(calculateMapplsRoute, 500);
+            if (!pluginLoaded || typeof mappls.direction !== 'function') {
+                document.getElementById('go-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                setTimeout(calculateMapplsRoute, 800);
                 return;
             }
+
+            document.getElementById('go-btn').innerHTML = 'Go';
 
             if (directionPlugin) { try { mappls.remove({map: map, layer: directionPlugin}); } catch(e) {} }
 
