@@ -7,10 +7,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=6.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
-    <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk_plugins?v=3.0&libraries=direction"></script>
-
-
 </head>
     
 <body class="city-page-bg">
@@ -153,27 +149,35 @@
         </div>
     </footer>
 
-        <script>
-        // 1. DYNAMIC COORDINATES & WEATHER
-        var map; 
-        var directionPlugin; 
-        var currentCity = "{{ city.name }}";
-        const currentCity = "{{ city.name }}";
-        let cityLat = 18.9220; let cityLng = 72.8347; // Default Mumbai
+    <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
+    
+    <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk_plugins?v=3.0&libraries=direction"></script>
 
+    <script>
+        // --- GLOBAL VARIABLES ---
+        var map;
+        var directionPlugin;
+        var currentCity = "{{ city.name }}"; 
+        var cityLat = 18.9220; 
+        var cityLng = 72.8347; // Default Mumbai
+
+        // --- COORDINATE SWITCHER ---
         if (currentCity === "Hyderabad") { cityLat = 17.3850; cityLng = 78.4867; }
         else if (currentCity === "Bhubaneswar") { cityLat = 20.2961; cityLng = 85.8245; }
         else if (currentCity === "Punjab") { cityLat = 31.6340; cityLng = 74.8723; }
         else if (currentCity === "Kolkata") { cityLat = 22.5726; cityLng = 88.3639; }
 
+        // --- WEATHER API ---
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=${cityLat}&longitude=${cityLng}&current_weather=true`)
             .then(res => res.json()).then(data => {
                 const temp = data.current_weather.temperature;
-                document.getElementById('weatherBadge').innerHTML = `<i class="fas fa-thermometer-half"></i> ${temp}°C | Live`;
-            }).catch(() => { document.getElementById('weatherBadge').innerHTML = "Weather N/A"; });
+                const weatherEl = document.getElementById('weatherBadge');
+                if(weatherEl) weatherEl.innerHTML = `<i class="fas fa-thermometer-half"></i> ${temp}°C | Live`;
+            }).catch(() => { 
+                if(document.getElementById('weatherBadge')) document.getElementById('weatherBadge').innerHTML = "Weather N/A"; 
+            });
 
-        // 2. MAPPLS INITIALIZATION
-        let map, directionPlugin;
+        // --- INITIALIZE MAP ---
         function initMap1() {
             map = new mappls.Map('liveMap', {
                 center: [cityLat, cityLng],
@@ -183,6 +187,7 @@
             });
         }
 
+        // --- ROUTE CALCULATION (THE GO BUTTON) ---
         function calculateMapplsRoute() {
             const startInput = document.getElementById("start-location").value;
             const endInput = document.getElementById("end-location").value;
@@ -192,16 +197,16 @@
                 return;
             }
 
-            // Append the city to make the search hyper-local
+            // Clean up old route if it exists
+            if (directionPlugin) {
+                try { mappls.remove({map: map, layer: directionPlugin}); } catch(e) { console.log("Old layer removal skipped"); }
+            }
+
+            // Create the search query
             const startQuery = startInput + ", " + currentCity;
             const endQuery = endInput + ", " + currentCity;
 
-            // Safely remove the old blue line if calculating a new route
-            if (directionPlugin) {
-                try { mappls.remove({map: map, layer: directionPlugin}); } catch(e) {}
-            }
-
-            // Call the Mappls Direction API
+            // Execute Mappls Direction
             mappls.direction({
                 map: map,
                 start: startQuery,
@@ -212,63 +217,27 @@
             }, function(data) {
                 directionPlugin = data;
                 
-                // IF Mappls successfully finds a route:
                 if (data && data.routes && data.routes.length > 0) {
                     const routeData = data.routes[0];
                     
-                    // Convert meters to Kilometers
-                    const distanceKm = (routeData.distance / 1000).toFixed(1);
-                    
-                    // Convert seconds to Hours and Minutes
+                    // Update Dashboard
+                    const dist = (routeData.distance / 1000).toFixed(1);
                     const totalMins = Math.floor(routeData.duration / 60);
-                    const hours = Math.floor(totalMins / 60);
-                    const mins = totalMins % 60;
+                    const h = Math.floor(totalMins / 60);
+                    const m = totalMins % 60;
                     
-                    let timeString = "";
-                    if (hours > 0) timeString += hours + " hr ";
-                    timeString += mins + " min";
-
-                    // Inject the live data into the dashboard and make it visible
-                    document.getElementById('route-distance').innerText = distanceKm + " km";
-                    document.getElementById('route-time').innerText = timeString;
+                    document.getElementById('route-distance').innerText = dist + " km";
+                    document.getElementById('route-time').innerText = h > 0 ? h + "h " + m + "m" : m + " min";
+                    
+                    // Reveal the dashboard
                     document.getElementById('live-route-info').style.display = "flex";
-                } 
-                // IF Mappls cannot find a valid route:
-                else {
-                    alert("Mappls couldn't find a direct driving route. Try being more specific (e.g., 'CST Station' instead of 'Station').");
+                } else {
+                    alert("Route not found. Try adding a specific landmark name.");
                 }
             });
-        }
-
-        // 3. FILTER & SORT LOGIC
-        function filterAndSortItems() {
-            let container = document.getElementById("itemGrid");
-            let cards = Array.from(container.getElementsByClassName("item-card"));
-            let sortVal = document.getElementById("sortOptions").value;
-            let filterVal = document.getElementById("typeFilter").value;
-
-            cards.forEach(card => {
-                let type = card.getAttribute("data-type").toLowerCase();
-                let isLodging = (type.includes("hotel") || type.includes("lodge"));
-                let isDining = (type.includes("rest") || type.includes("cafe"));
-
-                if (filterVal === "all" || (filterVal === "lodging" && isLodging) || (filterVal === "dining" && isDining)) {
-                    card.style.display = "flex";
-                } else { card.style.display = "none"; }
-            });
-
-            if (sortVal !== "default") {
-                cards.sort((a, b) => {
-                    let priceA = parseInt(a.getAttribute("data-price"));
-                    let priceB = parseInt(b.getAttribute("data-price"));
-                    let ratA = parseFloat(a.getAttribute("data-rating"));
-                    let ratB = parseFloat(b.getAttribute("data-rating"));
-                    return sortVal === "lowToHigh" ? priceA - priceB : ratB - ratA;
-                });
-                container.innerHTML = "";
-                cards.forEach(card => container.appendChild(card));
-            }
         }
     </script>
 </body>
 </html>
+
+        
