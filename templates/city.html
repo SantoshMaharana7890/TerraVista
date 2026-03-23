@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore {{ city.name }} - TerraVista</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=23.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=24.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
@@ -44,8 +44,7 @@
         <div class="grid-container-3">
             {% for place in places %}
             <div class="ui-card">
-                <img src="{{ place.image_url }}" alt="{{ place.name }}" class="card-img"
-                    onerror="this.src='https://via.placeholder.com/400x300?text=Place+Image'">
+                <img src="{{ place.image_url }}" alt="{{ place.name }}" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=Place+Image'">
                 <div class="card-content">
                     <span class="category-text">{{ place.category }}</span>
                     <h3 class="card-title">{{ place.name }}</h3>
@@ -77,22 +76,15 @@
 
         <div class="grid-container-3" id="itemGrid">
             {% for item in items %}
-            <div class="ui-card item-card" data-price="{{ item.price }}" data-rating="{{ item.rating }}"
-                data-type="{{ item.type }}">
-                <img src="{{ url_for('static', filename='images/' + item.image_file) }}" alt="{{ item.name }}"
-                    class="card-img"
-                    onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Image+Not+Found';">
+            <div class="ui-card item-card" data-price="{{ item.price }}" data-rating="{{ item.rating }}" data-type="{{ item.type }}">
+                <img src="{{ url_for('static', filename='images/' + item.image_file) }}" alt="{{ item.name }}" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=Hotel+Image'">
                 <div class="card-content">
                     <div class="title-rating-row">
                         <h3 class="card-title">{{ item.name }}</h3>
-                        <span class="rating-badge"><i class="fas fa-star" style="font-size: 0.8rem;"></i> {{ item.rating
-                            }}</span>
+                        <span class="rating-badge"><i class="fas fa-star"></i> {{ item.rating }}</span>
                     </div>
-                    <span
-                        class="budget-badge {{ item.budget_category | lower | replace(' ', '-') | replace('/', '') }}">{{
-                        item.budget_category }}</span>
-                    <p class="card-desc">{{ item.description | default('Experience exceptional service and local
-                        flavor.') }}</p>
+                    <span class="budget-badge {{ item.budget_category | lower | replace(' ', '-') }}">{{ item.budget_category }}</span>
+                    <p class="card-desc">{{ item.description | default('Premium local experience.') }}</p>
                     <p class="price">₹{{ item.price }} <small>/ service</small></p>
                     <button class="book-btn-light">Book Now</button>
                 </div>
@@ -107,31 +99,27 @@
             <div class="transport-card">
                 <h3><i class="fas fa-bus"></i> Local Transit</h3>
                 <ul class="transport-list">
-                    <li><i class="fas fa-check-circle"></i> Bus & Metro coverage.</li>
-                    <li><i class="fas fa-check-circle"></i> Verified Taxi & Auto.</li>
+                    <li><i class="fas fa-check-circle"></i> Verified local taxi & auto.</li>
+                    <li><i class="fas fa-check-circle"></i> Metro connectivity.</li>
                 </ul>
                 <button class="btn-green">View Fare Estimates</button>
             </div>
 
             <div class="map-wrapper">
-                <div class="map-header" style="display: flex; gap: 10px; background: white; padding: 15px;">
-                    <input type="text" id="start-location" placeholder="Start Point..."
-                        style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
-                    <input type="text" id="end-location" placeholder="Destination..."
-                        style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
-                    <button id="go-btn" onclick="calculateMapplsRoute()"
-                        style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">Go</button>
-                </div>
-                <div id="live-route-info"
-                    style="display: none; background: #eff6ff; padding: 15px; justify-content: space-around;">
-                    <div><small>TIME</small>
-                        <h4 id="route-time">--</h4>
+                <div class="map-header-responsive">
+                    <div id="weatherBadge" class="weather-widget-small">
+                        <i class="fas fa-sync fa-spin"></i>
                     </div>
-                    <div><small>DISTANCE</small>
-                        <h4 id="route-distance">--</h4>
-                    </div>
+                    <input type="text" id="start-location" class="map-input" placeholder="Start Point...">
+                    <input type="text" id="end-location" class="map-input" placeholder="Destination...">
+                    <button id="go-btn" class="map-go-btn" onclick="calculateMapplsRoute()">Go</button>
                 </div>
-                <div id="liveMap" style="height: 450px; width: 100%;"></div>
+
+                <div id="live-route-info" class="route-info-bar">
+                    <div class="route-stat"><small>TIME</small><h4 id="route-time">--</h4></div>
+                    <div class="route-stat"><small>DISTANCE</small><h4 id="route-distance">--</h4></div>
+                </div>
+                <div id="liveMap" class="mappls-map-container"></div>
             </div>
         </div>
     </section>
@@ -148,11 +136,8 @@
         </div>
     </footer>
 
-    <script
-        src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
-    <script
-        src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk_plugins?v=3.0&libraries=direction"
-        onload="pluginLoaded = true;"></script>
+    <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
+    <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk_plugins?v=3.0&libraries=direction" onload="pluginLoaded = true;"></script>
 
     <script>
         var map, directionPlugin;
@@ -160,43 +145,36 @@
         const currentCity = "{{ city.name }}";
         let cityLat = 18.9220, cityLng = 72.8347;
 
-        // --- DYNAMIC CITY TRAITS (SPORTS, CUISINE, ART) ---
+        // Dynamic City Traits Setup
         const cityTraits = {
-            "Mumbai": { sport: "Cricket", cuisine: "Vada Pav", art: "Warli Art" },
-            "Hyderabad": { sport: "Badminton", cuisine: "Biryani", art: "Pearl Craft" },
-            "Bhubaneswar": { sport: "Hockey", cuisine: "Pahala Rasgulla", art: "Pattachitra" },
-            "Punjab": { sport: "Kabaddi", cuisine: "Makki Di Roti", art: "Phulkari" },
-            "Kolkata": { sport: "Football", cuisine: "Rosogolla", art: "Terracotta" }
+            "Mumbai": { sport: "Cricket", cuisine: "Vada Pav", art: "Warli Art", lat: 18.9220, lng: 72.8347 },
+            "Hyderabad": { sport: "Badminton", cuisine: "Biryani", art: "Pearl Craft", lat: 17.3850, lng: 78.4867 },
+            "Bhubaneswar": { sport: "Hockey", cuisine: "Pahala Rasgulla", art: "Pattachitra", lat: 20.2961, lng: 85.8245 },
+            "Punjab": { sport: "Kabaddi", cuisine: "Makki Di Roti", art: "Phulkari", lat: 31.6340, lng: 74.8723 },
+            "Kolkata": { sport: "Football", cuisine: "Rosogolla", art: "Terracotta", lat: 22.5726, lng: 88.3639 }
         };
 
-        // Inject the famous traits into the header dynamically
         if (cityTraits[currentCity]) {
-            document.getElementById("dynamic-sport").innerHTML = `<i class="fas fa-running"></i> ${cityTraits[currentCity].sport}`;
-            document.getElementById("dynamic-cuisine").innerHTML = `<i class="fas fa-utensils"></i> ${cityTraits[currentCity].cuisine}`;
-            document.getElementById("dynamic-art").innerHTML = `<i class="fas fa-paint-brush"></i> ${cityTraits[currentCity].art}`;
+            const traits = cityTraits[currentCity];
+            document.getElementById("dynamic-sport").innerHTML = `<i class="fas fa-running"></i> ${traits.sport}`;
+            document.getElementById("dynamic-cuisine").innerHTML = `<i class="fas fa-utensils"></i> ${traits.cuisine}`;
+            document.getElementById("dynamic-art").innerHTML = `<i class="fas fa-paint-brush"></i> ${traits.art}`;
+            cityLat = traits.lat; cityLng = traits.lng;
         }
-
-        // --- DYNAMIC COORDINATE SETUP ---
-        if (currentCity === "Hyderabad") { cityLat = 17.3850; cityLng = 78.4867; }
-        else if (currentCity === "Bhubaneswar") { cityLat = 20.2961; cityLng = 85.8245; }
-        else if (currentCity === "Punjab") { cityLat = 31.6340; cityLng = 74.8723; }
-        else if (currentCity === "Kolkata") { cityLat = 22.5726; cityLng = 88.3639; }
 
         function initMap1() {
             map = new mappls.Map('liveMap', { center: [cityLat, cityLng], zoom: 12 });
             fetchWeather();
         }
 
-        // Fast Weather Fetch (Open-Meteo)
         function fetchWeather() {
             fetch(`https://api.open-meteo.com/v1/forecast?latitude=${cityLat}&longitude=${cityLng}&current_weather=true`)
                 .then(res => res.json()).then(data => {
                     const temp = Math.round(data.current_weather.temperature);
                     document.getElementById('weatherBadge').innerHTML = `<i class="fas fa-sun" style="color: #f59e0b;"></i> ${temp}°C`;
-                }).catch(() => { document.getElementById('weatherBadge').innerHTML = "Weather N/A"; });
+                }).catch(() => { document.getElementById('weatherBadge').innerHTML = "N/A"; });
         }
 
-        // Your requested Filtering and Sorting Logic
         function filterAndSortItems() {
             const type = document.getElementById('typeFilter').value;
             const sort = document.getElementById('sortOptions').value;
@@ -209,36 +187,38 @@
             });
 
             const visibleCards = cards.filter(c => c.style.display !== 'none');
-            visibleCards.sort((a, b) => {
-                if (sort === 'lowToHigh') return a.dataset.price - b.dataset.price;
-                if (sort === 'highToLow') return b.dataset.price - a.dataset.price;
-                if (sort === 'rating') return b.dataset.rating - a.dataset.rating;
-                return 0;
-            });
-
+            if (sort === 'lowToHigh') visibleCards.sort((a, b) => a.dataset.price - b.dataset.price);
+            if (sort === 'highToLow') visibleCards.sort((a, b) => b.dataset.price - a.dataset.price);
+            if (sort === 'rating') visibleCards.sort((a, b) => b.dataset.rating - a.dataset.rating);
+            
             visibleCards.forEach(card => grid.appendChild(card));
         }
 
         function calculateMapplsRoute() {
             const start = document.getElementById("start-location").value;
             const end = document.getElementById("end-location").value;
-            if (!start || !end) return alert("Enter both locations!");
-            if (!pluginLoaded) return setTimeout(calculateMapplsRoute, 500);
+            if (!start || !end) return alert("Please enter locations.");
+            
+            if (!pluginLoaded) {
+                document.getElementById('go-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                setTimeout(calculateMapplsRoute, 500);
+                return;
+            }
+            document.getElementById('go-btn').innerHTML = 'Go';
 
-            if (directionPlugin) { try { mappls.remove({ map: map, layer: directionPlugin }); } catch (e) { } }
+            if (directionPlugin) { try { mappls.remove({map: map, layer: directionPlugin}); } catch(e) {} }
 
-            mappls.direction({ map: map, start: start + ", " + currentCity, end: end + ", " + currentCity, profile: 'driving' }, function (data) {
+            mappls.direction({ map: map, start: start + ", " + currentCity, end: end + ", " + currentCity, profile: 'driving' }, function(data) {
                 directionPlugin = data;
                 if (data && data.routes && data.routes.length > 0) {
                     const r = data.routes[0];
                     document.getElementById('route-distance').innerText = (r.distance / 1000).toFixed(1) + " km";
                     const mins = Math.floor(r.duration / 60);
-                    document.getElementById('route-time').innerText = mins >= 60 ? Math.floor(mins / 60) + "h " + (mins % 60) + "m" : mins + " min";
+                    document.getElementById('route-time').innerText = mins >= 60 ? Math.floor(mins/60) + "h " + (mins%60) + "m" : mins + " min";
                     document.getElementById('live-route-info').style.display = "flex";
                 }
             });
         }
     </script>
 </body>
-
 </html>
