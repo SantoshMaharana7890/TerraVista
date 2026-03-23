@@ -3,66 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explore {{ city.name }} | TerraVista</title>
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=26.0">
+    <title>Explore {{ city.name }} - TerraVista</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <style>
-        /* --- Root Responsiveness Fixes (Internal to ensure 100% success) --- */
-        .city-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; align-items: center; }
-        
-        /* Map Search Bar: Stacks on mobile, clean on desktop */
-        .map-header-responsive {
-            display: flex; gap: 10px; padding: 15px; background: #fff; 
-            border-bottom: 1px solid #e2e8f0; align-items: center; border-radius: 12px 12px 0 0;
-        }
-
-        @media (max-width: 768px) {
-            .map-header-responsive { flex-direction: column; }
-            .map-input, .map-go-btn { width: 100% !important; margin: 2px 0; }
-            .city-title-container { padding: 40px 20px !important; text-align: center; }
-            .city-tags { justify-content: center; }
-            .grid-container-3 { grid-template-columns: 1fr !important; gap: 20px; }
-        }
-
-        /* Stable card heights to prevent flickering */
-        .ui-card { display: flex; flex-direction: column; min-height: 450px; background: white; border-radius: 15px; overflow: hidden; }
-        .card-img { height: 220px; width: 100%; object-fit: cover; background: #f1f5f9; }
-    </style>
 </head>
 <body class="city-page-bg">
 
     <nav class="navbar">
         <a href="/" class="logo">
-            <i class="fas fa-globe-americas" style="color: #3b82f6;"></i>
+            <i class="fas fa-globe-americas" style="color: #3b82f6; font-size: 28px;"></i>
             <span>Terra<span style="color: #3b82f6;">Vista</span></span>
         </a>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
-            <li><a href="#places">Places</a></li>
-            <li><a href="#accommodations">Hotels</a></li>
+            <li><a href="#places">Destinations</a></li>
+            <li><a href="#accommodations">Hotels & Dining</a></li>
             <li><a href="#transport">Transport</a></li>
-            <li><a href="/about">About</a></li>
+            <li><a href="/about">About Us</a></li>
         </ul>
     </nav>
 
     <header class="city-title-container">
         <h1 class="city-title">{{ city.name }}</h1>
         <div class="city-tags">
-            <span id="weatherBadge" class="tag" style="background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; font-weight: bold;">
-                <i class="fas fa-sun fa-spin"></i> Loading...
-            </span>
-
-            <span id="dynamic-sport" class="tag tag-blue"><i class="fas fa-running"></i> Sports</span>
-            <span id="dynamic-cuisine" class="tag tag-orange"><i class="fas fa-utensils"></i> Cuisine</span>
-            <span id="dynamic-art" class="tag tag-purple"><i class="fas fa-paint-brush"></i> Art & Crafts</span>
+            <span class="tag tag-blue"><i class="fas fa-landmark"></i> Heritage</span>
+            <span class="tag tag-orange"><i class="fas fa-utensils"></i> Cuisine</span>
+            <span class="tag tag-purple"><i class="fas fa-camera"></i> Photography</span>
         </div>
         <p class="city-description">{{ city.description }}</p>
     </header>
 
     <section id="places" class="section-wrapper">
-        <h2 class="section-heading">Top Places to Visit</h2>
+        <div class="section-header-flex">
+            <h2 class="section-heading">Top Places to Visit</h2>
+        </div>
         <div class="grid-container-3">
             {% for place in places %}
             <div class="ui-card">
@@ -80,12 +54,12 @@
 
     <div id="accommodations" class="section-wrapper">
         <div class="section-header-flex">
-            <h2 class="section-heading">Hotels & Dining</h2>
+            <h2 class="section-heading" style="margin-bottom: 0;">Hotels & Dining</h2>
             <div class="filter-sort-group">
                 <select id="typeFilter" onchange="filterAndSortItems()">
-                    <option value="all">All Types</option>
-                    <option value="lodging">Hotels</option>
-                    <option value="dining">Dining</option>
+                    <option value="all">Show All</option>
+                    <option value="lodging">Show Hotels & Lodges</option>
+                    <option value="dining">Show Restaurants & Cafes</option>
                 </select>
                 <select id="sortOptions" onchange="filterAndSortItems()">
                     <option value="default">Sort By</option>
@@ -99,17 +73,14 @@
         <div class="grid-container-3" id="itemGrid">
             {% for item in items %}
             <div class="ui-card item-card" data-price="{{ item.price }}" data-rating="{{ item.rating }}" data-type="{{ item.type }}">
-                <img src="{{ url_for('static', filename='images/' + item.image_file) }}" 
-                     alt="{{ item.name }}" 
-                     class="card-img" 
-                     onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Image+Not+Found';">
+                <img src="{{ url_for('static', filename='images/' + item.image_file) }}" alt="{{ item.name }}" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Not+Found'">
                 <div class="card-content">
                     <div class="title-rating-row">
                         <h3 class="card-title">{{ item.name }}</h3>
-                        <span class="rating-badge"><i class="fas fa-star"></i> {{ item.rating }}</span>
+                        <span class="rating-badge"><i class="fas fa-star" style="font-size: 0.8rem;"></i> {{ item.rating }}</span>
                     </div>
-                    <span class="budget-badge {{ item.budget_category | lower | replace(' ', '-') }}">{{ item.budget_category }}</span>
-                    <p class="card-desc">{{ item.description | default('A premium TerraVista experience.') }}</p>
+                    <span class="budget-badge {{ item.budget_category | lower | replace(' ', '-') | replace('/', '') }}">{{ item.budget_category }}</span>
+                    <p class="card-desc">{{ item.description | default('Experience exceptional service and local flavor.') }}</p>
                     <p class="price">₹{{ item.price }} <small>/ service</small></p>
                     <button class="book-btn-light">Book Now</button>
                 </div>
@@ -124,23 +95,20 @@
             <div class="transport-card">
                 <h3><i class="fas fa-bus"></i> Local Transit</h3>
                 <ul class="transport-list">
-                    <li><i class="fas fa-check-circle"></i> Local Cabs & Auto-rickshaws</li>
-                    <li><i class="fas fa-check-circle"></i> Integrated Metro Networks</li>
+                    <li><i class="fas fa-check-circle"></i> Comprehensive Bus & Metro coverage.</li>
+                    <li><i class="fas fa-check-circle"></i> Verified local taxi & auto services.</li>
+                    <li><i class="fas fa-check-circle"></i> Major railway hubs connectivity.</li>
                 </ul>
                 <button class="btn-green">View Fare Estimates</button>
             </div>
 
             <div class="map-wrapper">
-                <div class="map-header-responsive">
-                    <input type="text" id="start-location" class="map-input" placeholder="Start Point (e.g. Airport)">
-                    <input type="text" id="end-location" class="map-input" placeholder="End Point (e.g. Hotel)">
-                    <button id="go-btn" class="map-go-btn" onclick="calculateMapplsRoute()">Go</button>
+                <div class="map-header" style="display: flex; gap: 10px; background: white; padding: 15px;">
+                    <input type="text" id="start-location" placeholder="Start Location..." style="flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <input type="text" id="end-location" placeholder="Destination..." style="flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <button onclick="calculateMapplsRoute()" style="background: #3b82f6; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">Go</button>
                 </div>
-                <div id="live-route-info" style="display: none; background: #eff6ff; padding: 15px; border-bottom: 1px solid #bfdbfe; justify-content: space-around;">
-                    <div style="text-align: center;"><small style="font-weight: 800; color: #64748b;">TIME</small><h4 id="route-time" style="margin:0; color:#1e3a8a;">--</h4></div>
-                    <div style="text-align: center;"><small style="font-weight: 800; color: #64748b;">DISTANCE</small><h4 id="route-distance" style="margin:0; color:#1e3a8a;">--</h4></div>
-                </div>
-                <div id="liveMap" style="height: 450px; width: 100%;"></div>
+                <div id="liveMap" style="height: 500px; width: 100%;"></div>
             </div>
         </div>
     </section>
@@ -150,86 +118,52 @@
         <div class="social-icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-linkedin-in"></i></a>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 TerraVista. All rights reserved.</p>
-        </div>
+        <div class="footer-bottom"><p>&copy; 2026 TerraVista. All rights reserved.</p></div>
     </footer>
 
     <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
-    <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk_plugins?v=3.0&libraries=direction" onload="pluginIsReady = true;"></script>
+    <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk_plugins?v=3.0&libraries=direction"></script>
 
     <script>
-        var map, directionPlugin;
-        var pluginIsReady = false;
-        const currentCity = "{{ city.name }}";
+        var map;
+        var directionPlugin;
+        var currentCity = "{{ city.name }}";
 
-        // Handcrafted City Data (Coordinates + Famous Traits)
-        const cityData = {
-            "Mumbai": { sport: "Cricket", cuisine: "Vada Pav", art: "Warli Art", lat: 19.0760, lng: 72.8777 },
-            "Hyderabad": { sport: "Badminton", cuisine: "Biryani", art: "Pearl Craft", lat: 17.3850, lng: 78.4867 },
-            "Bhubaneswar": { sport: "Hockey", cuisine: "Pahala Rasgulla", art: "Pattachitra", lat: 20.2961, lng: 85.8245 },
-            "Punjab": { sport: "Kabaddi", cuisine: "Makki Di Roti", art: "Phulkari", lat: 31.6340, lng: 74.8723 },
-            "Kolkata": { sport: "Football", cuisine: "Rosogolla", art: "Terracotta", lat: 22.5726, lng: 88.3639 }
-        };
-
-        const city = cityData[currentCity] || cityData["Mumbai"];
-
-        // 1. Immediately Set Dynamic Traits
-        document.getElementById("dynamic-sport").innerHTML = `<i class="fas fa-running"></i> ${city.sport}`;
-        document.getElementById("dynamic-cuisine").innerHTML = `<i class="fas fa-utensils"></i> ${city.cuisine}`;
-        document.getElementById("dynamic-art").innerHTML = `<i class="fas fa-paint-brush"></i> ${city.art}`;
-
-        // 2. Initialize Map & Weather
         function initMap1() {
-            map = new mappls.Map('liveMap', { center: [city.lat, city.lng], zoom: 12 });
-            getWeather();
-        }
-
-        function getWeather() {
-            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`)
-                .then(r => r.json()).then(data => {
-                    const t = Math.round(data.current_weather.temperature);
-                    document.getElementById('weatherBadge').innerHTML = `<i class="fas fa-sun" style="color: #f59e0b;"></i> ${t}°C`;
-                }).catch(() => { document.getElementById('weatherBadge').innerHTML = "N/A"; });
-        }
-
-        // 3. Robust Routing Logic
-        function calculateMapplsRoute() {
-            const btn = document.getElementById('go-btn');
-            const start = document.getElementById("start-location").value;
-            const end = document.getElementById("end-location").value;
-
-            if (!start || !end) return alert("Please fill in both locations.");
-
-            if (!pluginIsReady) {
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                setTimeout(calculateMapplsRoute, 1000);
-                return;
-            }
-            btn.innerHTML = 'Go';
-
-            if (directionPlugin) mappls.remove({map: map, layer: directionPlugin});
-
-            mappls.direction({ 
-                map: map, 
-                start: start + ", " + currentCity, 
-                end: end + ", " + currentCity, 
-                profile: 'driving' 
-            }, function(data) {
-                directionPlugin = data;
-                if (data && data.routes && data.routes.length > 0) {
-                    const r = data.routes[0];
-                    document.getElementById('route-distance').innerText = (r.distance / 1000).toFixed(1) + " km";
-                    const mins = Math.floor(r.duration / 60);
-                    document.getElementById('route-time').innerText = mins >= 60 ? Math.floor(mins/60) + "h " + (mins%60) + "m" : mins + " min";
-                    document.getElementById('live-route-info').style.display = "flex";
-                }
+            map = new mappls.Map('liveMap', {
+                center: [19.0760, 72.8777], // Default center
+                zoom: 12,
+                zoomControl: true,
+                location: true
             });
         }
 
-        // 4. Filtering and Sorting Logic
+        function calculateMapplsRoute() {
+            const start = document.getElementById("start-location").value;
+            const end = document.getElementById("end-location").value;
+
+            if (!start || !end) {
+                alert("Please enter both locations.");
+                return;
+            }
+
+            if (directionPlugin) {
+                try { mappls.remove({map: map, layer: directionPlugin}); } catch(e) {}
+            }
+
+            mappls.direction({
+                map: map,
+                start: start + ", " + currentCity,
+                end: end + ", " + currentCity,
+                profile: 'driving'
+            }, function(data) {
+                directionPlugin = data;
+            });
+        }
+
         function filterAndSortItems() {
             const type = document.getElementById('typeFilter').value;
             const sort = document.getElementById('sortOptions').value;
@@ -237,18 +171,20 @@
             const cards = Array.from(grid.getElementsByClassName('item-card'));
 
             cards.forEach(card => {
-                const cardType = card.dataset.type;
+                const cardType = card.getAttribute('data-type');
                 card.style.display = (type === 'all' || cardType === type) ? 'flex' : 'none';
             });
 
-            const visible = cards.filter(c => c.style.display !== 'none');
-            if (sort === 'lowToHigh') visible.sort((a, b) => a.dataset.price - b.dataset.price);
-            if (sort === 'highToLow') visible.sort((a, b) => b.dataset.price - a.dataset.price);
-            if (sort === 'rating') visible.sort((a, b) => b.dataset.rating - a.dataset.rating);
-            
-            visible.forEach(card => grid.appendChild(card));
+            const visibleCards = cards.filter(c => c.style.display !== 'none');
+            visibleCards.sort((a, b) => {
+                if (sort === 'lowToHigh') return a.dataset.price - b.dataset.price;
+                if (sort === 'highToLow') return b.dataset.price - a.dataset.price;
+                if (sort === 'rating') return b.dataset.rating - a.dataset.rating;
+                return 0;
+            });
+
+            visibleCards.forEach(card => grid.appendChild(card));
         }
     </script>
 </body>
 </html>
-    
