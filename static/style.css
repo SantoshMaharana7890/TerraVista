@@ -176,12 +176,44 @@ body { background-color: #f8fafc; color: #1e293b; line-height: 1.6; }
     text-transform: none; /* Keeps original casing */
 }
 
+/* --- GLOWING VIEW DETAILS BUTTON --- */
+.view-details-btn {
+    margin-top: auto; /* Pushes button to the very bottom of the card */
+    background-color: #ffffff;
+    color: #3b82f6;
+    border: 2px solid #3b82f6;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.view-details-btn:hover {
+    background-color: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.6), 0 0 25px rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+}
+
 @media (max-width: 768px) {
     .navbar { position: relative !important; padding: 15px !important; flex-direction: column; }
     .nav-links { flex-wrap: wrap !important; justify-content: center !important; gap: 10px !important; }
     
     .city-title-container { padding-top: 30px !important; }
     
+    /* Aggressive Stack for About Cards and Grids */
+    .grid-container-3, .about-features { 
+        display: flex !important; 
+        flex-direction: column !important; 
+        width: 100% !important; 
+        padding: 0 15px !important; 
+        box-sizing: border-box !important; 
+        gap: 20px !important;
+    }
+
     /* Home Page Search Fix */
     .hero-search-form { flex-direction: column !important; width: 100% !important; padding: 0 15px !important; }
     .search-input-group, .search-btn { width: 100% !important; border-radius: 15px !important; }
