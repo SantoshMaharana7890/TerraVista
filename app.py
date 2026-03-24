@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, request
+import urllib.parse
 import mysql.connector
 from mysql.connector import Error
 
@@ -27,6 +28,15 @@ def home():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+# --- WIKIPEDIA DYNAMIC DETAIL ROUTE ---
+@app.route('/place/<place_name>')
+def place_detail(place_name):
+    # We decode the URL so "Gateway%20of%20India" becomes "Gateway of India"
+    clean_name = urllib.parse.unquote(place_name)
+    
+    # We render a dedicated template and pass the name to it
+    return render_template('place_detail.html', place_name=clean_name)
 
 @app.route('/search', methods=['GET'])
 def search_city():
