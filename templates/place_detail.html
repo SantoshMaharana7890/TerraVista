@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ place_name }} - TerraVista Explorer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Standalone Safe CSS to prevent breaking your main site */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f8fafc; color: #1e293b; line-height: 1.6; }
+        
+        .navbar { background-color: #0f172a; padding: 15px 60px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; width: 100%; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .logo { font-size: 1.6rem; font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 8px; color: #f8fafc; }
+        
+        /* Main Layout */
+        .detail-container { max-width: 900px; margin: 120px auto 60px auto; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .hero-banner { width: 100%; height: 400px; background: #e2e8f0; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+        .hero-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.5s ease; opacity: 0; }
+        .hero-img.loaded { opacity: 1; }
+        
+        .content-body { padding: 50px; }
+        .place-title { font-size: 2.8rem; color: #0f172a; margin-bottom: 20px; border-bottom: 3px solid #3b82f6; display: inline-block; padding-bottom: 10px; }
+        
+        .wiki-content { font-size: 1.15rem; color: #334155; line-height: 1.8; margin-bottom: 30px; }
+        .wiki-content p { margin-bottom: 15px; }
+        
+        .loader { text-align: center; padding: 50px; font-size: 1.2rem; color: #64748b; }
+        
+        .back-btn { display: inline-flex; align-items: center; gap: 10px; background: #eff6ff; color: #1d4ed8; padding: 12px 25px; border-radius: 8px; font-weight: 700; text-decoration: none; transition: 0.3s; }
+        .back-btn:hover { background: #3b82f6; color: white; }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 15px; justify-content: center; }
+            .detail-container { margin: 100px 15px 30px 15px; }
+            .hero-banner { height: 250px; }
+            .content-body { padding: 30px 20px; }
+            .place-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="javascript:history.back()" class="logo">
+            <i class="fas fa-arrow-left" style="font-size: 1.2rem;"></i> Back to City
+        </a>
+        <div class="logo">
+            <i class="fas fa-globe-americas" style="color: #3b82f6;"></i>
+            <span>Terra<span style="color: #3b82f6;">Vista</span></span>
+        </div>
+    </nav>
+
+    <div class="detail-container">
+        <div class="hero-banner" id="heroBanner">
+            <div class="loader" id="imgLoader"><i class="fas fa-image fa-spin fa-2x"></i></div>
+            <img id="placeImage" class="hero-img" alt="{{ place_name }}">
+        </div>
+
+        <div class="content-body">
+            <h1 class="place-title">{{ place_name }}</h1>
+            
+            <div id="wikiData" class="wiki-content">
+                <div class="loader"><i class="fas fa-circle-notch fa-spin fa-2x"></i><br><br>Retrieving live data from Wikipedia...</div>
+            </div>
+
+            <a href="javascript:history.back()" class="back-btn">
+                <i class="fas fa-map-marked-alt"></i> Continue Exploring
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const placeName = "{{ place_name }}";
+        
+        // Wikipedia REST API Endpoint
+        const wikiApiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(placeName)}`;
+
+        fetch(wikiApiUrl)
+            .then(response => {
+                if (!response.ok) throw new Error("Wikipedia article not found.");
+                return response.json();
+            })
+            .then(data => {
+                // 1. Inject the Official Summary Text
+                if(data.extract_html) {
+                    document.getElementById('wikiData').innerHTML = data.extract_html;
+                } else {
+                    document.getElementById('wikiData').innerHTML = `<p>We couldn't find a direct Wikipedia match for this location, but it remains one of the top curated spots in TerraVista.</p>`;
+                }
+
+                // 2. Inject the Official Thumbnail Image
+                if(data.thumbnail && data.thumbnail.source) {
+                    // Get a higher resolution version of the thumbnail
+                    const highResImg = data.thumbnail.source.replace(/\d+px-/, '800px-');
+                    const imgElement = document.getElementById('placeImage');
+                    
+                    imgElement.onload = function() {
+                        document.getElementById('imgLoader').style.display = 'none';
+                        this.classList.add('loaded');
+                    };
+                    imgElement.src = highResImg;
+                } else {
+                    // Fallback gradient if Wikipedia has no image
+                    document.getElementById('heroBanner').style.background = 'linear-gradient(135deg, #3b82f6 0%, #1e293b 100%)';
+                    document.getElementById('imgLoader').innerHTML = '<i class="fas fa-monument" style="color: white; font-size: 4rem;"></i>';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching Wiki data:", error);
+                document.getElementById('wikiData').innerHTML = `
+                    <p><strong>Experience the beauty of ${placeName}.</strong></p>
+                    <p>This destination is highly recommended by TerraVista. Visit it to discover its full history, vibrant culture, and stunning architecture.</p>
+                `;
+                document.getElementById('heroBanner').style.background = 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)';
+                document.getElementById('imgLoader').style.display = 'none';
+            });
+    </script>
+
+</body>
+</html>
