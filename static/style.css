@@ -180,3 +180,38 @@ body { background-color: #f8fafc; color: #1e293b; line-height: 1.6; }
     /* Grid Fix */
     .grid-container-3 { grid-template-columns: 1fr !important; padding: 0 15px !important; }
 }
+
+/* --- HOTELS & DINING SINGLE LINE FIX --- */
+@media (max-width: 768px) {
+    /* Forces the Header and Filters to stay on one horizontal line */
+    .section-header-flex {
+        display: flex !important;
+        flex-direction: row !important; 
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important; /* Prevents dropping to second line */
+        gap: 10px !important;
+        padding-bottom: 5px !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* Shrinks the "Hotels & Dining" text so it fits the screen width */
+    .section-header-flex .section-heading {
+        font-size: 1.1rem !important; /* Hand-tuned for mobile screens */
+        white-space: nowrap !important;
+        margin-bottom: 0 !important;
+        border-bottom: none !important; /* Removes thick line for a cleaner look */
+    }
+
+    /* Makes the dropdowns smaller to save space */
+    .filter-sort-group {
+        display: flex !important;
+        gap: 5px !important;
+    }
+
+    .filter-sort-group select {
+        padding: 5px 8px !important;
+        font-size: 12px !important;
+        height: 35px !important;
+    }
+}
