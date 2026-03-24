@@ -131,7 +131,10 @@
             <span class="close-modal" onclick="closeBookingModal()">&times;</span>
             <h2 style="color: #0f172a; margin-bottom: 10px;">Complete Your Reservation</h2>
             <h3 id="modalItemName" style="color: #3b82f6; margin-bottom: 5px;">Hotel Name</h3>
-            <p style="color: #475569; margin-bottom: 20px; font-weight: bold;">Price: ₹<span id="modalItemPrice">0</span></p>
+            
+            <p style="color: #475569; margin-bottom: 20px; font-weight: bold; font-size: 1.2rem;">
+                Total: ₹<span id="modalItemPrice">0</span>
+            </p>
 
             <form id="bookingForm" onsubmit="confirmBooking(event)">
                 <div style="display: flex; gap: 15px; margin-bottom: 15px;">
@@ -141,7 +144,7 @@
                     </div>
                     <div style="flex: 1;">
                         <label style="font-size: 0.9rem; color: #64748b; font-weight: bold;">Guests</label>
-                        <input type="number" min="1" max="10" required value="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 5px;">
+                        <input type="number" id="guestCount" min="1" max="10" required value="1" oninput="updateDynamicPrice()" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 5px;">
                     </div>
                 </div>
                 <button type="submit" class="btn-green" style="width: 100%; margin-top: 10px;" id="confirmBtn">
@@ -270,18 +273,39 @@
             }
         }
 
-        // --- BOOKING MODAL LOGIC ---
+        // 4. BOOKING MODAL LOGIC
+        let currentBasePrice = 0; // Stores the price in the background
+
         function openBookingModal(itemName, itemPrice) {
             document.getElementById('modalItemName').innerText = itemName;
-            document.getElementById('modalItemPrice').innerText = itemPrice;
             
-            // Reset the form in case they opened it before
+            // Clean the price string (in case it has commas) and convert to a real number
+            currentBasePrice = parseInt(itemPrice.toString().replace(/,/g, ''), 10);
+            
+            // Reset guests to 1 every time the modal opens
+            document.getElementById('guestCount').value = 1;
+            
+            // Set initial price with Indian comma formatting
+            document.getElementById('modalItemPrice').innerText = currentBasePrice.toLocaleString('en-IN');
+            
             document.getElementById('bookingForm').style.display = 'block';
             document.getElementById('bookingSuccess').style.display = 'none';
             document.getElementById('confirmBtn').innerHTML = 'Confirm Booking';
-            
-            // Show the modal
             document.getElementById('bookingModal').style.display = 'flex';
+        }
+
+        // The new function that calculates the price in real-time
+        function updateDynamicPrice() {
+            let guests = parseInt(document.getElementById('guestCount').value) || 1;
+            
+            // Prevent users from typing negative numbers or 0
+            if (guests < 1) guests = 1;
+            if (guests > 10) guests = 10;
+            
+            let total = currentBasePrice * guests;
+            
+            // Update the UI with the new total
+            document.getElementById('modalItemPrice').innerText = total.toLocaleString('en-IN');
         }
 
         function closeBookingModal() {
@@ -289,23 +313,18 @@
         }
 
         function confirmBooking(event) {
-            event.preventDefault(); // Stops the page from refreshing
+            event.preventDefault();
             const btn = document.getElementById('confirmBtn');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            
-            // Simulate a network request for 1.5 seconds to look realistic
             setTimeout(() => {
                 document.getElementById('bookingForm').style.display = 'none';
                 document.getElementById('bookingSuccess').style.display = 'block';
             }, 1500);
         }
 
-        // Close modal if user clicks outside the box
         window.onclick = function(event) {
             const modal = document.getElementById('bookingModal');
-            if (event.target === modal) {
-                closeBookingModal();
-            }
+            if (event.target === modal) closeBookingModal();
         }
     </script>
 </body>
