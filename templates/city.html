@@ -58,7 +58,7 @@
                     <p class="card-desc">{{ place.description }}</p>
 
                     <a href="/place/{{ place.name }}" class="view-details-btn">View Details</a>
-                
+
                 </div>
             </div>
             {% endfor %}
@@ -95,7 +95,9 @@
                     <span class="budget-badge {{ item.budget_category | lower | replace(' ', '-') }}">{{
                         item.budget_category }}</span>
                     <p class="price">₹{{ item.price }}</p>
-                    <button class="book-btn-light">Book Now</button>
+                    <button class="book-btn-light" onclick="openBookingModal('{{ item.name | replace("'", "\\'") }}', '{{ item.price }}')">
+                        <i class="fas fa-calendar-check"></i> Book Now
+                    </button>
                 </div>
             </div>
             {% endfor %}
@@ -124,11 +126,43 @@
         </div>
     </div>
 
+    <div id="bookingModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-modal" onclick="closeBookingModal()">&times;</span>
+            <h2 style="color: #0f172a; margin-bottom: 10px;">Complete Your Reservation</h2>
+            <h3 id="modalItemName" style="color: #3b82f6; margin-bottom: 5px;">Hotel Name</h3>
+            <p style="color: #475569; margin-bottom: 20px; font-weight: bold;">Price: ₹<span id="modalItemPrice">0</span></p>
+
+            <form id="bookingForm" onsubmit="confirmBooking(event)">
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.9rem; color: #64748b; font-weight: bold;">Check-In</label>
+                        <input type="date" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 5px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.9rem; color: #64748b; font-weight: bold;">Guests</label>
+                        <input type="number" min="1" max="10" required value="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 5px;">
+                    </div>
+                </div>
+                <button type="submit" class="btn-green" style="width: 100%; margin-top: 10px;" id="confirmBtn">
+                    Confirm Booking
+                </button>
+            </form>
+
+            <div id="bookingSuccess" style="display: none; text-align: center; padding: 20px 0;">
+                <i class="fas fa-check-circle" style="color: #22c55e; font-size: 4rem; margin-bottom: 15px;"></i>
+                <h3 style="color: #0f172a;">Booking Confirmed!</h3>
+                <p style="color: #475569;">Your TerraVista reservation has been secured.</p>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <h2 style="margin: 0 0 15px 0; font-size: 1.8rem; letter-spacing: -0.5px;">
             <span style="font-weight: 800; color: #ffffff;">Terra</span><span style="color: #3b82f6;">Vista</span>
         </h2>
-        <p>Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history.</p>
+        <p>Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the
+            rich history.</p>
         <div class="social-icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
@@ -183,7 +217,7 @@
             });
         }
 
-        // 3. ROUTE LOGIC: Professional Fix for the "Finalizing" problem
+        // ROUTE LOGIC: Professional Fix for the "Finalizing" problem
         function calculateMapplsRoute() {
             const btn = document.getElementById('go-btn');
 
@@ -233,6 +267,44 @@
                     return sortVal === "lowToHigh" ? priceA - priceB : 0;
                 });
                 cards.forEach(card => container.appendChild(card));
+            }
+        }
+
+        // --- BOOKING MODAL LOGIC ---
+        function openBookingModal(itemName, itemPrice) {
+            document.getElementById('modalItemName').innerText = itemName;
+            document.getElementById('modalItemPrice').innerText = itemPrice;
+            
+            // Reset the form in case they opened it before
+            document.getElementById('bookingForm').style.display = 'block';
+            document.getElementById('bookingSuccess').style.display = 'none';
+            document.getElementById('confirmBtn').innerHTML = 'Confirm Booking';
+            
+            // Show the modal
+            document.getElementById('bookingModal').style.display = 'flex';
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+
+        function confirmBooking(event) {
+            event.preventDefault(); // Stops the page from refreshing
+            const btn = document.getElementById('confirmBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            
+            // Simulate a network request for 1.5 seconds to look realistic
+            setTimeout(() => {
+                document.getElementById('bookingForm').style.display = 'none';
+                document.getElementById('bookingSuccess').style.display = 'block';
+            }, 1500);
+        }
+
+        // Close modal if user clicks outside the box
+        window.onclick = function(event) {
+            const modal = document.getElementById('bookingModal');
+            if (event.target === modal) {
+                closeBookingModal();
             }
         }
     </script>
