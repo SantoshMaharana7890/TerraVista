@@ -10,9 +10,9 @@
 <body class="home-bg">
 
     <nav class="navbar">
-        <div class="logo" style="display: flex; align-items: center; gap: 8px;">
+        <div class="logo">
             <i class="fas fa-globe-americas" style="color: #3b82f6; font-size: 28px;"></i>
-            <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: #f8fafc;">Terra<span style="color: #3b82f6;">Vista</span></span>
+            <span style="font-weight: 800; font-size: 1.6rem; color: #f8fafc;">Terra<span style="color: #3b82f6;">Vista</span></span>
         </div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
@@ -21,44 +21,33 @@
     </nav>
 
     <header class="hero-section">
-        <h1 class="hero-title" style="margin-bottom: 20px;">Experience the True Essence of India</h1>
+        <h1 class="hero-title">Experience the True Essence of India</h1>
+        <p class="hero-subtitle">Discover heritage, savor authentic cuisines, and stay in comfort. 
+            Curate your perfect journey today.</p>
         
-        <p class="hero-subtitle" style="color: #ffffff; text-shadow: 2px 2px 8px rgba(0,0,0,0.9); font-weight: 800;">
-            Discover heritage, savor authentic cuisines, and stay in comfort. Curate your perfect journey today.
-        </p>
-
-        <form action="/search" method="get" style="display: flex; gap: 15px; width: 100%; max-width: 800px; margin-top: 20px; justify-content: center;">
-            
-            <div style="display: flex; align-items: center; background: #ffffff; padding: 12px 25px; border-radius: 50px; flex: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative;">
-                
-                <i class="fas fa-map-marker-alt" style="color: #94a3b8; font-size: 1.2rem; margin-right: 15px;"></i>
-                
-                <select name="city" required style="flex: 1; border: none; outline: none; font-size: 1.1rem; background: transparent; cursor: pointer; color: #334155; -webkit-appearance: none; -moz-appearance: none; appearance: none; padding-right: 30px;">
-                    <option value="" disabled selected>Select a destination (Mumbai, Hyderabad, Bhubaneswar, Punjab)...</option>
+        <form action="/search" method="get" class="hero-search-form">
+            <div class="search-input-group">
+                <i class="fas fa-map-marker-alt location-icon"></i>
+                <select name="city" required class="city-dropdown">
+                    <option value="" disabled selected>Select Destination (Mumbai, Hyderabad...)</option>
                     <option value="Mumbai">Mumbai</option>
                     <option value="Hyderabad">Hyderabad</option>
                     <option value="Bhubaneswar">Bhubaneswar</option>
                     <option value="Punjab">Punjab</option>
                     <option value="Kolkata">Kolkata</option>
                 </select>
-
-                <i class="fas fa-chevron-down"></i>
+                <i class="fas fa-chevron-down dropdown-arrow"></i>
             </div>
-            
             <button type="submit" class="search-btn">Search</button>
-            
         </form>
     </header>
     
     <footer class="footer">
-        <h2 style="margin: 0 0 15px 0; font-size: 1.8rem; letter-spacing: -0.5px;">
-            <span style="font-weight: 800; color: #ffffff;">Terra</span><span style="color: #3b82f6;">Vista</span>
-        </h2>
-        <p>Your ultimate guide to exploring the unseen beauties, tasting the authentic cuisines, and experiencing the rich history.</p>
+        <h2>TerraVista</h2>
+        <p>Your ultimate guide to exploring the unseen beauties and rich history of India.</p>
         <div class="social-icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-youtube"></i></a>
             <a href="#"><i class="fab fa-linkedin-in"></i></a>
         </div>
