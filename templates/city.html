@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
+    
     <script id="mappls-direction-plugin" src="https://apis.mappls.com/advancedmaps/api/61322530fe31f5cca1160ea7c85ec03b/map_sdk_plugins?v=3.0&libraries=direction"></script>
 </head>
 <body class="city-page-bg">
@@ -127,51 +128,64 @@
     </footer>
 
     <script>
-        // --- DYNAMIC CITY TRAITS (SPORTS, CUISINE, ART) ---
-        const cityTraits = {
-            "Mumbai": { sport: "Cricket", cuisine: "Vada Pav", art: "Warli Art" },
-            "Hyderabad": { sport: "Badminton", cuisine: "Biryani", art: "Pearl Craft" },
-            "Bhubaneswar": { sport: "Hockey", cuisine: "Pahala Rasgulla", art: "Pattachitra" },
-            "Punjab": { sport: "Kabaddi", cuisine: "Makki Di Roti", art: "Phulkari" },
-            "Kolkata": { sport: "Football", cuisine: "Rosogolla", art: "Terracotta" }
+        const currentCity = "{{ city.name }}";
+
+        // 1. UNIFIED DYNAMIC CITY DATA
+        const cityData = {
+            "Mumbai": { sport: "Cricket", cuisine: "Vada Pav", art: "Warli Art", lat: 18.9220, lng: 72.8347 },
+            "Hyderabad": { sport: "Badminton", cuisine: "Biryani", art: "Pearl Craft", lat: 17.3850, lng: 78.4867 },
+            "Bhubaneswar": { sport: "Hockey", cuisine: "Pahala Rasgulla", art: "Pattachitra", lat: 20.2961, lng: 85.8245 },
+            "Punjab": { sport: "Kabaddi", cuisine: "Makki Di Roti", art: "Phulkari", lat: 31.6340, lng: 74.8723 },
+            "Kolkata": { sport: "Football", cuisine: "Rosogolla", art: "Terracotta", lat: 22.5726, lng: 88.3639 }
         };
 
-        // Inject the famous traits instantly
-        if (cityTraits[currentCity]) {
-            document.getElementById("dynamic-sport").innerHTML = `<i class="fas fa-running"></i> ${cityTraits[currentCity].sport}`;
-            document.getElementById("dynamic-cuisine").innerHTML = `<i class="fas fa-utensils"></i> ${cityTraits[currentCity].cuisine}`;
-            document.getElementById("dynamic-art").innerHTML = `<i class="fas fa-paint-brush"></i> ${cityTraits[currentCity].art}`;
-        }
-        
-        // 1. WEATHER LOGIC
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${cityLat}&longitude=${cityLng}&current_weather=true`)
-            .then(res => res.json()).then(data => {
-                const temp = data.current_weather.temperature;
-                document.getElementById('weatherBadge').innerHTML = `<i class="fas fa-thermometer-half"></i> ${temp}°C | Live`;
-            }).catch(() => { document.getElementById('weatherBadge').innerHTML = "N/A"; });
+        // Fallback to Mumbai if there's a typo in the database
+        const city = cityData[currentCity] || cityData["Mumbai"];
 
-        // 2. MAP INITIALIZATION
+        // 2. INSTANTLY INJECT CITY TAGS (Wrapped in try/catch so it can never crash the app)
+        try {
+            document.getElementById("dynamic-sport").innerHTML = `<i class="fas fa-running"></i> ${city.sport}`;
+            document.getElementById("dynamic-cuisine").innerHTML = `<i class="fas fa-utensils"></i> ${city.cuisine}`;
+            document.getElementById("dynamic-art").innerHTML = `<i class="fas fa-paint-brush"></i> ${city.art}`;
+        } catch(error) {
+            console.log("Static tags fallback active.");
+        }
+
+        // 3. FETCH WEATHER SAFELY
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`)
+            .then(res => res.json())
+            .then(data => {
+                const temp = Math.round(data.current_weather.temperature);
+                document.getElementById('weatherBadge').innerHTML = `<i class="fas fa-thermometer-half"></i> ${temp}°C | Live`;
+            }).catch(() => { 
+                document.getElementById('weatherBadge').innerHTML = "Weather N/A"; 
+            });
+
+        // 4. MAP INITIALIZATION & ROUTING
         let map, directionPlugin;
         let pluginReady = false;
 
-        // Listen for the plugin to actually finish loading
-        document.getElementById('mappls-direction-plugin').addEventListener('load', function() {
+        // The ? safely checks if the ID exists without crashing
+        document.getElementById('mappls-direction-plugin')?.addEventListener('load', function() {
             pluginReady = true;
-            console.log("Mappls Direction Plugin Ready.");
         });
 
+        // This is automatically called by the Mappls script tag in the header
         function initMap1() {
-            map = new mappls.Map('liveMap', { center: [cityLat, cityLng], zoom: 12 });
+            map = new mappls.Map('liveMap', { 
+                center: [city.lat, city.lng], 
+                zoom: 12,
+                zoomControl: true,
+                location: true 
+            });
         }
 
-        // 3. ROUTE LOGIC: Professional Fix for the "Finalizing" problem
         function calculateMapplsRoute() {
             const btn = document.getElementById('go-btn');
             
-            // If the plugin isn't ready yet, show a loader on the button instead of a popup
             if (!pluginReady || typeof mappls.direction === 'undefined') {
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wait...';
-                setTimeout(calculateMapplsRoute, 1000); // Check again in 1 second
+                setTimeout(calculateMapplsRoute, 800); 
                 return;
             }
 
@@ -179,7 +193,7 @@
             const start = document.getElementById("start-location").value;
             const end = document.getElementById("end-location").value;
 
-            if (!start || !end) return alert("Please fill both locations.");
+            if (!start || !end) return alert("Please fill in both locations.");
 
             if (directionPlugin) mappls.remove({map: map, layer: directionPlugin});
 
@@ -191,7 +205,7 @@
             }, function(data) { directionPlugin = data; });
         }
 
-        // 4. FILTERING & SORTING
+        // 5. FILTERING
         function filterAndSortItems() {
             let container = document.getElementById("itemGrid");
             let cards = Array.from(container.getElementsByClassName("item-card"));
@@ -211,11 +225,8 @@
                 cards.sort((a, b) => {
                     let priceA = parseInt(a.getAttribute("data-price"));
                     let priceB = parseInt(b.getAttribute("data-price"));
-                    return sortVal === "lowToHigh" ? priceA - priceB : 0;
+                    return sortVal === "lowToHigh" ? priceA - priceB : 0; // Simple Low to High
                 });
                 cards.forEach(card => container.appendChild(card));
             }
         }
-    </script>
-</body>
-</html> 
