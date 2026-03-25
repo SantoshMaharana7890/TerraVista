@@ -308,5 +308,13 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
     
     /* Aggressive Stack for Cards & About Pages */
     .grid-container-3, .about-features { display: flex !important; flex-direction: column !important; width: 100% !important; padding: 0 !important; box-sizing: border-box !important; gap: 20px !important; }
-    .section-wrapper { padding: 0 15px !important; box-sizing: border-box !important; width: 100% !important; overflow-x: hidden !important; }
+    
+    /* ROOT FIX: Added scroll-margin-top: 160px to clear the taller mobile navbar */
+    .section-wrapper { 
+        padding: 0 15px !important; 
+        box-sizing: border-box !important; 
+        width: 100% !important; 
+        overflow-x: hidden !important; 
+        scroll-margin-top: 160px !important; 
+    }
 }
