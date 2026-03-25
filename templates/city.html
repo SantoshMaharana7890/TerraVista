@@ -179,13 +179,14 @@
                 <p id="transitLoaderText" style="color: #475569; font-weight: bold;">Pinging local drivers...</p>
             </div>
 
-            <div id="transitResults" style="display: none; flex-direction: column; gap: 15px;">
+            <div id="transitResults" style="display: none; flex-direction: column; gap: 12px;">
                 
-                <div class="transit-option" onclick="bookRide('City Cab (AC)', 'cabPrice', 'cabEta', 'fa-car-side')" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
+                <div class="transit-option" onclick="bookRide('City Cab (AC)', 'cabPrice', 'cabEta', 'fa-taxi')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
                     <div style="display: flex; align-items: center; gap: 15px;">
-                        <i class="fas fa-car-side" style="font-size: 1.8rem; color: #0f172a;"></i>
+                        <i class="fas fa-taxi" style="font-size: 1.8rem; color: #0f172a;"></i>
                         <div>
                             <h4 style="color: #0f172a; margin-bottom: 2px;">City Cab (AC)</h4>
+                            <span style="font-size: 0.8rem; color: #64748b;"><span id="cabDistance">0</span> km • <span id="cabDuration">0</span> min trip</span><br>
                             <span style="font-size: 0.8rem; color: #22c55e; font-weight: bold;"><i class="fas fa-bolt"></i> <span id="cabEta">2</span> mins away</span>
                         </div>
                     </div>
@@ -194,11 +195,12 @@
                     </div>
                 </div>
 
-                <div class="transit-option" onclick="bookRide('Local Auto', 'autoPrice', 'autoEta', 'fa-motorcycle')" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
+                <div class="transit-option" onclick="bookRide('Local Auto', 'autoPrice', 'autoEta', 'fa-car-side')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
                     <div style="display: flex; align-items: center; gap: 15px;">
-                        <i class="fas fa-motorcycle" style="font-size: 1.8rem; color: #d97706;"></i>
+                        <i class="fas fa-car-side" style="font-size: 1.8rem; color: #d97706;"></i>
                         <div>
                             <h4 style="color: #0f172a; margin-bottom: 2px;">Local Auto</h4>
+                            <span style="font-size: 0.8rem; color: #64748b;"><span id="autoDistance">0</span> km • <span id="autoDuration">0</span> min trip</span><br>
                             <span style="font-size: 0.8rem; color: #22c55e; font-weight: bold;"><i class="fas fa-bolt"></i> <span id="autoEta">1</span> min away</span>
                         </div>
                     </div>
@@ -207,11 +209,26 @@
                     </div>
                 </div>
 
-                <div class="transit-option" onclick="bookRide('Metro / AC Bus', 'metroPrice', 'metroEta', 'fa-subway')" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
+                <div class="transit-option" onclick="bookRide('Local City Bus', 'busPrice', 'busEta', 'fa-bus')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fas fa-bus" style="font-size: 1.8rem; color: #ef4444;"></i>
+                        <div>
+                            <h4 style="color: #0f172a; margin-bottom: 2px;">Local City Bus</h4>
+                            <span style="font-size: 0.8rem; color: #64748b;"><span id="busDistance">0</span> km • <span id="busDuration">0</span> min trip</span><br>
+                            <span style="font-size: 0.8rem; color: #64748b; font-weight: bold;"><i class="fas fa-clock"></i> Arriving in <span id="busEta">5</span> mins</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <h3 style="color: #0f172a; margin-bottom: 0;">₹<span id="busPrice">25</span></h3>
+                    </div>
+                </div>
+
+                <div class="transit-option" onclick="bookRide('Metro Train', 'metroPrice', 'metroEta', 'fa-subway')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <i class="fas fa-subway" style="font-size: 1.8rem; color: #3b82f6;"></i>
                         <div>
-                            <h4 style="color: #0f172a; margin-bottom: 2px;">Metro / AC Bus</h4>
+                            <h4 style="color: #0f172a; margin-bottom: 2px;">Metro Train</h4>
+                            <span style="font-size: 0.8rem; color: #64748b;"><span id="metroDistance">0</span> km • <span id="metroDuration">0</span> min trip</span><br>
                             <span style="font-size: 0.8rem; color: #64748b; font-weight: bold;"><i class="fas fa-clock"></i> Departs in <span id="metroEta">5</span> mins</span>
                         </div>
                     </div>
@@ -409,77 +426,73 @@
         }
 
         // 5. LIVE TRANSIT ESTIMATOR & BOOKING LOGIC
+
+        // Advanced String-Hashing Algorithm: Generates a fixed, realistic distance for any two words
+        function getConsistentDistance(start, end) {
+            if (!start || !end) return Math.floor(Math.random() * 10) + 5; // Random fallback
+            let combined = (start.toLowerCase() + end.toLowerCase()).replace(/\s/g, '');
+            let hash = 0;
+            for (let i = 0; i < combined.length; i++) {
+                hash = ((hash << 5) - hash) + combined.charCodeAt(i);
+                hash |= 0;
+            }
+            // Math magic to keep the generated distance between 2.5km and 32.5km
+            return (Math.abs(hash) % 300) / 10 + 2.5; 
+        }
+
         function openTransitModal() {
             const startPoint = document.getElementById("start-location").value.trim();
             const endPoint = document.getElementById("end-location").value.trim();
             const routeTextElement = document.getElementById("transitRouteText");
 
             if (startPoint !== "" && endPoint !== "") {
-                routeTextElement.innerHTML = `Live fare from <strong style="color:#0f172a;">${startPoint}</strong> to <strong style="color:#0f172a;">${endPoint}</strong>.`;
+                routeTextElement.innerHTML = `Calculating routes from <strong style="color:#0f172a;">${startPoint}</strong> to <strong style="color:#0f172a;">${endPoint}</strong>.`;
             } else {
-                routeTextElement.innerHTML = `Estimates based on general traffic. <br><span style="color:#ef4444; font-weight:bold; font-size:0.8rem;"><i class="fas fa-exclamation-circle"></i> Tip: Enter Start and Destination on the map for accurate routing!</span>`;
+                routeTextElement.innerHTML = `Estimates based on general traffic. <br><span style="color:#ef4444; font-weight:bold; font-size:0.8rem;"><i class="fas fa-exclamation-circle"></i> Tip: Enter Start and Destination on the map!</span>`;
             }
 
-            // Reset UI states
             document.getElementById('transitModal').style.display = 'flex';
             document.getElementById('rideSuccessScreen').style.display = 'none';
             document.getElementById('transitResults').style.display = 'none';
             
             const loaderText = document.getElementById('transitLoaderText');
             const loaderIcon = document.getElementById('transitSpinnerIcon');
-            loaderText.innerText = 'Pinging local drivers...';
+            loaderText.innerText = 'Calculating exact distance & tariffs...';
             loaderIcon.className = 'fas fa-radar fa-spin';
             document.getElementById('transitLoader').style.display = 'block';
 
             setTimeout(() => {
-                document.getElementById('cabEta').innerText = Math.floor(Math.random() * 5) + 2; 
-                document.getElementById('autoEta').innerText = Math.floor(Math.random() * 3) + 1; 
-                document.getElementById('metroEta').innerText = Math.floor(Math.random() * 10) + 2; 
+                // Generate the mathematically fixed distance
+                let distance = getConsistentDistance(startPoint, endPoint);
+                let distStr = distance.toFixed(1); // Rounds to 1 decimal place (e.g., "5.2")
 
-                let baseDistance = (startPoint && endPoint) ? ((startPoint.length + endPoint.length) / 3) + 2 : Math.floor(Math.random() * 10) + 5;
-                
-                document.getElementById('cabPrice').innerText = Math.floor(baseDistance * 22).toLocaleString('en-IN'); 
-                document.getElementById('autoPrice').innerText = Math.floor(baseDistance * 12).toLocaleString('en-IN');
-                document.getElementById('metroPrice').innerText = (baseDistance <= 10 ? 20 : 40);
+                // CAB: Fastest, Most Expensive (22/km, 3 mins/km)
+                document.getElementById('cabDistance').innerText = distStr;
+                document.getElementById('cabDuration').innerText = Math.round(distance * 3); 
+                document.getElementById('cabPrice').innerText = Math.round(distance * 22).toLocaleString('en-IN');
+                document.getElementById('cabEta').innerText = Math.floor(Math.random() * 4) + 2;
+
+                // AUTO: Medium Speed, Medium Price (14/km, 4 mins/km)
+                document.getElementById('autoDistance').innerText = distStr;
+                document.getElementById('autoDuration').innerText = Math.round(distance * 4); 
+                document.getElementById('autoPrice').innerText = Math.round(distance * 14).toLocaleString('en-IN');
+                document.getElementById('autoEta').innerText = Math.floor(Math.random() * 3) + 1;
+
+                // LOCAL BUS: Slowest, Cheapest (Flat base + 2/km, 6 mins/km)
+                document.getElementById('busDistance').innerText = distStr;
+                document.getElementById('busDuration').innerText = Math.round(distance * 6); 
+                document.getElementById('busPrice').innerText = Math.round(distance * 2) + 10;
+                document.getElementById('busEta').innerText = Math.floor(Math.random() * 10) + 5;
+
+                // METRO: Fastest, Traffic-free, Fixed stations (2.5/km, 1.5 mins/km)
+                document.getElementById('metroDistance').innerText = distStr;
+                document.getElementById('metroDuration').innerText = Math.round(distance * 1.5); 
+                document.getElementById('metroPrice').innerText = Math.round(distance * 2.5) + 15;
+                document.getElementById('metroEta').innerText = Math.floor(Math.random() * 5) + 2;
 
                 document.getElementById('transitLoader').style.display = 'none';
                 document.getElementById('transitResults').style.display = 'flex';
-            }, 1200);
-        }
-
-        // NEW: Handles the user clicking a specific ride
-        function bookRide(vehicleName, priceElementId, etaElementId, iconClass) {
-            // Hide the list of rides
-            document.getElementById('transitResults').style.display = 'none';
-            
-            // Show a "Confirming Booking" spinner
-            const loaderText = document.getElementById('transitLoaderText');
-            const loaderIcon = document.getElementById('transitSpinnerIcon');
-            loaderText.innerHTML = `Connecting to your <strong>${vehicleName}</strong>...`;
-            loaderIcon.className = 'fas fa-circle-notch fa-spin';
-            document.getElementById('transitLoader').style.display = 'block';
-
-            // Get the specific data the user clicked on
-            const selectedPrice = document.getElementById(priceElementId).innerText;
-            const selectedEta = document.getElementById(etaElementId).innerText;
-
-            // Wait 1.5 seconds, then show the success ticket
-            setTimeout(() => {
-                document.getElementById('transitLoader').style.display = 'none';
-                
-                // Populate the ticket
-                document.getElementById('bookedVehicle').innerText = vehicleName;
-                document.getElementById('bookedEtaTime').innerText = selectedEta;
-                document.getElementById('bookedPriceFinal').innerText = selectedPrice;
-                document.getElementById('bookedIcon').className = `fas ${iconClass}`;
-                
-                // Show the ticket
-                document.getElementById('rideSuccessScreen').style.display = 'block';
             }, 1500);
-        }
-
-        function closeTransitModal() {
-            document.getElementById('transitModal').style.display = 'none';
         }
     </script>
 </body>
