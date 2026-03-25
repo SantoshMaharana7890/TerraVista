@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ city.name }} - TerraVista</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=37.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=38.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <script
@@ -169,27 +169,24 @@
     <div id="transitModal" class="modal-overlay">
         <div class="modal-box" style="max-width: 450px;">
             <span class="close-modal" onclick="closeTransitModal()">&times;</span>
-            <h2 style="color: #0f172a; margin-bottom: 5px;"><i class="fas fa-route" style="color: #3b82f6;"></i> Local
-                Transit Hub</h2>
+            <h2 style="color: #0f172a; margin-bottom: 5px;"><i class="fas fa-route" style="color: #3b82f6;"></i> Local Transit Hub</h2>
             <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;" id="transitRouteText">
                 Live estimates based on current {{ city.name }} traffic.
             </p>
 
             <div id="transitLoader" style="text-align: center; padding: 30px 0;">
-                <i class="fas fa-radar fa-spin" style="font-size: 3rem; color: #3b82f6; margin-bottom: 15px;"></i>
-                <p style="color: #475569; font-weight: bold;">Pinging local drivers...</p>
+                <i id="transitSpinnerIcon" class="fas fa-radar fa-spin" style="font-size: 3rem; color: #3b82f6; margin-bottom: 15px;"></i>
+                <p id="transitLoaderText" style="color: #475569; font-weight: bold;">Pinging local drivers...</p>
             </div>
 
-            <div id="transitResults" style="display: none; display: flex; flex-direction: column; gap: 15px;">
-
-                <div class="transit-option"
-                    style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
+            <div id="transitResults" style="display: none; flex-direction: column; gap: 15px;">
+                
+                <div class="transit-option" onclick="bookRide('City Cab (AC)', 'cabPrice', 'cabEta', 'fa-car-side')" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <i class="fas fa-car-side" style="font-size: 1.8rem; color: #0f172a;"></i>
                         <div>
                             <h4 style="color: #0f172a; margin-bottom: 2px;">City Cab (AC)</h4>
-                            <span style="font-size: 0.8rem; color: #22c55e; font-weight: bold;"><i
-                                    class="fas fa-bolt"></i> <span id="cabEta">2</span> mins away</span>
+                            <span style="font-size: 0.8rem; color: #22c55e; font-weight: bold;"><i class="fas fa-bolt"></i> <span id="cabEta">2</span> mins away</span>
                         </div>
                     </div>
                     <div style="text-align: right;">
@@ -197,14 +194,12 @@
                     </div>
                 </div>
 
-                <div class="transit-option"
-                    style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
+                <div class="transit-option" onclick="bookRide('Local Auto', 'autoPrice', 'autoEta', 'fa-motorcycle')" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <i class="fas fa-motorcycle" style="font-size: 1.8rem; color: #d97706;"></i>
                         <div>
                             <h4 style="color: #0f172a; margin-bottom: 2px;">Local Auto</h4>
-                            <span style="font-size: 0.8rem; color: #22c55e; font-weight: bold;"><i
-                                    class="fas fa-bolt"></i> <span id="autoEta">1</span> min away</span>
+                            <span style="font-size: 0.8rem; color: #22c55e; font-weight: bold;"><i class="fas fa-bolt"></i> <span id="autoEta">1</span> min away</span>
                         </div>
                     </div>
                     <div style="text-align: right;">
@@ -212,22 +207,31 @@
                     </div>
                 </div>
 
-                <div class="transit-option"
-                    style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
+                <div class="transit-option" onclick="bookRide('Metro / AC Bus', 'metroPrice', 'metroEta', 'fa-subway')" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <i class="fas fa-subway" style="font-size: 1.8rem; color: #3b82f6;"></i>
                         <div>
                             <h4 style="color: #0f172a; margin-bottom: 2px;">Metro / AC Bus</h4>
-                            <span style="font-size: 0.8rem; color: #64748b; font-weight: bold;"><i
-                                    class="fas fa-clock"></i> Departs in <span id="metroEta">5</span> mins</span>
+                            <span style="font-size: 0.8rem; color: #64748b; font-weight: bold;"><i class="fas fa-clock"></i> Departs in <span id="metroEta">5</span> mins</span>
                         </div>
                     </div>
                     <div style="text-align: right;">
                         <h3 style="color: #0f172a; margin-bottom: 0;">₹<span id="metroPrice">30</span></h3>
                     </div>
                 </div>
-
             </div>
+
+            <div id="rideSuccessScreen" style="display: none; text-align: center; padding: 20px 0;">
+                <i id="bookedIcon" class="fas fa-car-side" style="color: #22c55e; font-size: 4rem; margin-bottom: 15px;"></i>
+                <h3 style="color: #0f172a; margin-bottom: 10px;">Ride Confirmed!</h3>
+                <p style="color: #475569; margin-bottom: 15px;">Your <strong id="bookedVehicle" style="color: #0f172a;"></strong> is arriving in <strong id="bookedEtaTime" style="color: #22c55e;"></strong> mins.</p>
+                <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; display: inline-block; min-width: 200px;">
+                    <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 5px;">Estimated Fare</p>
+                    <p style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">₹<span id="bookedPriceFinal"></span></p>
+                </div>
+                <button class="btn-green" style="width: 100%; margin-top: 25px;" onclick="closeTransitModal()">Done</button>
+            </div>
+
         </div>
     </div>
 
@@ -404,43 +408,78 @@
             if (event.target === modal) closeBookingModal();
         }
 
-        // 5. LIVE TRANSIT ESTIMATOR LOGIC (Now wired to Map Inputs)
+        // 5. LIVE TRANSIT ESTIMATOR & BOOKING LOGIC
         function openTransitModal() {
-            // Grab the locations the user typed into the map
             const startPoint = document.getElementById("start-location").value.trim();
             const endPoint = document.getElementById("end-location").value.trim();
             const routeTextElement = document.getElementById("transitRouteText");
 
-            // Make the UI dynamic based on user input
             if (startPoint !== "" && endPoint !== "") {
                 routeTextElement.innerHTML = `Live fare from <strong style="color:#0f172a;">${startPoint}</strong> to <strong style="color:#0f172a;">${endPoint}</strong>.`;
             } else {
                 routeTextElement.innerHTML = `Estimates based on general traffic. <br><span style="color:#ef4444; font-weight:bold; font-size:0.8rem;"><i class="fas fa-exclamation-circle"></i> Tip: Enter Start and Destination on the map for accurate routing!</span>`;
             }
 
-            // Show modal and reset to loading state
+            // Reset UI states
             document.getElementById('transitModal').style.display = 'flex';
-            document.getElementById('transitLoader').style.display = 'block';
+            document.getElementById('rideSuccessScreen').style.display = 'none';
             document.getElementById('transitResults').style.display = 'none';
+            
+            const loaderText = document.getElementById('transitLoaderText');
+            const loaderIcon = document.getElementById('transitSpinnerIcon');
+            loaderText.innerText = 'Pinging local drivers...';
+            loaderIcon.className = 'fas fa-radar fa-spin';
+            document.getElementById('transitLoader').style.display = 'block';
 
-            // Simulate a network ping to a live API
             setTimeout(() => {
-                // Generate ETAs
                 document.getElementById('cabEta').innerText = Math.floor(Math.random() * 5) + 2; 
                 document.getElementById('autoEta').innerText = Math.floor(Math.random() * 3) + 1; 
                 document.getElementById('metroEta').innerText = Math.floor(Math.random() * 10) + 2; 
 
-                // Smart Math: If they typed a route, make the distance feel calculated based on string length, otherwise use a default
                 let baseDistance = (startPoint && endPoint) ? ((startPoint.length + endPoint.length) / 3) + 2 : Math.floor(Math.random() * 10) + 5;
                 
                 document.getElementById('cabPrice').innerText = Math.floor(baseDistance * 22).toLocaleString('en-IN'); 
                 document.getElementById('autoPrice').innerText = Math.floor(baseDistance * 12).toLocaleString('en-IN');
                 document.getElementById('metroPrice').innerText = (baseDistance <= 10 ? 20 : 40);
 
-                // Hide loader, show results
                 document.getElementById('transitLoader').style.display = 'none';
                 document.getElementById('transitResults').style.display = 'flex';
             }, 1200);
+        }
+
+        // NEW: Handles the user clicking a specific ride
+        function bookRide(vehicleName, priceElementId, etaElementId, iconClass) {
+            // Hide the list of rides
+            document.getElementById('transitResults').style.display = 'none';
+            
+            // Show a "Confirming Booking" spinner
+            const loaderText = document.getElementById('transitLoaderText');
+            const loaderIcon = document.getElementById('transitSpinnerIcon');
+            loaderText.innerHTML = `Connecting to your <strong>${vehicleName}</strong>...`;
+            loaderIcon.className = 'fas fa-circle-notch fa-spin';
+            document.getElementById('transitLoader').style.display = 'block';
+
+            // Get the specific data the user clicked on
+            const selectedPrice = document.getElementById(priceElementId).innerText;
+            const selectedEta = document.getElementById(etaElementId).innerText;
+
+            // Wait 1.5 seconds, then show the success ticket
+            setTimeout(() => {
+                document.getElementById('transitLoader').style.display = 'none';
+                
+                // Populate the ticket
+                document.getElementById('bookedVehicle').innerText = vehicleName;
+                document.getElementById('bookedEtaTime').innerText = selectedEta;
+                document.getElementById('bookedPriceFinal').innerText = selectedPrice;
+                document.getElementById('bookedIcon').className = `fas ${iconClass}`;
+                
+                // Show the ticket
+                document.getElementById('rideSuccessScreen').style.display = 'block';
+            }, 1500);
+        }
+
+        function closeTransitModal() {
+            document.getElementById('transitModal').style.display = 'none';
         }
     </script>
 </body>
