@@ -29,14 +29,48 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
 /* --- HOME PAGE HERO --- */
 .hero-section { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 20px 40px 20px; width: 100%; background-image: url('/static/images/hero_bg.jpg'); background-size: cover; background-position: center; }
 .hero-title { font-size: 3.5rem; color: #ffffff; margin-bottom: 15px; text-shadow: 2px 4px 10px rgba(0,0,0,0.7); }
-.hero-subtitle { font-size: 1.2rem; color: #ffffff; margin: 0 auto 40px auto; max-width: 620px; text-shadow: 1px 2px 6px rgba(0,0,0,0.8); font-weight: 600; }
 .hero-search-form { display: flex; gap: 15px; width: 100%; max-width: 800px; margin-top: 20px; justify-content: center; }
 .search-input-group { display: flex; align-items: center; background: #ffffff; padding: 12px 25px; border-radius: 50px; flex: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; }
 .city-dropdown { flex: 1; border: none; outline: none; font-size: 1.1rem; background: transparent; cursor: pointer; color: #456086; -webkit-appearance: none; appearance: none; padding-right: 30px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 .dropdown-arrow { position: absolute; right: 25px; color: #94a3b8; pointer-events: none; }
 .location-icon { color: #94a3b8; font-size: 1.2rem; margin-right: 15px; }
-.search-btn { height： 55px; padding: 0 35px; background-color: #3b82f6; color: white; border: none; border-radius: 30px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
-.search-btn:hover { background-color： #60a5fa; transform: translateY(-2px); box-shadow: 0 0 15px rgba(59, 130, 246, 0.8); }
+
+/* --- UPDATED HERO SUBTITLE --- */
+.hero-subtitle { 
+    font-size: 1.25rem; 
+    color: #ffffff; 
+    margin: 0 auto 40px auto; 
+    max-width: 680px; 
+    text-shadow: 1px 2px 6px rgba(0,0,0,0.8); 
+    font-weight: 600; 
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Clean, modern font */
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+}
+
+/* --- FIXED SEARCH BUTTON --- */
+.search-btn { 
+    height: 55px; /* Fixed the full-width colon typo here */
+    padding: 0 35px; 
+    background-color: #3b82f6; 
+    color: white; 
+    border: none; 
+    border-radius: 30px; 
+    font-weight: bold; 
+    font-size: 1.1rem; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+}
+
+.search-btn:hover { 
+    background-color: #2563eb; /* Fixed the full-width colon typo here */
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.6); 
+}
+
+.search-btn:active {
+    transform: translateY(1px); /* Makes the button physically "press down" when clicked */
+}
 
 /* --- SYNCHRONIZED HEADINGS --- */
 .section-heading, #accommodations .section-heading, #places .section-heading { font-size: 2rem !important; color: #0f172a !important; font-weight: 700 !important; border-bottom: 3px solid #1e3a8a !important; display: inline-block !important; padding-bottom: 8px !important; margin-bottom: 30px !important; text-transform: none; }
