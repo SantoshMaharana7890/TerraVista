@@ -23,9 +23,11 @@
     <header class="hero-section">
         <h1 class="hero-title" style="margin-bottom: 20px;">Experience the True Essence of India</h1>
         
-        <p class="hero-subtitle" style="color: #ffffff; text-shadow: 2px 2px 8px rgba(0,0,0,0.9); font-weight: 800;">
-            Discover heritage, savor authentic cuisines, and stay in comfort. Curate your perfect journey today.
+        <p class="hero-subtitle">
+            Discover heritage, savor authentic cuisines, and stay in comfort.<br>
+            Curate your perfect journey today.
         </p>
+
         <form action="/search" method="get" class="hero-search-form">
             <div class="search-input-group">
                 <i class="fas fa-map-marker-alt location-icon"></i>
@@ -68,8 +70,21 @@
         // Listen for the Enter key on the dropdown
         document.querySelector('.city-dropdown').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
-                e.preventDefault(); // Stop default browser behavior
-                document.querySelector('.hero-search-form').submit(); // Trigger the search
+                e.preventDefault(); // Stop default browser behavior instantly
+                
+                const searchBtn = document.querySelector('.search-btn');
+                const form = document.querySelector('.hero-search-form');
+                
+                // 1. FORCE inline styles. The browser cannot ignore this.
+                searchBtn.style.transition = "all 0.1s ease";
+                searchBtn.style.backgroundColor = "#2563eb"; // The dark blue hover color
+                searchBtn.style.boxShadow = "0 8px 20px rgba(59, 130, 246, 0.6)"; // The blue glow
+                searchBtn.style.transform = "translateY(1px)"; // The physical "press down"
+                
+                // 2. Wait exactly 350 milliseconds (long enough for the human eye to see the flash), THEN submit
+                setTimeout(() => {
+                    form.submit();
+                }, 350);
             }
         });
     </script>
