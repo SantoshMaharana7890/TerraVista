@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ city.name }} - TerraVista</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=45.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=46.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <script
@@ -108,12 +108,12 @@
     <div id="transport" class="section-wrapper">
         <h2 class="section-heading">Transport & Live Routes</h2>
         <div class="transport-layout">
+            
             <div class="transport-card">
                 <h3 style="color: #0f172a; margin-bottom: 20px; font-size: 1.3rem;">
                     <i class="fas fa-bus" style="color: #0f172a; margin-right: 8px;"></i> Local Transit
                 </h3>
-                
-                <ul class="transport-list" style="list-style: none; padding: 0; margin-bottom: 30px; color: #475569; font-size: 0.95rem;">
+                <ul class="transport-list" style="list-style: none; padding: 0; margin-bottom: 20px; color: #475569; font-size: 0.95rem;">
                     <li style="margin-bottom: 15px; display: flex; align-items: center;">
                         <i class="fas fa-check-circle" style="color: #475569; margin-right: 10px;"></i> Bus & Metro coverage.
                     </li>
@@ -122,17 +122,24 @@
                     </li>
                 </ul>
 
+                <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+                    <input type="text" id="start-location" class="map-input" placeholder="Start Point..." style="width: 100%; border: 1px solid #cbd5e1; padding: 12px; border-radius: 8px; font-size: 0.95rem; outline: none;">
+                    <input type="text" id="end-location" class="map-input" placeholder="Destination..." style="width: 100%; border: 1px solid #cbd5e1; padding: 12px; border-radius: 8px; font-size: 0.95rem; outline: none;">
+                </div>
+
                 <button class="btn-green" onclick="openTransitModal()" style="margin-top: auto; background-color: #22c55e;">
                     <i class="fas fa-satellite-dish" style="margin-right: 8px;"></i> Live Fare Estimates
                 </button>
             </div>
+
             <div class="map-wrapper">
-                <div class="map-header map-input-group">
-                    <input type="text" id="start-location" class="map-input" placeholder="Start Location...">
-                    <input type="text" id="end-location" class="map-input" placeholder="Destination...">
-                    <button id="go-btn" onclick="calculateMapplsRoute()" class="map-go-btn">Go</button>
+                <div class="map-header" style="background-color: #f8fafc; padding: 15px; border-bottom: 1px solid #e2e8f0; text-align: center;">
+                    <p style="color: #475569; font-size: 0.95rem; margin: 0; font-weight: 500; line-height: 1.5;">
+                        <i class="fas fa-info-circle" style="color: #3b82f6; margin-right: 5px;"></i> 
+                        Click on a place, then open the map link visible on the map and log in to avail full navigation features.
+                    </p>
                 </div>
-                <div id="liveMap"></div>
+                <div id="liveMap" style="height: 500px; width: 100%; min-height: 450px;"></div>
             </div>
         </div>
     </div>
