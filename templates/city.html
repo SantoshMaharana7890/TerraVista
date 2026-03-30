@@ -47,9 +47,7 @@
         <div class="grid-container-3">
             {% for place in places %}
             <div class="ui-card">
-                <img src="{{ url_for('static', filename='images/' + place.image_file) }}" alt="{{ place.name }}"
-                    class="card-img"
-                    onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Image+Not+Found';">
+                <img src="{{ url_for('static', filename='images/' + place.image_file) }}" class="card-img" alt="{{ place.name }}">
                 <div class="card-content">
                     <span class="category-text">{{ place.category }}</span>
                     <h3 class="card-title">{{ place.name }}</h3>
