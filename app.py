@@ -6,10 +6,12 @@ import urllib.parse
 import mysql.connector
 from mysql.connector import Error
 
-# --- YOUR FOURSQUARE API KEY ---
-FOURSQUARE_API_KEY = "fsq3HaOuSdgI03eyLi9dBNuFpZud/h1w2dDBseeV8jAeeak="
-
 app = Flask(__name__)
+
+# --- CONFIGURATION ---
+# CRITICAL: Replace this string with your actual Legacy API key from the Foursquare Dashboard.
+# It MUST start with 'fsq3'
+FOURSQUARE_API_KEY = "fsq3HaOuSdgI03eyLi9dBNuFpZud/h1w2dDBseeV8jAeeak="
 
 # --- SECURE TiDB DATABASE CONNECTION ---
 def get_db_connection():
@@ -26,9 +28,11 @@ def get_db_connection():
 
 # --- THE LIVE FOURSQUARE ENGINE ---
 def fetch_live_accommodations(city_name):
-    """Fetches live data and formats it to perfectly match the TiDB database structure."""
-    
-    # 1. Map your presentation cities to their map coordinates
+    """
+    Fetches live Foursquare data and formats it to perfectly match 
+    the existing TiDB database structure for the frontend UI.
+    """
+    # 1. Map your presentation cities to exact map coordinates
     coords = {
         "Mumbai": "18.9220,72.8347",
         "Hyderabad": "17.3850,78.4867",
@@ -39,66 +43,69 @@ def fetch_live_accommodations(city_name):
     ll = coords.get(city_name, "18.9220,72.8347")
     
     url = "https://places-api.foursquare.com/places/search"
+    
     params = {
         "ll": ll,
-        "categories": "19014,13065", # 19014 = Hotel, 13065 = Restaurant
-        "limit": 6, # Fetch 6 items for a perfect 3-column UI grid
+        "categories": "19014,13065", # Foursquare Codes: 19014 = Hotel, 13065 = Restaurant
+        "limit": 6, # Fetch exactly 6 items for a clean 3-column CSS grid
         "fields": "name,rating,price,categories"
     }
     
     headers = {
         "Accept": "application/json",
         "Authorization": FOURSQUARE_API_KEY,
-        "X-Places-Api-Version": "2025-02-05" 
+        "X-Places-Api-Version": "2025-02-05" # Strict Foursquare versioning requirement
     }
     
     live_items = []
     
     try:
-        # 5-second timeout. If it takes longer, we abort and use the database.
+        # 5-second timeout ensures the website never hangs during the presentation
         response = requests.get(url, params=params, headers=headers, timeout=5)
         
         if response.status_code == 200:
             results = response.json().get("results", [])
             
             for index, venue in enumerate(results):
-                # Classify as Lodging or Dining
+                # Identify if it is a Hotel or Dining establishment
                 cat_names = [c.get("name", "") for c in venue.get("categories", [])]
                 is_hotel = any("Hotel" in name for name in cat_names)
                 item_type = "lodging" if is_hotel else "dining"
                 
-                # Dynamic INR Pricing & Budget Categories based on Foursquare Price Tiers (1-4)
+                # Dynamic INR Pricing & Budget Classification
                 price_tier = venue.get("price", random.randint(1, 3))
                 if is_hotel:
-                    price_inr = random.randint(1500, 3500) if price_tier <= 2 else random.randint(5000, 12000)
+                    price_inr = random.randint(1500, 3500) if price_tier <= 2 else random.randint(5000, 15000)
                 else:
                     price_inr = random.randint(300, 800) if price_tier <= 2 else random.randint(1200, 3000)
                     
                 budget_cat = "Premium" if price_tier >= 3 else "Budget"
                 
-                # Format Ratings (Foursquare uses a 10-point scale; we use 5)
+                # Format Ratings (Converting Foursquare's 10-point scale to a 5-point scale)
                 rating = venue.get("rating")
                 rating = round(rating / 2, 1) if rating else round(random.uniform(3.8, 4.9), 1)
                     
-                # Create a dictionary that mimics a database row exactly
+                # Cycle safely through the local images prepared in Step 2
+                safe_image_name = f"hotel{(index % 3) + 1}.jpg" if is_hotel else f"dining{(index % 3) + 1}.jpg"
+
                 live_items.append({
                     "name": venue.get("name"),
                     "type": item_type,
                     "rating": rating,
                     "price": price_inr,
                     "budget_category": budget_cat,
-                    # Fallback to local generic images
-                    "image_file": f"hotel{index % 3 + 1}.jpg" if is_hotel else f"dining{index % 3 + 1}.jpg"
+                    "image_file": safe_image_name
                 })
                 
         return live_items
         
     except Exception as e:
-        print(f"Foursquare API Error (Falling back to Database): {e}")
+        # Logs the error to the terminal, but prevents a 500 server crash on the website
+        print(f"API Interruption (Triggering Database Fallback): {e}")
         return [] 
 
 
-# --- ROUTES ---
+# --- ROUTING LOGIC ---
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -125,21 +132,22 @@ def search_city():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         
-        # 1. Fetch City Info
+        # 1. Fetch City Info from TiDB
         cursor.execute("SELECT * FROM cities WHERE name = %s", (city_name,))
         city_info = cursor.fetchone()
         
         if not city_info:
             return "City not found. Please select a valid city from the dropdown.", 404
 
-        # 2. Fetch Tourist Places (Static Database)
+        # 2. Fetch Tourist Places (Kept Static per your UI design)
         cursor.execute("SELECT * FROM places WHERE city_id = %s", (city_info['id'],))
         places = cursor.fetchall()
 
-        # 3. Fetch Accommodations (Dynamic API First, Database Second)
+        # 3. Fetch Accommodations (THE GRACEFUL DEGRADATION PATTERN)
+        # First, attempt to get real-time Foursquare Data
         accommodations = fetch_live_accommodations(city_name)
         
-        # The Graceful Fallback
+        # If Foursquare fails or returns empty, silently load from the TiDB database
         if not accommodations:
             cursor.execute("SELECT * FROM accommodations WHERE city_id = %s", (city_info['id'],))
             accommodations = cursor.fetchall()
