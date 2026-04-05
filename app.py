@@ -42,84 +42,80 @@ def place_detail(place_name):
     return render_template('place_detail.html', place_name=clean_name)
 
 def fetch_live_accommodations(city_name):
-    # Coordinate dictionary mirroring your frontend mapping
+    # Map your 5 presentation cities to their latitude and longitude
     coords = {
-        "Mumbai": "18.9220,72.8347",
-        "Hyderabad": "17.3850,78.4867",
-        "Bhubaneswar": "20.2961,85.8245",
-        "Punjab": "31.6340,74.8723", 
-        "Kolkata": "22.5726,88.3639"
+        "Mumbai": (18.9220, 72.8347),
+        "Hyderabad": (17.3850, 78.4867),
+        "Bhubaneswar": (20.2961, 85.8245),
+        "Punjab": (31.6340, 74.8723), # Using Amritsar coordinates for Punjab
+        "Kolkata": (22.5726, 88.3639)
     }
     
-    ll = coords.get(city_name, "18.9220,72.8347")
+    lat, lon = coords.get(city_name, (18.9220, 72.8347))
     
-    url = "https://api.foursquare.com/v3/places/search"
-    params = {
-        "ll": ll,
-        "categories": "19014,13065", # 19014 = Hotel, 13065 = Restaurant
-        "limit": 6, # Fetch exactly 6 items for a clean 3-column grid
-        "fields": "name,rating,price,categories"
-    }
+    # OpenStreetMap Overpass API (No Keys Required!)
+    overpass_url = "http://overpass-api.de/api/interpreter"
     
-    headers = {
-        "Accept": "application/json",
-        "Authorization": "JK0Q0GH30Y3U3C5JWT1DWRR3IBWW2EIVHB22K3QTYKUYJCKF" # Replace with your real key
-    }
+    # Ask OSM for hotels and restaurants within a 5km radius
+    # We ask for 20 just to be safe, then we'll filter the best 6
+    overpass_query = f"""
+    [out:json];
+    (
+      node["tourism"="hotel"](around:5000,{lat},{lon});
+      node["amenity"="restaurant"](around:5000,{lat},{lon});
+    );
+    out 20;
+    """
     
     live_items = []
     
     try:
-        response = requests.get(url, params=params, headers=headers, timeout=5)
+        # Give it a 10-second timeout so the site doesn't freeze
+        response = requests.get(overpass_url, params={'data': overpass_query}, timeout=10)
         
         if response.status_code == 200:
-            results = response.json().get("results", [])
+            elements = response.json().get("elements", [])
             
-            for index, venue in enumerate(results):
-                # 1. Determine if it is a Hotel or Dining
-                cat_names = [c.get("name", "") for c in venue.get("categories", [])]
-                is_hotel = any("Hotel" in name for name in cat_names)
-                item_type = "lodging" if is_hotel else "dining"
+            for index, element in enumerate(elements):
+                tags = element.get("tags", {})
+                name = tags.get("name")
                 
-                # 2. Dynamic INR Pricing Logic
-                # Foursquare returns a price tier from 1 (Cheap) to 4 (Very Expensive)
-                price_tier = venue.get("price", random.randint(1, 3))
-                
-                if price_tier == 1:
-                    price_inr = random.randint(800, 1500)
-                    budget_cat = "Budget"
-                elif price_tier == 2:
-                    price_inr = random.randint(1800, 3500)
-                    budget_cat = "Budget"
-                elif price_tier == 3:
-                    price_inr = random.randint(5000, 9000)
-                    budget_cat = "Premium"
-                else:
-                    price_inr = random.randint(10000, 25000)
-                    budget_cat = "Premium"
-                
-                # 3. Format Ratings
-                rating = venue.get("rating")
-                if rating:
-                    rating = round(rating / 2, 1) # Convert out of 10 to out of 5
-                else:
+                # Only add places that actually have a name listed on the map
+                if name:
+                    is_hotel = tags.get("tourism") == "hotel"
+                    item_type = "lodging" if is_hotel else "dining"
+                    
+                    # Generate realistic Indian pricing since OSM doesn't provide prices
+                    if is_hotel:
+                        price_inr = random.randint(1500, 8000)
+                    else:
+                        price_inr = random.randint(400, 2000)
+                        
+                    budget_cat = "Premium" if price_inr > 3000 else "Budget"
+                    
+                    # Generate a realistic rating between 3.8 and 4.9
                     rating = round(random.uniform(3.8, 4.9), 1)
                     
-                # 4. Map perfectly to your existing Jinja template variables
-                live_items.append({
-                    "name": venue.get("name"),
-                    "type": item_type,
-                    "rating": rating,
-                    "price": price_inr,
-                    "budget_category": budget_cat,
-                    # Fallback to local generic images to keep load times fast
-                    "image_file": f"hotel{index % 3 + 1}.jpg" if is_hotel else f"dining{index % 3 + 1}.jpg"
-                })
-                
+                    live_items.append({
+                        "name": name,
+                        "type": item_type,
+                        "rating": rating,
+                        "price": price_inr,
+                        "budget_category": budget_cat,
+                        # Automatically cycle through your local fallback images
+                        "image_file": f"hotel{index % 3 + 1}.jpg" if is_hotel else f"dining{index % 3 + 1}.jpg"
+                    })
+                    
+                    # Stop once we have exactly 6 items for a clean 3-column UI grid
+                    if len(live_items) == 6:
+                        break
+                        
         return live_items
         
     except Exception as e:
-        print(f"API Error: {e}")
-        return [] # Returns empty list so the database fallback activates
+        # If the API takes too long, it fails silently and lets the database take over
+        print(f"OSM API Error: {e}")
+        return []
 
 
 @app.route('/search', methods=['GET'])
@@ -149,10 +145,9 @@ def search_city():
         places = cursor.fetchall()
 
         # 3. Fetch Accommodations (LIVE API + DATABASE FALLBACK)
-        # Attempt to pull real-time Foursquare data first
         accommodations = fetch_live_accommodations(city_name)
         
-        # If the API list is empty (failed or no results), fallback to your database
+        # If the API list is empty, fallback to your TiDB database instantly
         if not accommodations:
             cursor.execute("SELECT * FROM accommodations WHERE city_id = %s", (city_info['id'],))
             accommodations = cursor.fetchall()
