@@ -103,7 +103,7 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
 
 /* --- CITY PAGE & UI CARDS --- */
 .city-title-container { padding: 120px 20px 20px 20px; text-align: center; }
-.city-title { font-size: 3rem; text-transform: uppercase; letter-spacing: 2px; color: #0f172a; }
+.city-title { font-size: 3rem; text-transform: uppercase; letter-spacing: 3px; color: #0f172a; }
 .city-tags { display: flex; justify-content: center; gap: 12px; margin: 25px 0; flex-wrap: wrap; }
 .tag { padding: 10px 22px; border-radius: 30px; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.3s ease; cursor: default; }
 /* 1. Teal (Weather) */
@@ -131,7 +131,7 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
 /* Styling for the new City Description Card */
 .city-info-card {
     background-color: #c7e3ff87; /* Soft pastel-blue-grey */
-    border: 1px solid #ccdef5e1;
+    border: 1px solid #e4ecf7bb;
     border-radius: 16px;
     padding: 30px 40px;
     margin: 30px auto;
