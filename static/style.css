@@ -1,7 +1,10 @@
 /* ==========================================================================
    TERRAVISTA MASTER STYLESHEET (PRESENTATION READY)
    ========================================================================== */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color: #1e293b; line-height: 1.6; }
 
 .home-bg { display: flex; flex-direction: column; min-height: 100vh; }
@@ -103,7 +106,7 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
 
 /* --- CITY PAGE & UI CARDS --- */
 .city-title-container { padding: 120px 20px 20px 20px; text-align: center; }
-.city-title { font-size: 3rem; text-transform: uppercase; letter-spacing: 3px; color: #0f172a; }
+.city-title { font-family: 'Poppins', sans-serif; font-size: 3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 10px; color: #0f172a; }
 .city-tags { display: flex; justify-content: center; gap: 12px; margin: 25px 0; flex-wrap: wrap; }
 .tag { padding: 10px 22px; border-radius: 30px; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.3s ease; cursor: default; }
 /* 1. Teal (Weather) */
@@ -150,12 +153,12 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
 
 /* Styling the text inside the card */
 .city-info-text {
-    color: #334155; /* Dark slate grey for high readability */
-    font-size: 1.15rem;
-    line-height: 1.75;
+    color: #374151; /* Dark slate grey for high readability */
+    font-size: 1.1rem;
+    line-height: 1.85;
     font-weight: 400;
     letter-spacing: 0.3px;
-    font-family: 'Poppins', 'Segoe UI', Tahoma, sans-serif; /* Assuming you are using Inter */
+    font-family: 'Poppins', sans-serif; /* Assuming you are using Inter */
 }
 
 /* Grid and Cards (Anti-Flicker) */
