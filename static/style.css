@@ -130,13 +130,13 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
 
 /* Styling for the new City Description Card */
 .city-info-card {
-    background-color: #dbedff; /* Soft pastel-blue-grey */
-    border: 1px solid #bad3f3;
+    background-color: #e1f0ff; /* Soft pastel-blue-grey */
+    border: 1px solid #ccdef5;
     border-radius: 16px;
     padding: 30px 40px;
     margin: 30px auto;
     max-width: 900px; /* Keeps the text readable, not too wide */
-    text-align: justify;
+    text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.067);
     transition: all 0.3s ease-in-out;
 }
@@ -144,18 +144,18 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
 /* The Hover Glow Effect */
 .city-info-card:hover {
     transform: translateY(-3px); /* Lifts the card up slightly */
-    box-shadow: 0 10px 25px rgba(59, 131, 246, 0.26); /* Beautiful blue glow */
-    border-color: #93c1f9; /* Lightens the border on hover */
+    box-shadow: 0 10px 25px rgba(50, 120, 234, 0.3); /* Beautiful blue glow */
+    border-color: #a5ceff; /* Lightens the border on hover */
 }
 
 /* Styling the text inside the card */
 .city-info-text {
     color: #334155; /* Dark slate grey for high readability */
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin: 0;
-    font-weight: 500;
-    font-family: 'Montserrat', 'Helvetica Neue', sans-serif; /* Assuming you are using Inter */
+    font-size: 1.15rem;
+    line-height: 1.75;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, sans-serif; /* Assuming you are using Inter */
 }
 
 /* Grid and Cards (Anti-Flicker) */
