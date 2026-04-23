@@ -130,7 +130,7 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
 
 /* Styling for the new City Description Card */
 .city-info-card {
-    background-color: #c7e3ff87; /* Soft pastel-blue-grey */
+    background-color: #c2dbf587; /* Soft pastel-blue-grey */
     border: 1px solid #e4ecf7bb;
     border-radius: 16px;
     padding: 30px 40px;
