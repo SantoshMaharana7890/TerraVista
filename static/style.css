@@ -306,6 +306,17 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
     background: #ffffff !important;
 }
 
+/* This targets mobile devices (screens smaller than 768px wide) */
+@media (max-width: 768px) {
+  .city-title {
+    font-size: 2rem; /* Shrinks the text size */
+    letter-spacing: 4px; /* Reduces the wide spacing for mobile */
+    word-break: break-word; /* Ensures it wraps to the next line if it's still too long */
+    text-align: center; 
+    margin-top: 15px;
+  }
+}
+
 /* ==========================================================================
    THE ULTIMATE MOBILE FIX (Bulletproof Responsive Design)
    ========================================================================== */
