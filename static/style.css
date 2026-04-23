@@ -130,31 +130,32 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
 
 /* Styling for the new City Description Card */
 .city-info-card {
-    background-color: #f0f4f8; /* Soft pastel-blue-grey */
-    border: 1px solid #e2e8f0;
+    background-color: #dbedff; /* Soft pastel-blue-grey */
+    border: 1px solid #bad3f3;
     border-radius: 16px;
     padding: 30px 40px;
     margin: 30px auto;
     max-width: 900px; /* Keeps the text readable, not too wide */
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    text-align: justify;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.067);
     transition: all 0.3s ease-in-out;
 }
 
 /* The Hover Glow Effect */
 .city-info-card:hover {
     transform: translateY(-3px); /* Lifts the card up slightly */
-    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2); /* Beautiful blue glow */
-    border-color: #bfdbfe; /* Lightens the border on hover */
+    box-shadow: 0 10px 25px rgba(59, 131, 246, 0.26); /* Beautiful blue glow */
+    border-color: #93c1f9; /* Lightens the border on hover */
 }
 
 /* Styling the text inside the card */
 .city-info-text {
     color: #334155; /* Dark slate grey for high readability */
     font-size: 1.1rem;
-    line-height: 1.7;
+    line-height: 1.8;
     margin: 0;
-    font-family: 'Inter', sans-serif; /* Assuming you are using Inter */
+    font-weight: 500;
+    font-family: 'Montserrat', 'Helvetica Neue', sans-serif; /* Assuming you are using Inter */
 }
 
 /* Grid and Cards (Anti-Flicker) */
