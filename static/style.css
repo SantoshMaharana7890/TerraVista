@@ -158,7 +158,7 @@ html, body { height: 100%; overflow-x: hidden; background-color: #f8fafc; color:
     line-height: 1.85;
     font-weight: 400;
     letter-spacing: 0.3px;
-    font-family: 'Poppins', sans-serif; /* Assuming you are using Inter */
+    font-family: "Baskerville Old Face", Baskerville, "Times New Roman", Times, serif;
 }
 
 /* Grid and Cards (Anti-Flicker) */
