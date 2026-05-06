@@ -1,0 +1,267 @@
+-- ============================================================================
+-- 1. FULL RESET (Wipes the old data safely)
+-- ============================================================================
+DROP DATABASE IF EXISTS defaultdb;
+CREATE DATABASE defaultdb;
+USE defaultdb;
+
+-- ============================================================================
+-- 2. FRESH TABLE ARCHITECTURE
+-- ============================================================================
+CREATE TABLE cities (
+    id INT PRIMARY KEY,
+    name VARCHAR(100), 
+    description TEXT,
+    tag1 VARCHAR(50), 
+    tag2 VARCHAR(50), 
+    tag3 VARCHAR(50)
+);
+
+CREATE TABLE places (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    city_id INT, 
+    name VARCHAR(100), 
+    category VARCHAR(50), 
+    description TEXT, 
+    image_file VARCHAR(100),
+    FOREIGN KEY (city_id) REFERENCES cities(id)
+);
+
+CREATE TABLE accommodations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    city_id INT, 
+    name VARCHAR(100), 
+    type VARCHAR(20), 
+    budget_category VARCHAR(20), 
+    price INT, 
+    rating FLOAT, 
+    image_file VARCHAR(100),
+    FOREIGN KEY (city_id) REFERENCES cities(id)
+);
+
+-- ============================================================================
+-- 3. INSERTING CITIES
+-- ============================================================================
+INSERT INTO cities (id, name, description, tag1, tag2, tag3) VALUES 
+(1, 'Mumbai', 'Mumbai, the City of Dreams, is India''s financial powerhouse and the heart of Bollywood. The vibrant culture is a melting pot of communities, making it a dynamic, non-stop metropolis that truly never sleeps.', 'Cricket', 'Vada Pav', 'Bollywood'),
+(2, 'Hyderabad', 'The City of Pearls beautifully blends its rich historical heritage with a booming IT industry. Its bustling bazaars stand in striking contrast to modern skyscrapers.', 'Biryani', 'Charminar', 'IT Hub'),
+(3, 'Bhubaneswar', 'The Temple City of India is an ancient landscape dotted with exquisite sandstone temples, beautifully reflecting the rich Kalinga architecture and Odishan heritage.', 'Temples', 'Odissi Dance', 'Smart City'),
+(4, 'Punjab', 'The Land of Five Rivers is the vibrant, beating heart of North Indian culture and agriculture, famous for its golden wheat fields and the spirit of its people.', 'Golden Temple', 'Bhangra', 'Rich Agriculture'),
+(5, 'Kolkata', 'The Cultural Capital of India is a city that celebrates art, literature, and intellect. It is an emotion perfectly wrapped in the nostalgia of trams and grand colonial architecture.', 'Durga Puja', 'Rasgulla', 'Literature');
+
+-- ============================================================================
+-- 4. INSERTING UNIQUE PLACES (Rock Garden Replaced)
+-- ============================================================================
+INSERT INTO places (city_id, name, category, description, image_file) VALUES 
+-- Mumbai
+(1, 'Gateway of India', 'Historical', 'Iconic 20th-century monument overlooking the Arabian Sea.', 'Gateway of India.jpg'),
+(1, 'Elephanta Caves', 'Cultural', 'UNESCO World Heritage site with ancient rock-cut temples.', 'Elephanta Caves.jpg'),
+(1, 'Sanjay Gandhi Park', 'Nature', 'Massive protected forest offering peaceful hiking trails.', 'Sanjay Gandhi Park.jpg'),
+(1, 'Wankhede Stadium', 'Sports', 'Legendary cricket stadium where India won the 2011 World Cup.', 'Wankhede Stadium.jpg'),
+(1, 'Marine Drive', 'Leisure', '3.6km long boulevard known as the Queens Necklace.', 'Marine Drive.jpg'),
+(1, 'CST Station', 'Architecture', 'Breathtaking example of Victorian Gothic Revival architecture.', 'CST Station.jpg'),
+
+-- Hyderabad
+(2, 'Charminar', 'Monument', 'Global icon of Hyderabad famous for its four grand minarets.', 'Charminar.jpg'),
+(2, 'Salar Jung', 'Museum', 'One of the largest art museums housing rare ancient artifacts.', 'Salar Jung.jpg'),
+(2, 'Hussain Sagar', 'Lake', 'Heart-shaped lake featuring a massive monolithic Buddha statue.', 'Hussain Sagar.jpg'),
+(2, 'Ramoji Film City', 'Entertainment', 'The largest integrated film city in the world.', 'Ramoji Film City.jpg'),
+(2, 'Birla Mandir', 'Spiritual', 'Constructed entirely of pure white Rajasthani marble.', 'Birla Mandir.jpg'),
+(2, 'Golconda Fort', 'Military', 'Engineering marvel known for its magical acoustic system.', 'Golconda Fort.jpg'),
+
+-- Bhubaneswar
+(3, 'Lingaraj Temple', 'Temple', 'Ancient masterpiece of Kalinga architecture dating to the 11th century.', 'Lingaraj Temple.jpg'),
+(3, 'Udayagiri Caves', 'Historical', 'Partly natural and artificial caves carved into facing hills.', 'Udayagiri Caves.jpg'),
+(3, 'Nandankanan Park', 'Wildlife', 'Premier large zoo set inside a lush forest, known for white tigers.', 'Nandankanan Park.jpg'),
+(3, 'Odisha Museum', 'Arts', 'Treasure trove of Odishan history and rare palm-leaf manuscripts.', 'Odisha Museum.jpg'),
+(3, 'Dhauli Giri', 'Monument', 'Beautiful white peace pagoda built where the Kalinga War was fought.', 'Dhauli Giri.jpg'),
+(3, 'Ekamra Kanan', 'Botany', 'Largest botanical garden in the city featuring a massive rose garden.', 'Ekamra Kanan.jpg'),
+
+-- Punjab
+(4, 'Golden Temple', 'Shrine', 'The holiest shrine of Sikhism, breathtakingly plated in real gold.', 'Golden Temple.jpg'),
+(4, 'Jallianwala Bagh', 'Memorial', 'Solemn historical garden serving as a national memorial.', 'Jallianwala Bagh.jpg'),
+(4, 'Wagah Border', 'Military', 'The daily evening retreat ceremony is a patriotic spectacle.', 'Wagah Border.jpg'),
+(4, 'Virasat-e-Khalsa', 'Museum', 'Spectacular modern museum narrating the history of the Sikh religion.', 'Virasat-e-Khalsa.jpg'),
+(4, 'Harike Wetland', 'Nature', 'Vital sanctuary attracting thousands of migratory birds.', 'Harike Wetland.jpg'),
+(4, 'Qila Mubarak', 'Historical', 'Ancient fortress and beautiful palace of the Patiala dynasty.', 'Qila Mubarak.jpg'),
+
+-- Kolkata
+(5, 'Victoria Memorial', 'Architecture', 'Massive white marble building dedicated to Queen Victoria.', 'Victoria Memorial.jpg'),
+(5, 'Dakshineswar Kali', 'Spiritual', 'Famous Hindu temple situated on the eastern bank of the Hooghly.', 'Dakshineswar Kali.jpg'),
+(5, 'Sundarbans', 'Wildlife', 'Vast mangrove forest famous for the Royal Bengal Tiger.', 'Sundarbans.jpg'),
+(5, 'Eden Gardens', 'Sports', 'The oldest and one of the largest cricket stadiums in the world.', 'Eden Gardens.jpg'),
+(5, 'Indian Museum', 'Historical', 'Largest and oldest museum in India boasting rare antique collections.', 'Indian Museum.jpg'),
+(5, 'Kumartuli', 'Crafts', 'Traditional potters quarter crafting stunning clay idols.', 'Kumartuli.jpg');
+
+-- ============================================================================
+-- 5. INSERTING UNIQUE ACCOMMODATIONS
+-- ============================================================================
+-- Mumbai
+INSERT INTO accommodations (city_id, name, type, budget_category, price, rating, image_file) VALUES 
+(1, 'Taj Mahal Palace', 'Hotel', 'Premium', 15000, 4.9, 'Taj Mahal Palace.jpg'), 
+(1, 'Oberoi Mumbai', 'Hotel', 'Premium', 14500, 4.8, 'Oberoi Mumbai.jpg'),
+(1, 'The St. Regis', 'Hotel', 'Premium', 14000, 4.8, 'The St. Regis.jpg'), 
+(1, 'JW Marriott Juhu', 'Hotel', 'Premium', 13000, 4.7, 'JW Marriott Juhu.jpg'),
+(1, 'Trident Nariman', 'Hotel', 'Premium', 12000, 4.7, 'Trident Nariman.jpg'), 
+(1, 'ITC Maratha', 'Hotel', 'Premium', 11000, 4.6, 'ITC Maratha.jpg'),
+(1, 'Four Seasons Worli', 'Hotel', 'Premium', 13500, 4.7, 'Four Seasons Worli.jpg'),
+(1, 'Sahara Star', 'Hotel', 'Premium', 9500, 4.5, 'Sahara Star.jpg'),
+(1, 'Novotel Juhu', 'Hotel', 'Premium', 10500, 4.6, 'Novotel Juhu.jpg'),
+(1, 'Hotel Sea Lord', 'Lodge', 'Budget', 950, 3.8, 'Hotel Sea Lord.jpg'), 
+(1, 'Zostel Mumbai', 'Lodge', 'Budget', 900, 4.5, 'Zostel Mumbai.jpg'),
+(1, 'Backpacker Panda', 'Lodge', 'Budget', 800, 4.1, 'Backpacker Panda.jpg'), 
+(1, 'Mumbai Inn', 'Lodge', 'Budget', 700, 3.9, 'Mumbai Inn.jpg'),
+(1, 'City Guest House', 'Lodge', 'Budget', 600, 3.7, 'City Guest House.jpg'), 
+(1, 'Bandra Dorms', 'Lodge', 'Budget', 500, 4.0, 'Bandra Dorms.jpg'),
+(1, 'Wasabi Morimoto', 'Restaurant', 'Expensive', 5000, 4.9, 'Wasabi Morimoto.jpg'), 
+(1, 'Masque', 'Restaurant', 'Expensive', 4500, 4.8, 'Masque.jpg'),
+(1, 'The Bombay Canteen','Restaurant', 'Expensive', 2500, 4.7, 'The Bombay Canteen.jpg'), 
+(1, 'Trishna', 'Restaurant', 'Expensive', 3000, 4.6, 'Trishna.jpg'),
+(1, 'Peshawri', 'Restaurant', 'Expensive', 3500, 4.7, 'Peshawri.jpg'), 
+(1, 'San-Qi', 'Restaurant', 'Expensive', 4000, 4.8, 'San-Qi.jpg'),
+(1, 'Bastian', 'Restaurant', 'Expensive', 3800, 4.7, 'Bastian.jpg'),
+(1, 'Ashok Vada Pav', 'Cafe', 'Budget', 100, 4.8, 'Ashok Vada Pav.jpg'),
+(1, 'Cannon Pav Bhaji', 'Cafe', 'Budget', 250, 4.4, 'Cannon Pav Bhaji.jpg'), 
+(1, 'Cafe Madras', 'Cafe', 'Budget', 400, 4.6, 'Cafe Madras.jpg'),
+(1, 'Kyani & Co', 'Cafe', 'Budget', 300, 4.5, 'Kyani & Co.jpg'),
+(1, 'Leopold Cafe', 'Cafe', 'Budget', 800, 4.3, 'Leopold Cafe.jpg');
+
+-- Hyderabad
+INSERT INTO accommodations (city_id, name, type, budget_category, price, rating, image_file) VALUES 
+(2, 'Taj Falaknuma', 'Hotel', 'Premium', 25000, 4.9, 'Taj Falaknuma.jpg'), 
+(2, 'ITC Kakatiya', 'Hotel', 'Premium', 12000, 4.7, 'ITC Kakatiya.jpg'),
+(2, 'Park Hyatt', 'Hotel', 'Premium', 14000, 4.8, 'Park Hyatt.jpg'), 
+(2, 'Novotel HITEC', 'Hotel', 'Premium', 10000, 4.6, 'Novotel HITEC.jpg'),
+(2, 'Trident Hyderabad', 'Hotel', 'Premium', 11500, 4.7, 'Trident Hyderabad.jpg'), 
+(2, 'Westin Mindspace', 'Hotel', 'Premium', 13000, 4.8, 'Westin Mindspace.jpg'),
+(2, 'Taj Krishna', 'Hotel', 'Premium', 10500, 4.6, 'Taj Krishna.jpg'),
+(2, 'Sheraton Hyderabad', 'Hotel', 'Premium', 9500, 4.5, 'Sheraton Hyderabad.jpg'),
+(2, 'Marriott Tank Bund', 'Hotel', 'Premium', 8500, 4.4, 'Marriott Tank Bund.jpg'),
+(2, 'Deccan Lodge', 'Lodge', 'Budget', 850, 3.9, 'Deccan Lodge.jpg'), 
+(2, 'Nomad Hostel', 'Lodge', 'Budget', 750, 4.2, 'Nomad Hostel.jpg'),
+(2, 'Charminar Guest', 'Lodge', 'Budget', 600, 3.8, 'Charminar Guest.jpg'), 
+(2, 'Banjara Hills Inn', 'Lodge', 'Budget', 950, 4.1, 'Banjara Hills Inn.jpg'),
+(2, 'Secunderabad Dorm', 'Lodge', 'Budget', 500, 3.7, 'Secunderabad Dorm.jpg'), 
+(2, 'Tech Park Lodge', 'Lodge', 'Budget', 700, 4.0, 'Tech Park Lodge.jpg'),
+(2, 'Jewel of Nizam', 'Restaurant', 'Expensive', 4000, 4.9, 'Jewel of Nizam.jpg'), 
+(2, 'Flechazo', 'Restaurant', 'Expensive', 2000, 4.6, 'Flechazo.jpg'),
+(2, 'Absolute Barbecues','Restaurant', 'Expensive', 1800, 4.7, 'Absolute Barbecues.jpg'), 
+(2, 'Olive Bistro', 'Restaurant', 'Expensive', 2500, 4.5, 'Olive Bistro.jpg'),
+(2, 'Ohri Jiva', 'Restaurant', 'Expensive', 1500, 4.4, 'Ohri Jiva.jpg'), 
+(2, 'Tatva', 'Restaurant', 'Expensive', 1600, 4.6, 'Tatva.jpg'),
+(2, 'Tre-Forni', 'Restaurant', 'Expensive', 3500, 4.8, 'Tre-Forni.jpg'),
+(2, 'Paradise Biryani', 'Cafe', 'Budget', 500, 4.8, 'Paradise Biryani.jpg'),
+(2, 'Bawarchi', 'Cafe', 'Budget', 400, 4.6, 'Bawarchi.jpg'), 
+(2, 'Nimrah Cafe', 'Cafe', 'Budget', 150, 4.7, 'Nimrah Cafe.jpg'),
+(2, 'Karachi Bakery', 'Cafe', 'Budget', 200, 4.5, 'Karachi Bakery.jpg'),
+(2, 'Shah Ghouse', 'Cafe', 'Budget', 350, 4.4, 'Shah Ghouse.jpg');
+
+-- Bhubaneswar
+INSERT INTO accommodations (city_id, name, type, budget_category, price, rating, image_file) VALUES 
+(3, 'Mayfair Lagoon', 'Hotel', 'Premium', 10000, 4.8, 'Mayfair Lagoon.jpg'), 
+(3, 'Trident', 'Hotel', 'Premium', 9500, 4.7, 'Trident.jpg'),
+(3, 'Vivanta', 'Hotel', 'Premium', 8500, 4.6, 'Vivanta.jpg'), 
+(3, 'Swosti Premium', 'Hotel', 'Premium', 7500, 4.5, 'Swosti Premium.jpg'),
+(3, 'Welcomhotel', 'Hotel', 'Premium', 8000, 4.6, 'Welcomhotel.jpg'), 
+(3, 'Fortune Park', 'Hotel', 'Premium', 6500, 4.4, 'Fortune Park.jpg'),
+(3, 'Lemon Tree Premier', 'Hotel', 'Premium', 5500, 4.3, 'Lemon Tree Premier.jpg'),
+(3, 'Ginger Hotel', 'Hotel', 'Premium', 4000, 4.2, 'Ginger Hotel.jpg'),
+(3, 'Pal Heights', 'Hotel', 'Premium', 4500, 4.3, 'Pal Heights.jpg'),
+(3, 'KIIT Guest House', 'Lodge', 'Budget', 800, 4.2, 'KIIT Guest House.jpg'), 
+(3, 'Hotel Pushpak', 'Lodge', 'Budget', 600, 3.9, 'Hotel Pushpak.jpg'),
+(3, 'Divine Inn', 'Lodge', 'Budget', 500, 3.8, 'Divine Inn.jpg'), 
+(3, 'Forest View Residency', 'Lodge', 'Budget', 700, 4.0, 'Forest View Residency.jpg'),
+(3, 'Collection O', 'Lodge', 'Budget', 450, 3.6, 'Collection O.jpg'), 
+(3, 'Chandan Heritage', 'Lodge', 'Budget', 900, 4.1, 'Chandan Heritage.jpg'),
+(3, 'Zaika Palace', 'Restaurant', 'Expensive', 1500, 4.5, 'Zaika Palace.jpg'), 
+(3, 'Barbeque Nation', 'Restaurant', 'Expensive', 1800, 4.6, 'Barbeque Nation.jpg'),
+(3, 'Mainland China', 'Restaurant', 'Expensive', 2000, 4.5, 'Mainland China.jpg'), 
+(3, 'Michael Kitchen', 'Restaurant', 'Expensive', 1600, 4.4, 'Michael Kitchen.jpg'),
+(3, 'Bocca Cafe', 'Restaurant', 'Expensive', 1200, 4.6, 'Bocca Cafe.jpg'), 
+(3, 'Chill Ummm', 'Restaurant', 'Expensive', 1100, 4.3, 'Chill Ummm.jpg'),
+(3, 'The Courtyard', 'Restaurant', 'Expensive', 1400, 4.5, 'The Courtyard.jpg'),
+(3, 'Priya Restaurant', 'Restaurant', 'Budget', 200, 4.4, 'Priya Restaurant.jpg'),
+(3, 'Dalma', 'Cafe', 'Budget', 400, 4.7, 'Dalma.jpg'),
+(3, 'Odisha Hotel', 'Cafe', 'Budget', 350, 4.6, 'Odisha Hotel.jpg'), 
+(3, 'Keshari Sweets', 'Cafe', 'Budget', 150, 4.5, 'Keshari Sweets.jpg'),
+(3, 'Local Restro Cafe', 'Cafe', 'Budget', 50, 4.8, 'Local Restro Cafe.jpg');
+
+-- Punjab
+INSERT INTO accommodations (city_id, name, type, budget_category, price, rating, image_file) VALUES 
+(4, 'Taj Swarna', 'Hotel', 'Premium', 11000, 4.8, 'Taj Swarna.jpg'), 
+(4, 'Hyatt Regency', 'Hotel', 'Premium', 10500, 4.7, 'Hyatt Regency.jpg'),
+(4, 'Radisson Blu', 'Hotel', 'Premium', 9000, 4.6, 'Radisson Blu.jpg'), 
+(4, 'Welcomehotel', 'Hotel', 'Premium', 8500, 4.5, 'Welcomehotel Punjab.jpg'),
+(4, 'JW Marriott', 'Hotel', 'Premium', 12500, 4.8, 'JW Marriott Punjab.jpg'), 
+(4, 'The Lalit', 'Hotel', 'Premium', 10000, 4.6, 'The Lalit Punjab.jpg'),
+(4, 'Holiday Inn', 'Hotel', 'Premium', 7500, 4.4, 'Holiday Inn Punjab.jpg'),
+(4, 'Ramada Amritsar', 'Hotel', 'Premium', 6500, 4.3, 'Ramada Amritsar.jpg'),
+(4, 'Golden Tulip', 'Hotel', 'Premium', 6000, 4.2, 'Golden Tulip.jpg'),
+(4, 'Fortune Hotels','Lodge', 'Budget', 700, 4.3, 'Fortune Hotels.jpg'), 
+(4, 'Green Backpacker Hostel', 'Lodge', 'Budget', 500, 4.1, 'Green Backpacker Hostel.jpg'),
+(4, 'SureStay Hotel', 'Lodge', 'Budget', 800, 3.9, 'SureStay Hotel.jpg'), 
+(4, 'Highway Motel', 'Lodge', 'Budget', 950, 4.4, 'Highway Motel Punjab.jpg'),
+(4, 'Chandigarh Dorm', 'Lodge', 'Budget', 600, 3.8, 'Chandigarh Dorm.jpg'), 
+(4, 'Amritsar Guest', 'Lodge', 'Budget', 750, 4.0, 'Amritsar Guest.jpg'),
+(4, 'Kesar Da Dhaba', 'Restaurant', 'Expensive', 1200, 4.8, 'Kesar Da Dhaba.jpg'), 
+(4, 'Makhan Fish', 'Restaurant', 'Expensive', 1500, 4.7, 'Makhan Fish.jpg'),
+(4, 'Yellow Chilli', 'Restaurant', 'Expensive', 1800, 4.5, 'Yellow Chilli.jpg'), 
+(4, 'Pal Dhaba', 'Restaurant', 'Expensive', 1400, 4.6, 'Pal Dhaba.jpg'),
+(4, 'Garam Dharam', 'Restaurant', 'Expensive', 1600, 4.4, 'Garam Dharam.jpg'), 
+(4, 'Bharawan Dhaba', 'Restaurant', 'Expensive', 1100, 4.6, 'Bharawan Dhaba.jpg'),
+(4, 'Saffron', 'Restaurant', 'Expensive', 2200, 4.8, 'Saffron.jpg'),
+(4, 'Brothers Dhaba', 'Cafe', 'Budget', 400, 4.7, 'Brothers Dhaba.jpg'),
+(4, 'Kulcha Land', 'Cafe', 'Budget', 200, 4.8, 'Kulcha Land.jpg'), 
+(4, 'Giani Tea Stall', 'Cafe', 'Budget', 50, 4.9, 'Giani Tea Stall.jpg'),
+(4, 'Ahuja Lassi', 'Cafe', 'Budget', 80, 4.8, 'Ahuja Lassi.jpg'),
+(4, 'Beera Chicken', 'Cafe', 'Budget', 350, 4.5, 'Beera Chicken.jpg');
+
+-- Kolkata
+INSERT INTO accommodations (city_id, name, type, budget_category, price, rating, image_file) VALUES 
+(5, 'Taj Bengal', 'Hotel', 'Premium', 14000, 4.8, 'Taj Bengal.jpg'), 
+(5, 'ITC Royal Bengal', 'Hotel', 'Premium', 15500, 4.9, 'ITC Royal Bengal.jpg'),
+(5, 'The Oberoi Grand', 'Hotel', 'Premium', 16000, 4.9, 'The Oberoi Grand.jpg'), 
+(5, 'JW Marriott', 'Hotel', 'Premium', 13500, 4.7, 'JW Marriott.jpg'),
+(5, 'Novotel Kolkata', 'Hotel', 'Premium', 11000, 4.6, 'Novotel Kolkata.jpg'), 
+(5, 'Westin Rajarhat', 'Hotel', 'Premium', 12000, 4.7, 'Westin Rajarhat.jpg'),
+(5, 'The Lalit', 'Hotel', 'Premium', 10500, 4.6, 'The Lalit.jpg'),
+(5, 'Peerless Inn', 'Hotel', 'Premium', 7500, 4.4, 'Peerless Inn.jpg'),
+(5, 'Hyatt Regency', 'Hotel', 'Premium', 9500, 4.5, 'Hyatt Regency.jpg'),
+(5, 'Howrah Lodge', 'Lodge', 'Budget', 600, 3.8, 'Howrah Lodge.jpg'), 
+(5, 'Park Street Hostel', 'Lodge', 'Budget', 850, 4.2, 'Park Street Hostel.jpg'),
+(5, 'Salt Lake Inn', 'Lodge', 'Budget', 950, 4.0, 'Salt Lake Inn.jpg'), 
+(5, 'Ballygunge Dorm', 'Lodge', 'Budget', 500, 3.7, 'Ballygunge Dorm.jpg'),
+(5, 'Victoria Guest', 'Lodge', 'Budget', 750, 4.1, 'Victoria Guest.jpg'), 
+(5, 'Esplanade Lodge', 'Lodge', 'Budget', 650, 3.9, 'Esplanade Lodge.jpg'),
+(5, 'Peter Cat', 'Restaurant', 'Expensive', 2000, 4.8, 'Peter Cat.jpg'), 
+(5, 'Mocambo', 'Restaurant', 'Expensive', 2200, 4.7, 'Mocambo.jpg'),
+(5, 'Oh Calcutta', 'Restaurant', 'Expensive', 2500, 4.8, 'Oh Calcutta.jpg'), 
+(5, 'Arsalan', 'Restaurant', 'Expensive', 1500, 4.6, 'Arsalan.jpg'),
+(5, '6 Ballygunge Place','Restaurant', 'Expensive', 1800, 4.7, '6 Ballygunge Place.jpg'), 
+(5, 'Aminia', 'Restaurant', 'Expensive', 1200, 4.5, 'Aminia.jpg'),
+(5, 'Kasturi', 'Restaurant', 'Expensive', 1400, 4.6, 'Kasturi.jpg'),
+(5, 'Flurys', 'Cafe', 'Budget', 450, 4.6, 'Flurys.jpg'),
+(5, 'KC Das Sweets', 'Cafe', 'Budget', 200, 4.8, 'KC Das Sweets.jpg'), 
+(5, 'Indian Coffee House','Cafe', 'Budget', 150, 4.5, 'Indian Coffee House.jpg'),
+(5, 'Tiretti Bazaar', 'Cafe', 'Budget', 100, 4.7, 'Tiretti Bazaar.jpg'),
+(5, 'Balwant Dhaba', 'Cafe', 'Budget', 250, 4.4, 'Balwant Dhaba.jpg');
+
+UPDATE Cities 
+SET description = "<strong>'Welcome to Mumbai</strong>, famously dubbed the <strong>'City of Dreams'</strong> and India's relentless <strong>financial powerhouse</strong>. Evolving from a humble archipelago of <strong>seven islands</strong> originally inhabited by <strong>Koli fishermen</strong>, its history is deeply shaped by layers of Portuguese and British colonial influence. Today, the metropolis is globally celebrated as the dazzling epicenter of <strong>Bollywood</strong> and home to iconic architectural marvels like the <strong>Gateway of India</strong>. The cultural fabric here is a vibrant, resilient melting pot, reaching its zenith during the spectacular, city-wide festivities of <strong>Ganesh Chaturthi</strong>. For gastronomes, Mumbai's legendary street food scene offers an explosion of flavors, spearheaded by the iconic, spicy <strong>Vada Pav</strong> and the richly buttery <strong>Pav Bhaji</strong>. Sports run profoundly through the city's veins, with <strong>cricket</strong> treated as an absolute religion and the historic <strong>Wankhede Stadium</strong> serving as its ultimate temple. Whether strolling down the sweeping Queen's Necklace of <strong>Marine Drive</strong> or navigating the bustling local trains, the city's energetic pulse is instantly infectious. Beautifully chaotic and endlessly inspiring, Mumbai offers a uniquely welcoming spirit that seamlessly bridges its historical heritage with a soaring, modern ambition.<strong>'</strong>"
+WHERE name = 'Mumbai';
+
+UPDATE Cities 
+SET description = "<strong>'Welcome to Hyderabad</strong>, widely celebrated as the <strong>'City of Pearls'</strong> and a booming global hub for <strong>information technology</strong>. Founded in <strong>1591</strong> by <strong>Muhammad Quli Qutb Shah</strong>, the city boasts a regal history steeped in the rich legacy of the <strong>Nizams</strong> and stunning Indo-Islamic architecture. It is most famous worldwide for the iconic <strong>Charminar</strong>, a magnificent 16th-century monument with four grand minarets that stands as the city's enduring historical symbol. The local culture is a beautiful synthesis of North and South Indian traditions, famously characterized by its warm, polite traditional etiquette known as <strong>'Tehzeeb'</strong>. For culinary enthusiasts, the city offers an unforgettable gastronomic journey, headlined by the rich, slow-cooked perfection of authentic <strong>Hyderabadi Biryani</strong>. This royal cuisine is perfectly complemented by beloved local delicacies like savory Haleem and the traditional apricot dessert, <strong>Qubani ka Meetha</strong>. Sports play a vital role in the city's energetic rhythm, with cricket commanding massive devotion alongside a soaring, world-class badminton culture. Seamlessly blending ancient monuments with the cutting-edge skyline of <strong>HITEC City</strong>, Hyderabad offers a vibrant experience that honors its royal past while embracing a dynamic future.<strong>'</strong>"
+WHERE name = 'Hyderabad';
+
+UPDATE Cities 
+SET description = "<strong>'Welcome to Bhubaneswar</strong>, proudly hailed as the <strong>'Temple City of India'</strong> and the thriving <strong>capital of Odisha</strong>. With a profound history tracing back over two millennia, it served as the ancient capital of the <strong>Kalinga empire</strong> and showcases a unique, historical confluence of Hindu, Buddhist, and Jain heritage. The city is globally renowned for its majestic Kalinga architecture, most strikingly embodied by the towering 11th-century <strong>Lingaraj Temple</strong> and the intricate, rock-cut <strong>Udayagiri</strong> and <strong>Khandagiri caves</strong>. Culturally, it is a vibrant epicenter where the graceful classical <strong>Odissi</strong> dance and meticulous <strong>Pattachitra</strong> scroll paintings continue to flourish alongside rapid urban growth. Culinary explorers are treated to authentic Odia gastronomy, featuring wholesome, flavorful staples like <strong>Dalma</strong> alongside legendary, caramelized sweets such as <strong>Chhena Poda</strong> and <strong>Pahala Rasagola</strong>. In recent years, Bhubaneswar has spectacularly transformed into the undisputed <strong>'Sports Capital of India'</strong>, anchored by the world-class <strong>Kalinga Stadium</strong> which regularly hosts prestigious global tournaments like the <strong>Men's FIH Hockey World Cup</strong>. Beyond its ancient roots and athletic prowess, it has rapidly emerged as a premier educational and IT hub, attracting top talent from across the nation. Seamlessly intertwining divine antiquity with dynamic, modern infrastructure, Bhubaneswar offers an incredibly enriching experience that captivates historians, sports fans, and professionals alike.<strong>'</strong>"
+WHERE name = 'Bhubaneswar';
+
+UPDATE Cities 
+SET description = "<strong>'Welcome to Punjab</strong>, affectionately known as the <strong>'Land of Five Rivers'</strong> and the vibrant, <strong>agricultural heartland of India</strong>. Its profound history is defined by the mighty <strong>Sikh Empire</strong> founded by <strong>Maharaja Ranjit Singh</strong> and a resilient spirit that endured the deep scars of the <strong>1947</strong> partition. Globally, it is most famous as the <strong>spiritual home of Sikhism</strong>, anchored by the breathtaking, gilded brilliance of the <strong>Golden Temple</strong> in <strong>Amritsar</strong>. The culture is an exuberant celebration of life, pulsating with the energetic beats of traditional <strong>Bhangra</strong> music and vibrant, colorful agricultural festivals like <strong>Baisakhi</strong>. For food lovers, Punjabi cuisine offers an incredibly rich and hearty culinary experience centered around rich dairy and traditional clay tandoor cooking. Iconic dishes like buttery <strong>Makki di Roti</strong> with <strong>Sarson ka Saag</strong>, heavily spiced <strong>Chole Bhature</strong>, and refreshing glasses of sweet <strong>Lassi</strong> are universally beloved. The region boasts a fierce, deeply ingrained sporting culture, dominating in traditional <strong>wrestling (Kushti)</strong>, <strong>Kabaddi</strong>, and consistently producing top-tier athletes in field hockey. Radiating immense warmth and legendary hospitality, Punjab offers an unforgettable experience that perfectly balances fierce historical traditions with an immensely generous, joyful spirit.<strong>'</strong>"
+WHERE name = 'Punjab';
+
+UPDATE Cities 
+SET description = "<strong>'Welcome to Kolkata</strong>, universally cherished as the <strong>'City of Joy'</strong> and India's undisputed <strong>intellectual and cultural capital</strong>. Serving as the capital of British India until <strong>1911</strong>, its grand history is visibly etched into stunning colonial-era architecture like the magnificent <strong>Victoria Memorial</strong> and the iconic, cantilevered <strong>Howrah Bridge</strong>. It is globally famous for its profound literary and artistic heritage, proudly claiming Nobel laureates like <strong>Rabindranath Tagore</strong> and maintaining an unmatched, daily passion for cinema, poetry, and theater. The city's cultural heartbeat reaches a spectacular crescendo during <strong>Durga Puja</strong>, a massive, vibrant festival that seamlessly transforms the streets into an immersive public art gallery. Gastronomy in Kolkata is deeply emotional and distinct, revolving around a fierce love for mustard-infused river fish and world-renowned Bengali confectionery. Staples like the slow-cooked, aromatic <strong>Kosha Mangsho</strong>, delicate <strong>Macher Jhol</strong>, and iconic desserts like Rasgulla and Sandesh are absolute culinary imperatives. Sports are treated with fanatical devotion, with the colossal <strong>Salt Lake Stadium</strong> serving as the historic epicenter of <strong>Indian football</strong>, alongside a massive, enduring love for cricket at the legendary <strong>Eden Gardens</strong>. Beautifully balancing its faded colonial grandeur with a fiercely passionate modern intellect, Kolkata remains a profoundly soulful metropolis that thrives on art, lively conversation, and an indomitable spirit.<strong>'</strong>"
+WHERE name = 'Kolkata';
